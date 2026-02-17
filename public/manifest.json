@@ -6,15 +6,23 @@
   "permissions": [
     "storage",
     "activeTab",
-    "alarms",
-    "tabs"
+    "alarms"
   ],
   "background": {
     "service_worker": "background.js"
   },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
+      "matches": [
+        "*://*.jetro.go.jp/*",
+        "*://*.customs.go.jp/*",
+        "*://*.meti.go.jp/*",
+        "*://*.mofa.go.jp/*",
+        "*://*.tradestats.go.jp/*",
+        "*://*.alibaba.com/*",
+        "*://*.made-in-china.com/*",
+        "*://*.globalsources.com/*"
+      ],
       "js": ["content.js"],
       "run_at": "document_idle"
     }
@@ -35,8 +43,17 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["popup.html", "data/*"],
-      "matches": ["<all_urls>"]
+      "resources": ["data/*"],
+      "matches": [
+        "*://*.jetro.go.jp/*",
+        "*://*.customs.go.jp/*",
+        "*://*.meti.go.jp/*",
+        "*://*.mofa.go.jp/*",
+        "*://*.tradestats.go.jp/*",
+        "*://*.alibaba.com/*",
+        "*://*.made-in-china.com/*",
+        "*://*.globalsources.com/*"
+      ]
     }
   ],
   "content_security_policy": {
