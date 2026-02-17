@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import type { OriginRule, OriginRulesData } from '@/types';
+import type { OriginRulesData } from '@/types';
 
 interface OriginRulesGuideProps {
   agreementId?: string;
