@@ -9,9 +9,6 @@
     "alarms",
     "tabs"
   ],
-  "host_permissions": [
-    "https://*.supabase.co/*"
-  ],
   "background": {
     "service_worker": "background.js"
   },
@@ -28,7 +25,7 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["popup.html"],
+      "resources": ["popup.html", "data/*"],
       "matches": ["<all_urls>"]
     }
   ],

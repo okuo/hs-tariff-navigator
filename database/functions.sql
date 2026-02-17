@@ -1,10 +1,9 @@
--- Trade Lens Database Functions
--- ストアドファンクション定義
+﻿-- HS Tariff Navigator Database Functions
+-- 繧ｹ繝医い繝峨ヵ繧｡繝ｳ繧ｯ繧ｷ繝ｧ繝ｳ螳夂ｾｩ
 
--- pg_trgm拡張を有効化（類似度検索用）
-CREATE EXTENSION IF NOT EXISTS pg_trgm;
+-- pg_trgm諡｡蠑ｵ繧呈怏蜉ｹ蛹厄ｼ磯｡樔ｼｼ蠎ｦ讀懃ｴ｢逕ｨ・・CREATE EXTENSION IF NOT EXISTS pg_trgm;
 
--- HSコード検索関数
+-- HS繧ｳ繝ｼ繝画､懃ｴ｢髢｢謨ｰ
 CREATE OR REPLACE FUNCTION search_hs_codes(
   search_term TEXT,
   limit_count INTEGER DEFAULT 10
@@ -40,7 +39,7 @@ AS $$
   LIMIT limit_count;
 $$;
 
--- 関税最適化関数
+-- 髢｢遞取怙驕ｩ蛹夜未謨ｰ
 CREATE OR REPLACE FUNCTION optimize_tariff(
   p_hs_code VARCHAR(10),
   p_from_country VARCHAR(2),
@@ -59,8 +58,7 @@ DECLARE
   savings_amount BIGINT;
   savings_percentage FLOAT;
 BEGIN
-  -- 適用可能な協定を取得
-  FOR current_agreement IN
+  -- 驕ｩ逕ｨ蜿ｯ閭ｽ縺ｪ蜊泌ｮ壹ｒ蜿門ｾ・  FOR current_agreement IN
     SELECT a.*, tr.preferential_rate, tr.base_rate, tr.conditions
     FROM agreements a
     LEFT JOIN tariff_rates tr ON tr.agreement_id = a.id 
@@ -72,17 +70,16 @@ BEGIN
       AND p_to_country = ANY(a.countries)
     ORDER BY a.priority
   LOOP
-    -- 優遇税率が設定されている場合はそれを使用、なければ推定値
+    -- 蜆ｪ驕・ｨ守紫縺瑚ｨｭ螳壹＆繧後※縺・ｋ蝣ｴ蜷医・縺昴ｌ繧剃ｽｿ逕ｨ縲√↑縺代ｌ縺ｰ謗ｨ螳壼､
     IF current_agreement.preferential_rate IS NOT NULL THEN
       base_tariff := current_agreement.base_rate;
     ELSE
-      -- デフォルト推定値を使用
+      -- 繝・ヵ繧ｩ繝ｫ繝域耳螳壼､繧剃ｽｿ逕ｨ
       current_agreement.preferential_rate := GREATEST(0, base_tariff * (1 - current_agreement.priority * 0.3));
       current_agreement.base_rate := base_tariff;
     END IF;
     
-    -- 削減額計算
-    IF p_trade_value IS NOT NULL AND p_trade_value > 0 THEN
+    -- 蜑頑ｸ幃｡崎ｨ育ｮ・    IF p_trade_value IS NOT NULL AND p_trade_value > 0 THEN
       savings_amount := (p_trade_value * (current_agreement.base_rate - current_agreement.preferential_rate) / 100)::BIGINT;
     ELSE
       savings_amount := (1000000 * (current_agreement.base_rate - current_agreement.preferential_rate) / 100)::BIGINT;
@@ -90,7 +87,7 @@ BEGIN
     
     savings_percentage := (current_agreement.base_rate - current_agreement.preferential_rate) / current_agreement.base_rate * 100;
     
-    -- 協定データを配列に追加
+    -- 蜊泌ｮ壹ョ繝ｼ繧ｿ繧帝・蛻励↓霑ｽ蜉
     agreement_data := agreement_data || jsonb_build_object(
       'agreement', jsonb_build_object(
         'id', current_agreement.id,
@@ -106,14 +103,12 @@ BEGIN
       'conditions', current_agreement.conditions
     );
     
-    -- 最良の協定を選択（削減額が最大）
-    IF best_agreement IS NULL OR savings_amount > (best_agreement->>'savings_amount')::BIGINT THEN
+    -- 譛濶ｯ縺ｮ蜊泌ｮ壹ｒ驕ｸ謚橸ｼ亥炎貂幃｡阪′譛螟ｧ・・    IF best_agreement IS NULL OR savings_amount > (best_agreement->>'savings_amount')::BIGINT THEN
       best_agreement := agreement_data[array_length(agreement_data, 1)];
     END IF;
   END LOOP;
   
-  -- 結果を構築
-  result := jsonb_build_object(
+  -- 邨先棡繧呈ｧ狗ｯ・  result := jsonb_build_object(
     'hs_code', p_hs_code,
     'from_country', p_from_country,
     'to_country', p_to_country,
@@ -127,7 +122,7 @@ BEGIN
 END;
 $$;
 
--- 国別協定検索関数
+-- 蝗ｽ蛻･蜊泌ｮ壽､懃ｴ｢髢｢謨ｰ
 CREATE OR REPLACE FUNCTION get_agreements_by_countries(
   p_from_country VARCHAR(2),
   p_to_country VARCHAR(2)

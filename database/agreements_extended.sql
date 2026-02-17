@@ -1,79 +1,64 @@
--- Trade Lens Extended Agreements
--- 最新のFTA/EPA協定データ
+﻿-- HS Tariff Navigator Extended Agreements
+-- 譛譁ｰ縺ｮFTA/EPA蜊泌ｮ壹ョ繝ｼ繧ｿ
 
 INSERT INTO agreements (id, name_ja, name_en, countries, effective_date, document_url, priority, is_active) VALUES
 
--- 日英EPA（2021年発効）
-('juk-epa', '日英EPA（日英包括的経済連携協定）', 'Japan-UK Comprehensive Economic Partnership Agreement',
+-- 譌･闍ｱEPA・・021蟷ｴ逋ｺ蜉ｹ・・('juk-epa', '譌･闍ｱEPA・域律闍ｱ蛹・峡逧・ｵ梧ｸ磯｣謳ｺ蜊泌ｮ夲ｼ・, 'Japan-UK Comprehensive Economic Partnership Agreement',
  ARRAY['JP','GB'], 
  '2021-01-01', 'https://www.mofa.go.jp/mofaj/gaiko/fta/j-uk/', 6, true),
 
--- 日ASEAN EPA（2008年発効）
-('jasean-epa', '日ASEAN EPA（日ASEAN包括的経済連携協定）', 'Japan-ASEAN Comprehensive Economic Partnership',
+-- 譌･ASEAN EPA・・008蟷ｴ逋ｺ蜉ｹ・・('jasean-epa', '譌･ASEAN EPA・域律ASEAN蛹・峡逧・ｵ梧ｸ磯｣謳ｺ蜊泌ｮ夲ｼ・, 'Japan-ASEAN Comprehensive Economic Partnership',
  ARRAY['JP','TH','VN','MY','SG','ID','PH','BN','KH','LA','MM'],
  '2008-12-01', 'https://www.mofa.go.jp/mofaj/gaiko/fta/j-asean/', 7, true),
 
--- 日スイスEPA（2009年発効）
-('jch-epa', '日スイスEPA（日スイス経済連携協定）', 'Japan-Switzerland Economic Partnership Agreement',
+-- 譌･繧ｹ繧､繧ｹEPA・・009蟷ｴ逋ｺ蜉ｹ・・('jch-epa', '譌･繧ｹ繧､繧ｹEPA・域律繧ｹ繧､繧ｹ邨梧ｸ磯｣謳ｺ蜊泌ｮ夲ｼ・, 'Japan-Switzerland Economic Partnership Agreement',
  ARRAY['JP','CH'], 
  '2009-09-01', 'https://www.mofa.go.jp/mofaj/gaiko/fta/j-swiss/', 8, true),
 
--- 日チリEPA（2007年発効）
-('jcl-epa', '日チリEPA（日チリ戦略的経済連携協定）', 'Japan-Chile Strategic Economic Partnership Agreement',
+-- 譌･繝√ΜEPA・・007蟷ｴ逋ｺ蜉ｹ・・('jcl-epa', '譌･繝√ΜEPA・域律繝√Μ謌ｦ逡･逧・ｵ梧ｸ磯｣謳ｺ蜊泌ｮ夲ｼ・, 'Japan-Chile Strategic Economic Partnership Agreement',
  ARRAY['JP','CL'], 
  '2007-09-03', 'https://www.mofa.go.jp/mofaj/gaiko/fta/j-chile/', 9, true),
 
--- 日タイEPA（2007年発効）
-('jth-epa', '日タイEPA（日タイ経済連携協定）', 'Japan-Thailand Economic Partnership Agreement',
+-- 譌･繧ｿ繧､EPA・・007蟷ｴ逋ｺ蜉ｹ・・('jth-epa', '譌･繧ｿ繧､EPA・域律繧ｿ繧､邨梧ｸ磯｣謳ｺ蜊泌ｮ夲ｼ・, 'Japan-Thailand Economic Partnership Agreement',
  ARRAY['JP','TH'], 
  '2007-11-01', 'https://www.mofa.go.jp/mofaj/gaiko/fta/j-thai/', 10, true),
 
--- 日インドネシアEPA（2008年発効）
-('jid-epa', '日インドネシアEPA（日インドネシア経済連携協定）', 'Japan-Indonesia Economic Partnership Agreement',
+-- 譌･繧､繝ｳ繝峨ロ繧ｷ繧｢EPA・・008蟷ｴ逋ｺ蜉ｹ・・('jid-epa', '譌･繧､繝ｳ繝峨ロ繧ｷ繧｢EPA・域律繧､繝ｳ繝峨ロ繧ｷ繧｢邨梧ｸ磯｣謳ｺ蜊泌ｮ夲ｼ・, 'Japan-Indonesia Economic Partnership Agreement',
  ARRAY['JP','ID'], 
  '2008-07-01', 'https://www.mofa.go.jp/mofaj/gaiko/fta/j-indonesia/', 11, true),
 
--- 日フィリピンEPA（2008年発効）
-('jph-epa', '日フィリピンEPA（日フィリピン経済連携協定）', 'Japan-Philippines Economic Partnership Agreement',
+-- 譌･繝輔ぅ繝ｪ繝斐ΦEPA・・008蟷ｴ逋ｺ蜉ｹ・・('jph-epa', '譌･繝輔ぅ繝ｪ繝斐ΦEPA・域律繝輔ぅ繝ｪ繝斐Φ邨梧ｸ磯｣謳ｺ蜊泌ｮ夲ｼ・, 'Japan-Philippines Economic Partnership Agreement',
  ARRAY['JP','PH'], 
  '2008-12-11', 'https://www.mofa.go.jp/mofaj/gaiko/fta/j-philippines/', 12, true),
 
--- 日シンガポールEPA（2002年発効、改正2007年）
-('jsg-epa', '日シンガポールEPA（日シンガポール経済連携協定）', 'Japan-Singapore Economic Partnership Agreement',
+-- 譌･繧ｷ繝ｳ繧ｬ繝昴・繝ｫEPA・・002蟷ｴ逋ｺ蜉ｹ縲∵隼豁｣2007蟷ｴ・・('jsg-epa', '譌･繧ｷ繝ｳ繧ｬ繝昴・繝ｫEPA・域律繧ｷ繝ｳ繧ｬ繝昴・繝ｫ邨梧ｸ磯｣謳ｺ蜊泌ｮ夲ｼ・, 'Japan-Singapore Economic Partnership Agreement',
  ARRAY['JP','SG'], 
  '2002-11-30', 'https://www.mofa.go.jp/mofaj/gaiko/fta/j-singapore/', 13, true),
 
--- 日マレーシアEPA（2006年発効）
-('jmy-epa', '日マレーシアEPA（日マレーシア経済連携協定）', 'Japan-Malaysia Economic Partnership Agreement',
+-- 譌･繝槭Ξ繝ｼ繧ｷ繧｢EPA・・006蟷ｴ逋ｺ蜉ｹ・・('jmy-epa', '譌･繝槭Ξ繝ｼ繧ｷ繧｢EPA・域律繝槭Ξ繝ｼ繧ｷ繧｢邨梧ｸ磯｣謳ｺ蜊泌ｮ夲ｼ・, 'Japan-Malaysia Economic Partnership Agreement',
  ARRAY['JP','MY'], 
  '2006-07-13', 'https://www.mofa.go.jp/mofaj/gaiko/fta/j-malaysia/', 14, true),
 
--- 日ベトナムEPA（2009年発効）
-('jvn-epa', '日ベトナムEPA（日ベトナム経済連携協定）', 'Japan-Viet Nam Economic Partnership Agreement',
+-- 譌･繝吶ヨ繝翫ΒEPA・・009蟷ｴ逋ｺ蜉ｹ・・('jvn-epa', '譌･繝吶ヨ繝翫ΒEPA・域律繝吶ヨ繝翫Β邨梧ｸ磯｣謳ｺ蜊泌ｮ夲ｼ・, 'Japan-Viet Nam Economic Partnership Agreement',
  ARRAY['JP','VN'], 
  '2009-10-01', 'https://www.mofa.go.jp/mofaj/gaiko/fta/j-vietnam/', 15, true),
 
--- 日モンゴルEPA（2016年発効）
-('jmn-epa', '日モンゴルEPA（日モンゴル経済連携協定）', 'Japan-Mongolia Economic Partnership Agreement',
+-- 譌･繝｢繝ｳ繧ｴ繝ｫEPA・・016蟷ｴ逋ｺ蜉ｹ・・('jmn-epa', '譌･繝｢繝ｳ繧ｴ繝ｫEPA・域律繝｢繝ｳ繧ｴ繝ｫ邨梧ｸ磯｣謳ｺ蜊泌ｮ夲ｼ・, 'Japan-Mongolia Economic Partnership Agreement',
  ARRAY['JP','MN'], 
  '2016-06-07', 'https://www.mofa.go.jp/mofaj/gaiko/fta/j-mongolia/', 16, true),
 
--- 日トルコEPA（交渉中）
-('jtr-epa', '日トルコEPA（日トルコ経済連携協定）', 'Japan-Turkey Economic Partnership Agreement',
+-- 譌･繝医Ν繧ｳEPA・井ｺ､貂我ｸｭ・・('jtr-epa', '譌･繝医Ν繧ｳEPA・域律繝医Ν繧ｳ邨梧ｸ磯｣謳ｺ蜊泌ｮ夲ｼ・, 'Japan-Turkey Economic Partnership Agreement',
  ARRAY['JP','TR'], 
  '2025-01-01', 'https://www.mofa.go.jp/mofaj/gaiko/fta/j-turkey/', 17, false),
 
--- 日コロンビアEPA（交渉中）
-('jco-epa', '日コロンビアEPA（日コロンビア経済連携協定）', 'Japan-Colombia Economic Partnership Agreement',
+-- 譌･繧ｳ繝ｭ繝ｳ繝薙いEPA・井ｺ､貂我ｸｭ・・('jco-epa', '譌･繧ｳ繝ｭ繝ｳ繝薙いEPA・域律繧ｳ繝ｭ繝ｳ繝薙い邨梧ｸ磯｣謳ｺ蜊泌ｮ夲ｼ・, 'Japan-Colombia Economic Partnership Agreement',
  ARRAY['JP','CO'], 
  '2025-01-01', 'https://www.mofa.go.jp/mofaj/gaiko/fta/j-colombia/', 18, false),
 
--- 日韓EPA（中断中）
-('jkr-epa', '日韓EPA（日韓経済連携協定）', 'Japan-Korea Economic Partnership Agreement',
+-- 譌･髻摘PA・井ｸｭ譁ｭ荳ｭ・・('jkr-epa', '譌･髻摘PA・域律髻鍋ｵ梧ｸ磯｣謳ｺ蜊泌ｮ夲ｼ・, 'Japan-Korea Economic Partnership Agreement',
  ARRAY['JP','KR'], 
  '2025-01-01', 'https://www.mofa.go.jp/mofaj/gaiko/fta/j-korea/', 19, false),
 
--- 日中韓FTA（交渉中）
-('jck-fta', '日中韓FTA（日中韓自由貿易協定）', 'Japan-China-Korea Free Trade Agreement',
+-- 譌･荳ｭ髻擢TA・井ｺ､貂我ｸｭ・・('jck-fta', '譌･荳ｭ髻擢TA・域律荳ｭ髻楢・逕ｱ雋ｿ譏灘鵠螳夲ｼ・, 'Japan-China-Korea Free Trade Agreement',
  ARRAY['JP','CN','KR'], 
  '2025-01-01', 'https://www.mofa.go.jp/mofaj/gaiko/fta/jck/', 20, false);

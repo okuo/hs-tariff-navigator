@@ -1,0 +1,710 @@
+{
+  "version": "1.0.0",
+  "updated_at": "2025-01-15T00:00:00Z",
+  "data": [
+    {
+      "code": "8507100000",
+      "description_ja": "鉛蓄電池（始動用）",
+      "description_en": "Lead-acid accumulators for starting piston engines",
+      "unit": "NO",
+      "category": "機械類",
+      "subcategory": "電池"
+    },
+    {
+      "code": "8507200000",
+      "description_ja": "鉛蓄電池（その他）",
+      "description_en": "Other lead-acid accumulators",
+      "unit": "NO",
+      "category": "機械類",
+      "subcategory": "電池"
+    },
+    {
+      "code": "8471300000",
+      "description_ja": "携帯用自動データ処理機械",
+      "description_en": "Portable automatic data processing machines",
+      "unit": "NO",
+      "category": "機械類",
+      "subcategory": "コンピュータ"
+    },
+    {
+      "code": "6203423000",
+      "description_ja": "男子用ズボン（綿製）",
+      "description_en": "Men's trousers of cotton",
+      "unit": "NO",
+      "category": "繊維製品",
+      "subcategory": "衣類"
+    },
+    {
+      "code": "8703232900",
+      "description_ja": "乗用自動車（ガソリン車1500cc以上）",
+      "description_en": "Passenger motor cars with gasoline engines (≥1500cc)",
+      "unit": "NO",
+      "category": "輸送機器",
+      "subcategory": "自動車"
+    },
+    {
+      "code": "8703332900",
+      "description_ja": "乗用自動車（ガソリン車1500cc超3000cc以下）",
+      "description_en": "Passenger motor cars with gasoline engines (1500-3000cc)",
+      "unit": "NO",
+      "category": "輸送機器",
+      "subcategory": "自動車"
+    },
+    {
+      "code": "0901119000",
+      "description_ja": "コーヒー（焙煎していないもの、その他）",
+      "description_en": "Coffee, not roasted, other",
+      "unit": "KG",
+      "category": "農産物",
+      "subcategory": "飲料原料"
+    },
+    {
+      "code": "1701110000",
+      "description_ja": "砂糖（甜菜糖）",
+      "description_en": "Raw beet sugar",
+      "unit": "KG",
+      "category": "農産物",
+      "subcategory": "砂糖類"
+    },
+    {
+      "code": "2208202000",
+      "description_ja": "ウイスキー",
+      "description_en": "Whisky",
+      "unit": "LT",
+      "category": "飲料",
+      "subcategory": "アルコール"
+    },
+    {
+      "code": "8471494000",
+      "description_ja": "自動データ処理機械（その他）",
+      "description_en": "Other automatic data processing machines",
+      "unit": "NO",
+      "category": "機械類",
+      "subcategory": "コンピュータ"
+    },
+    {
+      "code": "8517120000",
+      "description_ja": "携帯電話",
+      "description_en": "Cellular phones",
+      "unit": "NO",
+      "category": "機械類",
+      "subcategory": "通信機器"
+    },
+    {
+      "code": "8528723000",
+      "description_ja": "カラー受像機（液晶ディスプレイ）",
+      "description_en": "Color LCD television receivers",
+      "unit": "NO",
+      "category": "機械類",
+      "subcategory": "電子機器"
+    },
+    {
+      "code": "6204620000",
+      "description_ja": "女人用ズボン（綿製）",
+      "description_en": "Women's trousers of cotton",
+      "unit": "NO",
+      "category": "繊維製品",
+      "subcategory": "衣類"
+    },
+    {
+      "code": "8544421900",
+      "description_ja": "電気絶縁電線（その他）",
+      "description_en": "Other insulated electric conductors",
+      "unit": "KG",
+      "category": "機械類",
+      "subcategory": "電線"
+    },
+    {
+      "code": "3004909000",
+      "description_ja": "医薬品（その他）",
+      "description_en": "Other medicaments",
+      "unit": "KG",
+      "category": "化学製品",
+      "subcategory": "医薬品"
+    },
+    {
+      "code": "8542310000",
+      "description_ja": "半導体メモリ",
+      "description_en": "Semiconductor memory devices",
+      "unit": "NO",
+      "category": "電子部品",
+      "subcategory": "半導体"
+    },
+    {
+      "code": "8542320000",
+      "description_ja": "マイクロプロセッサー",
+      "description_en": "Microprocessors",
+      "unit": "NO",
+      "category": "電子部品",
+      "subcategory": "半導体"
+    },
+    {
+      "code": "8542330000",
+      "description_ja": "アンプリファイア",
+      "description_en": "Amplifiers",
+      "unit": "NO",
+      "category": "電子部品",
+      "subcategory": "半導体"
+    },
+    {
+      "code": "8517621000",
+      "description_ja": "スマートフォン",
+      "description_en": "Smart phones",
+      "unit": "NO",
+      "category": "通信機器",
+      "subcategory": "携帯電話"
+    },
+    {
+      "code": "8517629000",
+      "description_ja": "その他の無線電話",
+      "description_en": "Other wireless phones",
+      "unit": "NO",
+      "category": "通信機器",
+      "subcategory": "携帯電話"
+    },
+    {
+      "code": "8528721000",
+      "description_ja": "カラー液晶テレビ（32インチ以下）",
+      "description_en": "Color LCD TV receivers (≤32 inch)",
+      "unit": "NO",
+      "category": "映像機器",
+      "subcategory": "テレビ"
+    },
+    {
+      "code": "8528722000",
+      "description_ja": "カラー液晶テレビ（32インチ超）",
+      "description_en": "Color LCD TV receivers (>32 inch)",
+      "unit": "NO",
+      "category": "映像機器",
+      "subcategory": "テレビ"
+    },
+    {
+      "code": "8471702000",
+      "description_ja": "ハードディスクドライブ",
+      "description_en": "Hard disk drives",
+      "unit": "NO",
+      "category": "コンピュータ",
+      "subcategory": "ストレージ"
+    },
+    {
+      "code": "8471800000",
+      "description_ja": "その他のコンピュータユニット",
+      "description_en": "Other computer units",
+      "unit": "NO",
+      "category": "コンピュータ",
+      "subcategory": "周辺機器"
+    },
+    {
+      "code": "8544491000",
+      "description_ja": "同軸ケーブル",
+      "description_en": "Coaxial cables",
+      "unit": "KG",
+      "category": "電子部品",
+      "subcategory": "ケーブル"
+    },
+    {
+      "code": "8703101000",
+      "description_ja": "ゴルフカート",
+      "description_en": "Golf carts",
+      "unit": "NO",
+      "category": "輸送機器",
+      "subcategory": "特殊車両"
+    },
+    {
+      "code": "8703211000",
+      "description_ja": "ハイブリッド乗用車（1000cc以下）",
+      "description_en": "Hybrid passenger cars (≤1000cc)",
+      "unit": "NO",
+      "category": "輸送機器",
+      "subcategory": "自動車"
+    },
+    {
+      "code": "8703221000",
+      "description_ja": "ハイブリッド乗用車（1000-1500cc）",
+      "description_en": "Hybrid passenger cars (1000-1500cc)",
+      "unit": "NO",
+      "category": "輸送機器",
+      "subcategory": "自動車"
+    },
+    {
+      "code": "8703231000",
+      "description_ja": "ハイブリッド乗用車（1500-3000cc）",
+      "description_en": "Hybrid passenger cars (1500-3000cc)",
+      "unit": "NO",
+      "category": "輸送機器",
+      "subcategory": "自動車"
+    },
+    {
+      "code": "8703801000",
+      "description_ja": "電気自動車",
+      "description_en": "Electric passenger cars",
+      "unit": "NO",
+      "category": "輸送機器",
+      "subcategory": "自動車"
+    },
+    {
+      "code": "8708100000",
+      "description_ja": "バンパー及びその部品",
+      "description_en": "Bumpers and parts thereof",
+      "unit": "NO",
+      "category": "自動車部品",
+      "subcategory": "外装部品"
+    },
+    {
+      "code": "8708210000",
+      "description_ja": "シートベルト",
+      "description_en": "Safety seat belts",
+      "unit": "NO",
+      "category": "自動車部品",
+      "subcategory": "安全装置"
+    },
+    {
+      "code": "8708299000",
+      "description_ja": "その他の車体部品",
+      "description_en": "Other body parts",
+      "unit": "KG",
+      "category": "自動車部品",
+      "subcategory": "車体部品"
+    },
+    {
+      "code": "8708301000",
+      "description_ja": "ブレーキパッド",
+      "description_en": "Brake pads",
+      "unit": "NO",
+      "category": "自動車部品",
+      "subcategory": "ブレーキ"
+    },
+    {
+      "code": "8708309000",
+      "description_ja": "その他のブレーキ部品",
+      "description_en": "Other brake parts",
+      "unit": "KG",
+      "category": "自動車部品",
+      "subcategory": "ブレーキ"
+    },
+    {
+      "code": "8409110000",
+      "description_ja": "航空機用エンジン部品",
+      "description_en": "Aircraft engine parts",
+      "unit": "KG",
+      "category": "輸送機器",
+      "subcategory": "航空機部品"
+    },
+    {
+      "code": "8477200000",
+      "description_ja": "押出成形機",
+      "description_en": "Extruders",
+      "unit": "NO",
+      "category": "産業機械",
+      "subcategory": "プラスチック機械"
+    },
+    {
+      "code": "8477300000",
+      "description_ja": "ブロー成形機",
+      "description_en": "Blow moulding machines",
+      "unit": "NO",
+      "category": "産業機械",
+      "subcategory": "プラスチック機械"
+    },
+    {
+      "code": "8479891000",
+      "description_ja": "産業用ロボット",
+      "description_en": "Industrial robots",
+      "unit": "NO",
+      "category": "産業機械",
+      "subcategory": "ロボット"
+    },
+    {
+      "code": "8479899000",
+      "description_ja": "その他の機械",
+      "description_en": "Other machines and mechanical appliances",
+      "unit": "NO",
+      "category": "産業機械",
+      "subcategory": "その他機械"
+    },
+    {
+      "code": "8414100000",
+      "description_ja": "真空ポンプ",
+      "description_en": "Vacuum pumps",
+      "unit": "NO",
+      "category": "産業機械",
+      "subcategory": "ポンプ"
+    },
+    {
+      "code": "8414200000",
+      "description_ja": "ハンドポンプ",
+      "description_en": "Hand pumps",
+      "unit": "NO",
+      "category": "産業機械",
+      "subcategory": "ポンプ"
+    },
+    {
+      "code": "8456101000",
+      "description_ja": "レーザー加工機",
+      "description_en": "Laser cutting machines",
+      "unit": "NO",
+      "category": "工作機械",
+      "subcategory": "特殊加工機"
+    },
+    {
+      "code": "8456300000",
+      "description_ja": "放電加工機",
+      "description_en": "EDM machines",
+      "unit": "NO",
+      "category": "工作機械",
+      "subcategory": "特殊加工機"
+    },
+    {
+      "code": "8458110000",
+      "description_ja": "横型旋盤",
+      "description_en": "Horizontal lathes",
+      "unit": "NO",
+      "category": "工作機械",
+      "subcategory": "旋盤"
+    },
+    {
+      "code": "8459100000",
+      "description_ja": "ドリル盤",
+      "description_en": "Drilling machines",
+      "unit": "NO",
+      "category": "工作機械",
+      "subcategory": "ボール盤"
+    },
+    {
+      "code": "3901100000",
+      "description_ja": "ポリエチレン（密度0.94未満）",
+      "description_en": "Polyethylene (density < 0.94)",
+      "unit": "KG",
+      "category": "化学製品",
+      "subcategory": "プラスチック"
+    },
+    {
+      "code": "3901200000",
+      "description_ja": "ポリエチレン（密度0.94以上）",
+      "description_en": "Polyethylene (density ≥ 0.94)",
+      "unit": "KG",
+      "category": "化学製品",
+      "subcategory": "プラスチック"
+    },
+    {
+      "code": "3902100000",
+      "description_ja": "ポリプロピレン",
+      "description_en": "Polypropylene",
+      "unit": "KG",
+      "category": "化学製品",
+      "subcategory": "プラスチック"
+    },
+    {
+      "code": "3903110000",
+      "description_ja": "ポリスチレン（発泡性）",
+      "description_en": "Expandable polystyrene",
+      "unit": "KG",
+      "category": "化学製品",
+      "subcategory": "プラスチック"
+    },
+    {
+      "code": "3904100000",
+      "description_ja": "ポリ塩化ビニル",
+      "description_en": "Polyvinyl chloride",
+      "unit": "KG",
+      "category": "化学製品",
+      "subcategory": "プラスチック"
+    },
+    {
+      "code": "2902200000",
+      "description_ja": "ベンゼン",
+      "description_en": "Benzene",
+      "unit": "KG",
+      "category": "化学製品",
+      "subcategory": "基礎化学品"
+    },
+    {
+      "code": "2902300000",
+      "description_ja": "トルエン",
+      "description_en": "Toluene",
+      "unit": "KG",
+      "category": "化学製品",
+      "subcategory": "基礎化学品"
+    },
+    {
+      "code": "2902410000",
+      "description_ja": "オルトキシレン",
+      "description_en": "Ortho-xylene",
+      "unit": "KG",
+      "category": "化学製品",
+      "subcategory": "基礎化学品"
+    },
+    {
+      "code": "3004209000",
+      "description_ja": "その他の抗生物質",
+      "description_en": "Other antibiotics",
+      "unit": "KG",
+      "category": "医薬品",
+      "subcategory": "抗生物質"
+    },
+    {
+      "code": "3004905000",
+      "description_ja": "抗がん剤",
+      "description_en": "Anti-cancer drugs",
+      "unit": "KG",
+      "category": "医薬品",
+      "subcategory": "抗腫瘍薬"
+    },
+    {
+      "code": "0304870000",
+      "description_ja": "冷凍マグロ",
+      "description_en": "Frozen tuna",
+      "unit": "KG",
+      "category": "水産物",
+      "subcategory": "冷凍魚"
+    },
+    {
+      "code": "0304890000",
+      "description_ja": "その他の冷凍魚",
+      "description_en": "Other frozen fish",
+      "unit": "KG",
+      "category": "水産物",
+      "subcategory": "冷凍魚"
+    },
+    {
+      "code": "1605210000",
+      "description_ja": "エビ（調製品）",
+      "description_en": "Prepared shrimps and prawns",
+      "unit": "KG",
+      "category": "水産物",
+      "subcategory": "水産加工品"
+    },
+    {
+      "code": "1605300000",
+      "description_ja": "ロブスター（調製品）",
+      "description_en": "Prepared lobster",
+      "unit": "KG",
+      "category": "水産物",
+      "subcategory": "水産加工品"
+    },
+    {
+      "code": "0901210000",
+      "description_ja": "コーヒー（焙煎、カフェイン含有）",
+      "description_en": "Roasted coffee, caffeinated",
+      "unit": "KG",
+      "category": "農産物",
+      "subcategory": "嗜好品"
+    },
+    {
+      "code": "0901220000",
+      "description_ja": "コーヒー（焙煎、カフェイン除去）",
+      "description_en": "Roasted coffee, decaffeinated",
+      "unit": "KG",
+      "category": "農産物",
+      "subcategory": "嗜好品"
+    },
+    {
+      "code": "1704900000",
+      "description_ja": "その他の砂糖菓子",
+      "description_en": "Other sugar confectionery",
+      "unit": "KG",
+      "category": "食品",
+      "subcategory": "菓子類"
+    },
+    {
+      "code": "1806200000",
+      "description_ja": "チョコレート製品",
+      "description_en": "Chocolate products",
+      "unit": "KG",
+      "category": "食品",
+      "subcategory": "菓子類"
+    },
+    {
+      "code": "2203000000",
+      "description_ja": "ビール",
+      "description_en": "Beer",
+      "unit": "LT",
+      "category": "飲料",
+      "subcategory": "アルコール"
+    },
+    {
+      "code": "2204100000",
+      "description_ja": "スパークリングワイン",
+      "description_en": "Sparkling wine",
+      "unit": "LT",
+      "category": "飲料",
+      "subcategory": "アルコール"
+    },
+    {
+      "code": "5201000000",
+      "description_ja": "綿",
+      "description_en": "Cotton, not carded or combed",
+      "unit": "KG",
+      "category": "繊維原料",
+      "subcategory": "天然繊維"
+    },
+    {
+      "code": "5503200000",
+      "description_ja": "ポリエステル短繊維",
+      "description_en": "Polyester staple fibres",
+      "unit": "KG",
+      "category": "繊維原料",
+      "subcategory": "化学繊維"
+    },
+    {
+      "code": "5407200000",
+      "description_ja": "ポリエステル織物",
+      "description_en": "Woven polyester fabrics",
+      "unit": "KG",
+      "category": "繊維製品",
+      "subcategory": "織物"
+    },
+    {
+      "code": "6109100000",
+      "description_ja": "Tシャツ（綿製）",
+      "description_en": "Cotton T-shirts",
+      "unit": "NO",
+      "category": "衣類",
+      "subcategory": "カジュアル"
+    },
+    {
+      "code": "6110200000",
+      "description_ja": "セーター（綿製）",
+      "description_en": "Cotton pullovers",
+      "unit": "NO",
+      "category": "衣類",
+      "subcategory": "ニット"
+    },
+    {
+      "code": "6203120000",
+      "description_ja": "スーツ（合成繊維）",
+      "description_en": "Men's suits of synthetic fibres",
+      "unit": "NO",
+      "category": "衣類",
+      "subcategory": "フォーマル"
+    },
+    {
+      "code": "6204120000",
+      "description_ja": "女人スーツ（合成繊維）",
+      "description_en": "Women's suits of synthetic fibres",
+      "unit": "NO",
+      "category": "衣類",
+      "subcategory": "フォーマル"
+    },
+    {
+      "code": "6403999000",
+      "description_ja": "その他の革靴",
+      "description_en": "Other leather footwear",
+      "unit": "NO",
+      "category": "履物",
+      "subcategory": "革靴"
+    },
+    {
+      "code": "6404190000",
+      "description_ja": "その他のスポーツシューズ",
+      "description_en": "Other sports footwear",
+      "unit": "NO",
+      "category": "履物",
+      "subcategory": "スポーツ"
+    },
+    {
+      "code": "7208100000",
+      "description_ja": "熱間圧延鋼板（幅600mm以上）",
+      "description_en": "Hot-rolled steel sheets (≥600mm wide)",
+      "unit": "KG",
+      "category": "金属製品",
+      "subcategory": "鋼板"
+    },
+    {
+      "code": "7209100000",
+      "description_ja": "冷間圧延鋼板（幅600mm以上）",
+      "description_en": "Cold-rolled steel sheets (≥600mm wide)",
+      "unit": "KG",
+      "category": "金属製品",
+      "subcategory": "鋼板"
+    },
+    {
+      "code": "7601100000",
+      "description_ja": "アルミニウム地金",
+      "description_en": "Unwrought aluminium",
+      "unit": "KG",
+      "category": "金属製品",
+      "subcategory": "アルミニウム"
+    },
+    {
+      "code": "7604100000",
+      "description_ja": "アルミニウム棒",
+      "description_en": "Aluminium bars and rods",
+      "unit": "KG",
+      "category": "金属製品",
+      "subcategory": "アルミニウム"
+    },
+    {
+      "code": "7606110000",
+      "description_ja": "アルミニウム板（厚さ0.2mm超）",
+      "description_en": "Aluminium sheets (thickness >0.2mm)",
+      "unit": "KG",
+      "category": "金属製品",
+      "subcategory": "アルミニウム"
+    },
+    {
+      "code": "7801100000",
+      "description_ja": "鉛（精製）",
+      "description_en": "Refined lead",
+      "unit": "KG",
+      "category": "金属製品",
+      "subcategory": "その他金属"
+    },
+    {
+      "code": "7901110000",
+      "description_ja": "亜鉛（純度99.99%以上）",
+      "description_en": "Zinc (purity ≥99.99%)",
+      "unit": "KG",
+      "category": "金属製品",
+      "subcategory": "その他金属"
+    },
+    {
+      "code": "9001100000",
+      "description_ja": "光ファイバー",
+      "description_en": "Optical fibres",
+      "unit": "KG",
+      "category": "光学機器",
+      "subcategory": "光学部品"
+    },
+    {
+      "code": "9002110000",
+      "description_ja": "撮影機用レンズ",
+      "description_en": "Camera lenses",
+      "unit": "NO",
+      "category": "光学機器",
+      "subcategory": "レンズ"
+    },
+    {
+      "code": "9011100000",
+      "description_ja": "複合顕微鏡",
+      "description_en": "Compound optical microscopes",
+      "unit": "NO",
+      "category": "測定機器",
+      "subcategory": "顕微鏡"
+    },
+    {
+      "code": "9018110000",
+      "description_ja": "心電図計測装置",
+      "description_en": "Electrocardiographs",
+      "unit": "NO",
+      "category": "医療機器",
+      "subcategory": "診断装置"
+    },
+    {
+      "code": "9031800000",
+      "description_ja": "その他の測定機器",
+      "description_en": "Other measuring instruments",
+      "unit": "NO",
+      "category": "測定機器",
+      "subcategory": "測定器"
+    },
+    {
+      "code": "9013100000",
+      "description_ja": "レーザー（レーザーダイオード除く）",
+      "description_en": "Lasers, other than laser diodes",
+      "unit": "NO",
+      "category": "光学機器",
+      "subcategory": "レーザー"
+    }
+  ]
+}

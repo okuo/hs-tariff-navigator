@@ -1,17 +1,16 @@
 // Content Script for Trade Lens Chrome Extension
+import { TRADE_RELATED_DOMAINS, CONTENT_SCRIPT_CONFIG } from '@/utils/constants';
+
 console.log('Trade Lens Content Script loaded');
 
-// 貿易関連サイトを検出するためのドメインリスト
-const TRADE_RELATED_DOMAINS = [
-  'jetro.go.jp',
-  'customs.go.jp', 
-  'meti.go.jp',
-  'mofa.go.jp',
-  'tradestats.go.jp',
-  'alibaba.com',
-  'made-in-china.com',
-  'globalsources.com'
-];
+// Debounce utility
+function debounce(fn: () => void, ms: number): () => void {
+  let timer: ReturnType<typeof setTimeout> | null = null;
+  return () => {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(fn, ms);
+  };
+}
 
 // HSコードパターンの正規表現
 const HS_CODE_PATTERNS = [
@@ -31,7 +30,7 @@ function isTradeRelatedSite(): boolean {
 function extractHSCodes(): string[] {
   const bodyText = document.body.innerText;
   const foundCodes = new Set<string>();
-  
+
   HS_CODE_PATTERNS.forEach(pattern => {
     const matches = bodyText.match(pattern);
     if (matches) {
@@ -44,7 +43,7 @@ function extractHSCodes(): string[] {
       });
     }
   });
-  
+
   return Array.from(foundCodes);
 }
 
@@ -57,24 +56,26 @@ function highlightHSCodes(): void {
   );
 
   const textNodes: Text[] = [];
-  let node;
-  
-  while (node = walker.nextNode()) {
-    if (node.parentElement?.tagName !== 'SCRIPT' && 
+  let node: Node | null = walker.nextNode();
+  let nodeCount = 0;
+  while (node && nodeCount < CONTENT_SCRIPT_CONFIG.MAX_NODE_COUNT) {
+    if (node.parentElement?.tagName !== 'SCRIPT' &&
         node.parentElement?.tagName !== 'STYLE' &&
-        !node.parentElement?.classList?.contains('trade-lens-highlight')) {
+        !node.parentElement?.classList?.contains('hs-tariff-navigator-highlight')) {
       textNodes.push(node as Text);
     }
+    node = walker.nextNode();
+    nodeCount++;
   }
 
   textNodes.forEach(textNode => {
     let modified = false;
     let content = textNode.textContent || '';
-    
+
     HS_CODE_PATTERNS.forEach(pattern => {
       content = content.replace(pattern, (match) => {
         modified = true;
-        return `<span class="trade-lens-highlight" data-hs-code="${match.replace(/[^0-9]/g, '')}" 
+        return `<span class="hs-tariff-navigator-highlight" data-hs-code="${match.replace(/[^0-9]/g, '')}"
                       title="Trade Lensで詳細を確認">${match}</span>`;
       });
     });
@@ -89,12 +90,12 @@ function highlightHSCodes(): void {
 
 // ハイライトのスタイルを追加
 function addHighlightStyles(): void {
-  if (document.getElementById('trade-lens-styles')) return;
-  
+  if (document.getElementById('hs-tariff-navigator-styles')) return;
+
   const style = document.createElement('style');
-  style.id = 'trade-lens-styles';
+  style.id = 'hs-tariff-navigator-styles';
   style.textContent = `
-    .trade-lens-highlight {
+    .hs-tariff-navigator-highlight {
       background-color: #fef3c7 !important;
       border-bottom: 2px solid #f59e0b !important;
       cursor: pointer !important;
@@ -102,13 +103,13 @@ function addHighlightStyles(): void {
       padding: 1px 2px !important;
       border-radius: 2px !important;
     }
-    
-    .trade-lens-highlight:hover {
+
+    .hs-tariff-navigator-highlight:hover {
       background-color: #fde68a !important;
       border-bottom-color: #d97706 !important;
     }
-    
-    .trade-lens-tooltip {
+
+    .hs-tariff-navigator-tooltip {
       position: absolute;
       top: -30px;
       left: 0;
@@ -123,8 +124,8 @@ function addHighlightStyles(): void {
       transition: opacity 0.2s;
       pointer-events: none;
     }
-    
-    .trade-lens-highlight:hover .trade-lens-tooltip {
+
+    .hs-tariff-navigator-highlight:hover .hs-tariff-navigator-tooltip {
       opacity: 1;
     }
   `;
@@ -134,11 +135,11 @@ function addHighlightStyles(): void {
 // HSコードクリック時の処理
 function handleHSCodeClick(event: Event): void {
   const target = event.target as HTMLElement;
-  if (!target.classList.contains('trade-lens-highlight')) return;
-  
+  if (!target.classList.contains('hs-tariff-navigator-highlight')) return;
+
   const hsCode = target.getAttribute('data-hs-code');
   if (!hsCode) return;
-  
+
   // Trade Lensポップアップを開く（将来的にはポップアップ内で直接表示）
   chrome.runtime.sendMessage({
     type: 'HS_CODE_CLICKED',
@@ -146,7 +147,7 @@ function handleHSCodeClick(event: Event): void {
     url: window.location.href,
     context: target.textContent
   });
-  
+
   // ユーザーに通知
   showNotification(`HSコード ${hsCode} をTrade Lensで確認できます`);
 }
@@ -154,11 +155,11 @@ function handleHSCodeClick(event: Event): void {
 // 通知表示
 function showNotification(message: string): void {
   // 既存の通知を削除
-  const existing = document.getElementById('trade-lens-notification');
+  const existing = document.getElementById('hs-tariff-navigator-notification');
   if (existing) existing.remove();
-  
+
   const notification = document.createElement('div');
-  notification.id = 'trade-lens-notification';
+  notification.id = 'hs-tariff-navigator-notification';
   notification.textContent = message;
   notification.style.cssText = `
     position: fixed;
@@ -175,11 +176,11 @@ function showNotification(message: string): void {
     max-width: 300px;
     animation: slideIn 0.3s ease-out;
   `;
-  
+
   // アニメーション用CSS
-  if (!document.getElementById('trade-lens-notification-styles')) {
+  if (!document.getElementById('hs-tariff-navigator-notification-styles')) {
     const style = document.createElement('style');
-    style.id = 'trade-lens-notification-styles';
+    style.id = 'hs-tariff-navigator-notification-styles';
     style.textContent = `
       @keyframes slideIn {
         from {
@@ -194,9 +195,9 @@ function showNotification(message: string): void {
     `;
     document.head.appendChild(style);
   }
-  
+
   document.body.appendChild(notification);
-  
+
   // 3秒後に自動削除
   setTimeout(() => {
     if (notification.parentNode) {
@@ -213,19 +214,23 @@ function initialize(): void {
     console.log('Not a trade-related site, skipping HSCode detection');
     return;
   }
-  
+
   console.log('Trade-related site detected, initializing HSCode detection');
-  
+
   // スタイルを追加
   addHighlightStyles();
-  
+
   // HSコードをハイライト
   highlightHSCodes();
-  
+
   // クリックイベントを設定
   document.addEventListener('click', handleHSCodeClick);
-  
-  // 動的に追加されるコンテンツを監視
+
+  // 動的に追加されるコンテンツを監視（デバウンス付き）
+  const debouncedHighlight = debounce(() => {
+    highlightHSCodes();
+  }, CONTENT_SCRIPT_CONFIG.DEBOUNCE_MS);
+
   const observer = new MutationObserver((mutations) => {
     let shouldUpdate = false;
     mutations.forEach(mutation => {
@@ -235,19 +240,17 @@ function initialize(): void {
         }
       });
     });
-    
+
     if (shouldUpdate) {
-      setTimeout(() => {
-        highlightHSCodes();
-      }, 100);
+      debouncedHighlight();
     }
   });
-  
+
   observer.observe(document.body, {
     childList: true,
     subtree: true
   });
-  
+
   // ページに見つかったHSコード数を報告
   const extractedCodes = extractHSCodes();
   if (extractedCodes.length > 0) {
@@ -260,22 +263,22 @@ function initialize(): void {
   }
 }
 
-// ページ読み込み完了後に初期化
+// ページ読み込み完了時に初期化
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initialize);
 } else {
   initialize();
 }
 
-// メッセージリスナー（Background Script からの通信）
+// メッセージリスナー（Background Scriptからの通信）
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   switch (message.type) {
-    case 'GET_PAGE_HS_CODES':
+    case 'GET_PAGE_HS_CODES': {
       const codes = extractHSCodes();
       sendResponse({ codes });
       break;
-      
-    case 'HIGHLIGHT_HS_CODE':
+    }
+    case 'HIGHLIGHT_HS_CODE': {
       const targetCode = message.hsCode;
       const highlights = document.querySelectorAll(`[data-hs-code="${targetCode}"]`);
       highlights.forEach(el => {
@@ -283,7 +286,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       });
       sendResponse({ highlighted: highlights.length });
       break;
-      
+    }
+
     default:
       sendResponse({ error: 'Unknown message type' });
   }

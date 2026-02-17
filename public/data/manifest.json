@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0",
+  "updated_at": "2025-01-15T00:00:00Z",
+  "files": {
+    "hs_codes": {
+      "url": "hs_codes.json",
+      "count": 90
+    },
+    "agreements": {
+      "url": "agreements.json",
+      "count": 20
+    },
+    "tariff_rates": {
+      "url": "tariff_rates.json",
+      "count": 78
+    }
+  }
+}
