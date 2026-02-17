@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "TariffScope - FTA/EPA最適化ツール",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "日本企業の貿易コスト削減を支援。FTA/EPA協定の最適な関税率を自動判定し、削減額をシミュレーション。",
   "permissions": [
     "storage",
@@ -23,7 +23,9 @@
         "*://*.made-in-china.com/*",
         "*://*.globalsources.com/*"
       ],
-      "js": ["content.js"],
+      "js": [
+        "content.js"
+      ],
       "run_at": "document_idle"
     }
   ],
@@ -43,7 +45,9 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["data/*"],
+      "resources": [
+        "data/*"
+      ],
       "matches": [
         "*://*.jetro.go.jp/*",
         "*://*.customs.go.jp/*",
