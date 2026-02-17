@@ -1,0 +1,756 @@
+{
+  "version": "1.0.0",
+  "updated_at": "2025-01-15T00:00:00Z",
+  "data": [
+    {
+      "hs_code": "8507100000",
+      "country_from": "JP",
+      "country_to": "CN",
+      "agreement_id": "rcep",
+      "base_rate": 10.0,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要"},
+      "effective_date": "2022-01-01"
+    },
+    {
+      "hs_code": "8471300000",
+      "country_from": "JP",
+      "country_to": "CN",
+      "agreement_id": "rcep",
+      "base_rate": 15.0,
+      "preferential_rate": 5.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要"},
+      "effective_date": "2022-01-01"
+    },
+    {
+      "hs_code": "6203423000",
+      "country_from": "JP",
+      "country_to": "CN",
+      "agreement_id": "rcep",
+      "base_rate": 20.0,
+      "preferential_rate": 8.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要"},
+      "effective_date": "2022-01-01"
+    },
+    {
+      "hs_code": "8703232900",
+      "country_from": "JP",
+      "country_to": "AU",
+      "agreement_id": "jaepa",
+      "base_rate": 5.0,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要"},
+      "effective_date": "2015-01-15"
+    },
+    {
+      "hs_code": "8507100000",
+      "country_from": "JP",
+      "country_to": "AU",
+      "agreement_id": "jaepa",
+      "base_rate": 8.0,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要"},
+      "effective_date": "2015-01-15"
+    },
+    {
+      "hs_code": "8703332900",
+      "country_from": "JP",
+      "country_to": "US",
+      "agreement_id": "jusmca",
+      "base_rate": 2.5,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "自国申告制度"},
+      "effective_date": "2020-01-01"
+    },
+    {
+      "hs_code": "8471494000",
+      "country_from": "JP",
+      "country_to": "US",
+      "agreement_id": "jusmca",
+      "base_rate": 0.0,
+      "preferential_rate": 0.0,
+      "conditions": {"duty_free": true},
+      "effective_date": "2020-01-01"
+    },
+    {
+      "hs_code": "8517120000",
+      "country_from": "CN",
+      "country_to": "JP",
+      "agreement_id": "rcep",
+      "base_rate": 0.0,
+      "preferential_rate": 0.0,
+      "conditions": {"duty_free": true},
+      "effective_date": "2022-01-01"
+    },
+    {
+      "hs_code": "8528723000",
+      "country_from": "CN",
+      "country_to": "JP",
+      "agreement_id": "rcep",
+      "base_rate": 8.0,
+      "preferential_rate": 4.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要"},
+      "effective_date": "2022-01-01"
+    },
+    {
+      "hs_code": "0901119000",
+      "country_from": "AU",
+      "country_to": "JP",
+      "agreement_id": "jaepa",
+      "base_rate": 6.0,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "即時撤廃"},
+      "effective_date": "2015-01-15"
+    },
+    {
+      "hs_code": "1701110000",
+      "country_from": "AU",
+      "country_to": "JP",
+      "agreement_id": "cptpp",
+      "base_rate": 71.8,
+      "preferential_rate": 35.9,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "10年"},
+      "effective_date": "2018-12-30"
+    },
+    {
+      "hs_code": "2208202000",
+      "country_from": "DE",
+      "country_to": "JP",
+      "agreement_id": "jepa",
+      "base_rate": 15.0,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "7年"},
+      "effective_date": "2019-02-01"
+    },
+    {
+      "hs_code": "6204620000",
+      "country_from": "IT",
+      "country_to": "JP",
+      "agreement_id": "jepa",
+      "base_rate": 10.9,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "10年"},
+      "effective_date": "2019-02-01"
+    },
+    {
+      "hs_code": "8507100000",
+      "country_from": "JP",
+      "country_to": "KR",
+      "agreement_id": null,
+      "base_rate": 10.0,
+      "preferential_rate": 10.0,
+      "conditions": {"mfn_rate": true},
+      "effective_date": "2024-01-01"
+    },
+    {
+      "hs_code": "8471300000",
+      "country_from": "JP",
+      "country_to": "TW",
+      "agreement_id": null,
+      "base_rate": 15.0,
+      "preferential_rate": 15.0,
+      "conditions": {"mfn_rate": true},
+      "effective_date": "2024-01-01"
+    },
+    {
+      "hs_code": "6203423000",
+      "country_from": "JP",
+      "country_to": "TH",
+      "agreement_id": null,
+      "base_rate": 20.0,
+      "preferential_rate": 20.0,
+      "conditions": {"mfn_rate": true},
+      "effective_date": "2024-01-01"
+    },
+    {
+      "hs_code": "8703232900",
+      "country_from": "JP",
+      "country_to": "IN",
+      "agreement_id": null,
+      "base_rate": 10.0,
+      "preferential_rate": 10.0,
+      "conditions": {"mfn_rate": true},
+      "effective_date": "2024-01-01"
+    },
+    {
+      "hs_code": "8542310000",
+      "country_from": "JP",
+      "country_to": "CN",
+      "agreement_id": "rcep",
+      "base_rate": 0.0,
+      "preferential_rate": 0.0,
+      "conditions": {"duty_free": true, "origin_requirement": "原産地証明書が必要"},
+      "effective_date": "2022-01-01"
+    },
+    {
+      "hs_code": "8542310000",
+      "country_from": "JP",
+      "country_to": "US",
+      "agreement_id": "jusmca",
+      "base_rate": 0.0,
+      "preferential_rate": 0.0,
+      "conditions": {"duty_free": true},
+      "effective_date": "2020-01-01"
+    },
+    {
+      "hs_code": "8542310000",
+      "country_from": "JP",
+      "country_to": "AU",
+      "agreement_id": "cptpp",
+      "base_rate": 0.0,
+      "preferential_rate": 0.0,
+      "conditions": {"duty_free": true, "origin_requirement": "原産地証明書が必要"},
+      "effective_date": "2018-12-30"
+    },
+    {
+      "hs_code": "8542310000",
+      "country_from": "JP",
+      "country_to": "GB",
+      "agreement_id": "juk-epa",
+      "base_rate": 0.0,
+      "preferential_rate": 0.0,
+      "conditions": {"duty_free": true, "origin_requirement": "原産地証明書が必要"},
+      "effective_date": "2021-01-01"
+    },
+    {
+      "hs_code": "8542310000",
+      "country_from": "JP",
+      "country_to": "DE",
+      "agreement_id": "jepa",
+      "base_rate": 0.0,
+      "preferential_rate": 0.0,
+      "conditions": {"duty_free": true, "origin_requirement": "原産地証明書が必要"},
+      "effective_date": "2019-02-01"
+    },
+    {
+      "hs_code": "8517621000",
+      "country_from": "JP",
+      "country_to": "CN",
+      "agreement_id": "rcep",
+      "base_rate": 0.0,
+      "preferential_rate": 0.0,
+      "conditions": {"duty_free": true, "origin_requirement": "原産地証明書が必要"},
+      "effective_date": "2022-01-01"
+    },
+    {
+      "hs_code": "8517621000",
+      "country_from": "JP",
+      "country_to": "US",
+      "agreement_id": null,
+      "base_rate": 0.0,
+      "preferential_rate": 0.0,
+      "conditions": {"duty_free": true},
+      "effective_date": "2024-01-01"
+    },
+    {
+      "hs_code": "8517621000",
+      "country_from": "JP",
+      "country_to": "SG",
+      "agreement_id": "jsg-epa",
+      "base_rate": 0.0,
+      "preferential_rate": 0.0,
+      "conditions": {"duty_free": true, "origin_requirement": "原産地証明書が必要"},
+      "effective_date": "2002-11-30"
+    },
+    {
+      "hs_code": "8517621000",
+      "country_from": "JP",
+      "country_to": "MY",
+      "agreement_id": "jmy-epa",
+      "base_rate": 0.0,
+      "preferential_rate": 0.0,
+      "conditions": {"duty_free": true, "origin_requirement": "原産地証明書が必要"},
+      "effective_date": "2006-07-13"
+    },
+    {
+      "hs_code": "8703211000",
+      "country_from": "JP",
+      "country_to": "AU",
+      "agreement_id": "jaepa",
+      "base_rate": 5.0,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "即時撤廃"},
+      "effective_date": "2015-01-15"
+    },
+    {
+      "hs_code": "8703211000",
+      "country_from": "JP",
+      "country_to": "NZ",
+      "agreement_id": "cptpp",
+      "base_rate": 0.0,
+      "preferential_rate": 0.0,
+      "conditions": {"duty_free": true, "origin_requirement": "原産地証明書が必要"},
+      "effective_date": "2018-12-30"
+    },
+    {
+      "hs_code": "8703211000",
+      "country_from": "JP",
+      "country_to": "CA",
+      "agreement_id": "cptpp",
+      "base_rate": 6.1,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "5年"},
+      "effective_date": "2018-12-30"
+    },
+    {
+      "hs_code": "8703211000",
+      "country_from": "JP",
+      "country_to": "MX",
+      "agreement_id": "cptpp",
+      "base_rate": 20.0,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "10年"},
+      "effective_date": "2018-12-30"
+    },
+    {
+      "hs_code": "8703801000",
+      "country_from": "JP",
+      "country_to": "GB",
+      "agreement_id": "juk-epa",
+      "base_rate": 10.0,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "即時撤廃"},
+      "effective_date": "2021-01-01"
+    },
+    {
+      "hs_code": "8703801000",
+      "country_from": "JP",
+      "country_to": "DE",
+      "agreement_id": "jepa",
+      "base_rate": 10.0,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "即時撤廃"},
+      "effective_date": "2019-02-01"
+    },
+    {
+      "hs_code": "8703801000",
+      "country_from": "JP",
+      "country_to": "CN",
+      "agreement_id": "rcep",
+      "base_rate": 25.0,
+      "preferential_rate": 12.5,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "15年"},
+      "effective_date": "2022-01-01"
+    },
+    {
+      "hs_code": "8708100000",
+      "country_from": "JP",
+      "country_to": "TH",
+      "agreement_id": "jth-epa",
+      "base_rate": 30.0,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "10年"},
+      "effective_date": "2007-11-01"
+    },
+    {
+      "hs_code": "8708100000",
+      "country_from": "JP",
+      "country_to": "ID",
+      "agreement_id": "jid-epa",
+      "base_rate": 25.0,
+      "preferential_rate": 5.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "10年"},
+      "effective_date": "2008-07-01"
+    },
+    {
+      "hs_code": "8708100000",
+      "country_from": "JP",
+      "country_to": "VN",
+      "agreement_id": "jvn-epa",
+      "base_rate": 50.0,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "15年"},
+      "effective_date": "2009-10-01"
+    },
+    {
+      "hs_code": "8479891000",
+      "country_from": "JP",
+      "country_to": "CN",
+      "agreement_id": "rcep",
+      "base_rate": 8.0,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "即時撤廃"},
+      "effective_date": "2022-01-01"
+    },
+    {
+      "hs_code": "8479891000",
+      "country_from": "JP",
+      "country_to": "DE",
+      "agreement_id": "jepa",
+      "base_rate": 1.7,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "即時撤廃"},
+      "effective_date": "2019-02-01"
+    },
+    {
+      "hs_code": "8479891000",
+      "country_from": "JP",
+      "country_to": "US",
+      "agreement_id": null,
+      "base_rate": 0.0,
+      "preferential_rate": 0.0,
+      "conditions": {"duty_free": true},
+      "effective_date": "2024-01-01"
+    },
+    {
+      "hs_code": "8479891000",
+      "country_from": "JP",
+      "country_to": "TH",
+      "agreement_id": "jasean-epa",
+      "base_rate": 5.0,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "5年"},
+      "effective_date": "2008-12-01"
+    },
+    {
+      "hs_code": "8456101000",
+      "country_from": "JP",
+      "country_to": "GB",
+      "agreement_id": "juk-epa",
+      "base_rate": 3.7,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "即時撤廃"},
+      "effective_date": "2021-01-01"
+    },
+    {
+      "hs_code": "8456101000",
+      "country_from": "JP",
+      "country_to": "CH",
+      "agreement_id": "jch-epa",
+      "base_rate": 2.5,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "即時撤廃"},
+      "effective_date": "2009-09-01"
+    },
+    {
+      "hs_code": "8456101000",
+      "country_from": "JP",
+      "country_to": "SG",
+      "agreement_id": "jsg-epa",
+      "base_rate": 0.0,
+      "preferential_rate": 0.0,
+      "conditions": {"duty_free": true, "origin_requirement": "原産地証明書が必要"},
+      "effective_date": "2002-11-30"
+    },
+    {
+      "hs_code": "3901100000",
+      "country_from": "JP",
+      "country_to": "CN",
+      "agreement_id": "rcep",
+      "base_rate": 6.5,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "10年"},
+      "effective_date": "2022-01-01"
+    },
+    {
+      "hs_code": "3901100000",
+      "country_from": "JP",
+      "country_to": "US",
+      "agreement_id": null,
+      "base_rate": 6.5,
+      "preferential_rate": 6.5,
+      "conditions": {"mfn_rate": true},
+      "effective_date": "2024-01-01"
+    },
+    {
+      "hs_code": "3901100000",
+      "country_from": "JP",
+      "country_to": "DE",
+      "agreement_id": "jepa",
+      "base_rate": 6.5,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "7年"},
+      "effective_date": "2019-02-01"
+    },
+    {
+      "hs_code": "3901100000",
+      "country_from": "JP",
+      "country_to": "TH",
+      "agreement_id": "jasean-epa",
+      "base_rate": 5.0,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "10年"},
+      "effective_date": "2008-12-01"
+    },
+    {
+      "hs_code": "2902200000",
+      "country_from": "JP",
+      "country_to": "SG",
+      "agreement_id": "jsg-epa",
+      "base_rate": 0.0,
+      "preferential_rate": 0.0,
+      "conditions": {"duty_free": true, "origin_requirement": "原産地証明書が必要"},
+      "effective_date": "2002-11-30"
+    },
+    {
+      "hs_code": "2902200000",
+      "country_from": "JP",
+      "country_to": "MY",
+      "agreement_id": "jmy-epa",
+      "base_rate": 3.0,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "5年"},
+      "effective_date": "2006-07-13"
+    },
+    {
+      "hs_code": "0304870000",
+      "country_from": "TH",
+      "country_to": "JP",
+      "agreement_id": "jth-epa",
+      "base_rate": 3.5,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "即時撤廃"},
+      "effective_date": "2007-11-01"
+    },
+    {
+      "hs_code": "0304870000",
+      "country_from": "VN",
+      "country_to": "JP",
+      "agreement_id": "jvn-epa",
+      "base_rate": 3.5,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "即時撤廃"},
+      "effective_date": "2009-10-01"
+    },
+    {
+      "hs_code": "0304870000",
+      "country_from": "ID",
+      "country_to": "JP",
+      "agreement_id": "jid-epa",
+      "base_rate": 3.5,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "即時撤廃"},
+      "effective_date": "2008-07-01"
+    },
+    {
+      "hs_code": "1605210000",
+      "country_from": "TH",
+      "country_to": "JP",
+      "agreement_id": "jasean-epa",
+      "base_rate": 6.0,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "10年"},
+      "effective_date": "2008-12-01"
+    },
+    {
+      "hs_code": "1605210000",
+      "country_from": "VN",
+      "country_to": "JP",
+      "agreement_id": "cptpp",
+      "base_rate": 6.0,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "即時撤廃"},
+      "effective_date": "2018-12-30"
+    },
+    {
+      "hs_code": "1605210000",
+      "country_from": "MY",
+      "country_to": "JP",
+      "agreement_id": "rcep",
+      "base_rate": 6.0,
+      "preferential_rate": 3.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "15年"},
+      "effective_date": "2022-01-01"
+    },
+    {
+      "hs_code": "0901210000",
+      "country_from": "AU",
+      "country_to": "JP",
+      "agreement_id": "jaepa",
+      "base_rate": 6.0,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "即時撤廃"},
+      "effective_date": "2015-01-15"
+    },
+    {
+      "hs_code": "0901210000",
+      "country_from": "PE",
+      "country_to": "JP",
+      "agreement_id": "cptpp",
+      "base_rate": 6.0,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "即時撤廃"},
+      "effective_date": "2018-12-30"
+    },
+    {
+      "hs_code": "0901210000",
+      "country_from": "VN",
+      "country_to": "JP",
+      "agreement_id": "jvn-epa",
+      "base_rate": 6.0,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "即時撤廃"},
+      "effective_date": "2009-10-01"
+    },
+    {
+      "hs_code": "6109100000",
+      "country_from": "VN",
+      "country_to": "JP",
+      "agreement_id": "jvn-epa",
+      "base_rate": 10.9,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "10年"},
+      "effective_date": "2009-10-01"
+    },
+    {
+      "hs_code": "6109100000",
+      "country_from": "MY",
+      "country_to": "JP",
+      "agreement_id": "jmy-epa",
+      "base_rate": 10.9,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "10年"},
+      "effective_date": "2006-07-13"
+    },
+    {
+      "hs_code": "6109100000",
+      "country_from": "PH",
+      "country_to": "JP",
+      "agreement_id": "jph-epa",
+      "base_rate": 10.9,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "10年"},
+      "effective_date": "2008-12-11"
+    },
+    {
+      "hs_code": "6203120000",
+      "country_from": "IT",
+      "country_to": "JP",
+      "agreement_id": "jepa",
+      "base_rate": 9.1,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "10年"},
+      "effective_date": "2019-02-01"
+    },
+    {
+      "hs_code": "6203120000",
+      "country_from": "GB",
+      "country_to": "JP",
+      "agreement_id": "juk-epa",
+      "base_rate": 9.1,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "10年"},
+      "effective_date": "2021-01-01"
+    },
+    {
+      "hs_code": "7208100000",
+      "country_from": "AU",
+      "country_to": "JP",
+      "agreement_id": "jaepa",
+      "base_rate": 0.0,
+      "preferential_rate": 0.0,
+      "conditions": {"duty_free": true, "origin_requirement": "原産地証明書が必要"},
+      "effective_date": "2015-01-15"
+    },
+    {
+      "hs_code": "7208100000",
+      "country_from": "CA",
+      "country_to": "JP",
+      "agreement_id": "cptpp",
+      "base_rate": 0.0,
+      "preferential_rate": 0.0,
+      "conditions": {"duty_free": true, "origin_requirement": "原産地証明書が必要"},
+      "effective_date": "2018-12-30"
+    },
+    {
+      "hs_code": "7208100000",
+      "country_from": "CL",
+      "country_to": "JP",
+      "agreement_id": "jcl-epa",
+      "base_rate": 0.0,
+      "preferential_rate": 0.0,
+      "conditions": {"duty_free": true, "origin_requirement": "原産地証明書が必要"},
+      "effective_date": "2007-09-03"
+    },
+    {
+      "hs_code": "7601100000",
+      "country_from": "AU",
+      "country_to": "JP",
+      "agreement_id": "jaepa",
+      "base_rate": 0.0,
+      "preferential_rate": 0.0,
+      "conditions": {"duty_free": true, "origin_requirement": "原産地証明書が必要"},
+      "effective_date": "2015-01-15"
+    },
+    {
+      "hs_code": "7601100000",
+      "country_from": "MY",
+      "country_to": "JP",
+      "agreement_id": "rcep",
+      "base_rate": 3.0,
+      "preferential_rate": 0.0,
+      "conditions": {"origin_requirement": "原産地証明書が必要", "staging": "10年"},
+      "effective_date": "2022-01-01"
+    },
+    {
+      "hs_code": "8542310000",
+      "country_from": "JP",
+      "country_to": "KR",
+      "agreement_id": null,
+      "base_rate": 0.0,
+      "preferential_rate": 0.0,
+      "conditions": {"duty_free": true},
+      "effective_date": "2024-01-01"
+    },
+    {
+      "hs_code": "8542310000",
+      "country_from": "JP",
+      "country_to": "TW",
+      "agreement_id": null,
+      "base_rate": 0.0,
+      "preferential_rate": 0.0,
+      "conditions": {"duty_free": true},
+      "effective_date": "2024-01-01"
+    },
+    {
+      "hs_code": "8517621000",
+      "country_from": "JP",
+      "country_to": "IN",
+      "agreement_id": null,
+      "base_rate": 0.0,
+      "preferential_rate": 0.0,
+      "conditions": {"duty_free": true},
+      "effective_date": "2024-01-01"
+    },
+    {
+      "hs_code": "8703211000",
+      "country_from": "JP",
+      "country_to": "KR",
+      "agreement_id": null,
+      "base_rate": 8.0,
+      "preferential_rate": 8.0,
+      "conditions": {"mfn_rate": true},
+      "effective_date": "2024-01-01"
+    },
+    {
+      "hs_code": "8703211000",
+      "country_from": "JP",
+      "country_to": "TW",
+      "agreement_id": null,
+      "base_rate": 17.5,
+      "preferential_rate": 17.5,
+      "conditions": {"mfn_rate": true},
+      "effective_date": "2024-01-01"
+    },
+    {
+      "hs_code": "8479891000",
+      "country_from": "JP",
+      "country_to": "IN",
+      "agreement_id": null,
+      "base_rate": 7.5,
+      "preferential_rate": 7.5,
+      "conditions": {"mfn_rate": true},
+      "effective_date": "2024-01-01"
+    },
+    {
+      "hs_code": "3901100000",
+      "country_from": "JP",
+      "country_to": "BR",
+      "agreement_id": null,
+      "base_rate": 14.0,
+      "preferential_rate": 14.0,
+      "conditions": {"mfn_rate": true},
+      "effective_date": "2024-01-01"
+    }
+  ]
+}

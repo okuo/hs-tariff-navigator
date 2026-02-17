@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Trade Lens - FTA/EPA最適化ツール",
+  "name": "TariffScope - FTA/EPA最適化ツール",
   "version": "1.0.0",
   "description": "日本企業の貿易コスト削減を支援。FTA/EPA協定の最適な関税率を自動判定し、削減額をシミュレーション。",
   "permissions": [
@@ -8,9 +8,6 @@
     "activeTab",
     "alarms",
     "tabs"
-  ],
-  "host_permissions": [
-    "https://*.supabase.co/*"
   ],
   "background": {
     "service_worker": "background.js"
@@ -24,11 +21,11 @@
   ],
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Trade Lens"
+    "default_title": "TariffScope"
   },
   "web_accessible_resources": [
     {
-      "resources": ["popup.html"],
+      "resources": ["popup.html", "data/*"],
       "matches": ["<all_urls>"]
     }
   ],

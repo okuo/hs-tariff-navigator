@@ -73,3 +73,47 @@ export interface CountryOption {
   name_ja: string;
   name_en: string;
 }
+
+export interface SearchHistoryEntry {
+  id: string;
+  hs_code: string;
+  country_from: string;
+  country_to: string;
+  trade_value: number | null;
+  search_results: OptimizationResult;
+  created_at: string;
+}
+
+export interface SearchHistoryForDisplay {
+  id: string;
+  hs_code: string;
+  from_country: string;
+  to_country: string;
+  trade_value: number | null;
+  best_agreement_name?: string;
+  savings_amount?: number;
+  timestamp: string;
+}
+
+export interface CertificationType {
+  type: string;
+  name_ja: string;
+  name_en: string;
+  description: string;
+}
+
+export interface OriginRule {
+  agreement_id: string;
+  certification_types: CertificationType[];
+  required_documents: string[];
+  key_rules: string[];
+  value_content_threshold: string;
+  notes: string;
+  reference_url: string;
+}
+
+export interface OriginRulesData {
+  version: string;
+  updated_at: string;
+  data: Record<string, OriginRule>;
+}

@@ -1,0 +1,204 @@
+{
+  "version": "1.0.0",
+  "updated_at": "2025-01-15T00:00:00Z",
+  "data": {
+    "rcep": {
+      "agreement_id": "rcep",
+      "certification_types": [
+        {
+          "type": "third_party",
+          "name_ja": "第三者証明",
+          "name_en": "Third-party certification",
+          "description": "発給機関（日本商工会議所等）が原産地証明書を発給"
+        },
+        {
+          "type": "approved_exporter",
+          "name_ja": "認定輸出者自己証明",
+          "name_en": "Approved exporter self-certification",
+          "description": "税関から認定を受けた輸出者が自ら証明"
+        },
+        {
+          "type": "self_certification",
+          "name_ja": "輸出者・生産者自己申告",
+          "name_en": "Exporter/Producer self-declaration",
+          "description": "輸出者または生産者が自ら原産地申告"
+        }
+      ],
+      "required_documents": [
+        "原産地証明書（様式あり）",
+        "インボイス（原産地申告の場合は申告文を記載）",
+        "原産品申告明細書（輸入時）",
+        "生産工程フロー図（必要に応じて）"
+      ],
+      "key_rules": [
+        "完全生産品：一国で完全に生産された産品",
+        "原産材料のみから生産：RCEP締約国原産の材料のみで生産",
+        "品目別規則（PSR）：関税分類変更基準または付加価値基準を満たす",
+        "累積：RCEP締約国間で原産資格を累積可能"
+      ],
+      "value_content_threshold": "域内原産割合40%以上（RVC基準の場合）",
+      "notes": "発効後20年以内に第三者証明を廃止し自己申告に完全移行予定",
+      "reference_url": "https://www.customs.go.jp/roo/procedure/riyou_rcep.htm"
+    },
+    "cptpp": {
+      "agreement_id": "cptpp",
+      "certification_types": [
+        {
+          "type": "self_certification",
+          "name_ja": "自己申告制度",
+          "name_en": "Self-certification",
+          "description": "輸出者、生産者、輸入者のいずれかが原産地申告可能"
+        }
+      ],
+      "required_documents": [
+        "原産品申告書（任意様式）",
+        "原産品申告明細書",
+        "インボイス等の商業書類",
+        "生産に関する資料（必要に応じて）"
+      ],
+      "key_rules": [
+        "完全生産品：締約国で完全に得られた産品",
+        "原産材料のみから生産：締約国原産材料のみで生産",
+        "品目別規則（PSR）：関税分類変更、付加価値、加工工程基準",
+        "完全累積：締約国間で生産工程の累積可能"
+      ],
+      "value_content_threshold": "域内原産割合は品目により異なる（多くは45-55%）",
+      "notes": "第三者証明は不要。輸入者申告も可能",
+      "reference_url": "https://www.customs.go.jp/roo/procedure/riyou_tpp11.htm"
+    },
+    "jepa": {
+      "agreement_id": "jepa",
+      "certification_types": [
+        {
+          "type": "self_certification",
+          "name_ja": "自己申告制度",
+          "name_en": "Self-certification",
+          "description": "輸出者が原産地に関する申告を作成"
+        },
+        {
+          "type": "approved_exporter",
+          "name_ja": "認定輸出者制度",
+          "name_en": "Approved exporter",
+          "description": "REXシステム（EU側）/ 認定輸出者（日本側）"
+        }
+      ],
+      "required_documents": [
+        "原産地に関する申告（インボイス等に記載）",
+        "原産品申告明細書",
+        "サプライヤー証明書（必要に応じて）"
+      ],
+      "key_rules": [
+        "完全生産品：締約国で完全に得られた産品",
+        "十分な変更・加工：品目別規則を満たす加工",
+        "二国間累積：日EU間で原産資格の累積可能",
+        "トレランス：非原産材料の許容範囲あり"
+      ],
+      "value_content_threshold": "品目別に異なる（MaxNOM等の基準）",
+      "notes": "6,000ユーロ以下は認定輸出者でなくても自己申告可能",
+      "reference_url": "https://www.customs.go.jp/roo/procedure/riyou_eu.htm"
+    },
+    "jusmca": {
+      "agreement_id": "jusmca",
+      "certification_types": [
+        {
+          "type": "self_certification",
+          "name_ja": "自己申告制度",
+          "name_en": "Self-certification",
+          "description": "輸出者または生産者が原産地申告を作成"
+        }
+      ],
+      "required_documents": [
+        "原産品申告書",
+        "原産品申告明細書",
+        "インボイス等の商業書類"
+      ],
+      "key_rules": [
+        "完全生産品基準",
+        "関税分類変更基準（CTC）",
+        "付加価値基準（RVC）",
+        "加工工程基準"
+      ],
+      "value_content_threshold": "品目により異なる",
+      "notes": "対象品目は農産品が中心。工業製品は限定的",
+      "reference_url": "https://www.customs.go.jp/roo/procedure/riyou_us.htm"
+    },
+    "jaepa": {
+      "agreement_id": "jaepa",
+      "certification_types": [
+        {
+          "type": "third_party",
+          "name_ja": "第三者証明",
+          "name_en": "Third-party certification",
+          "description": "日本商工会議所等が原産地証明書を発給"
+        },
+        {
+          "type": "approved_exporter",
+          "name_ja": "認定輸出者自己証明",
+          "name_en": "Approved exporter",
+          "description": "認定輸出者による自己証明"
+        }
+      ],
+      "required_documents": [
+        "原産地証明書（第三者証明の場合）",
+        "原産地申告（認定輸出者の場合）",
+        "原産品申告明細書"
+      ],
+      "key_rules": [
+        "完全生産品基準",
+        "品目別規則（PSR）に基づく実質的変更基準",
+        "付加価値基準（QVC）"
+      ],
+      "value_content_threshold": "品目別規則による（多くは40-50%）",
+      "notes": "認定輸出者制度を利用すると手続きが簡素化",
+      "reference_url": "https://www.customs.go.jp/roo/procedure/riyou_au.htm"
+    },
+    "juk-epa": {
+      "agreement_id": "juk-epa",
+      "certification_types": [
+        {
+          "type": "self_certification",
+          "name_ja": "自己申告制度",
+          "name_en": "Self-certification",
+          "description": "輸出者による原産地申告"
+        }
+      ],
+      "required_documents": [
+        "原産地に関する申告",
+        "原産品申告明細書",
+        "サプライヤー証明書（必要に応じて）"
+      ],
+      "key_rules": [
+        "日EU・EPAとほぼ同様の規則体系",
+        "完全生産品基準",
+        "品目別規則（PSR）",
+        "二国間累積"
+      ],
+      "value_content_threshold": "日EU・EPAと同様",
+      "notes": "日EU・EPAの規則をベースとしている",
+      "reference_url": "https://www.customs.go.jp/roo/procedure/riyou_uk.htm"
+    },
+    "default": {
+      "agreement_id": "default",
+      "certification_types": [
+        {
+          "type": "third_party",
+          "name_ja": "第三者証明",
+          "name_en": "Third-party certification",
+          "description": "発給機関が原産地証明書を発給"
+        }
+      ],
+      "required_documents": [
+        "原産地証明書",
+        "インボイス",
+        "原産品申告明細書"
+      ],
+      "key_rules": [
+        "完全生産品基準",
+        "実質的変更基準（関税分類変更または付加価値基準）"
+      ],
+      "value_content_threshold": "協定により異なる",
+      "notes": "詳細は各協定の規定をご確認ください",
+      "reference_url": "https://www.customs.go.jp/roo/procedure/index.htm"
+    }
+  }
+}

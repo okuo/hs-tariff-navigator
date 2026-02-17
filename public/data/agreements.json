@@ -1,0 +1,206 @@
+{
+  "version": "1.0.0",
+  "updated_at": "2025-01-15T00:00:00Z",
+  "data": [
+    {
+      "id": "rcep",
+      "name_ja": "RCEP（地域的な包括的経済連携）",
+      "name_en": "Regional Comprehensive Economic Partnership",
+      "countries": ["JP", "CN", "KR", "TH", "VN", "MY", "SG", "ID", "PH", "AU", "NZ", "BN", "KH", "LA", "MM"],
+      "effective_date": "2022-01-01",
+      "document_url": "https://www.mofa.go.jp/mofaj/gaiko/fta/j-eacepia/index.html",
+      "priority": 1,
+      "is_active": true
+    },
+    {
+      "id": "cptpp",
+      "name_ja": "CPTPP（環太平洋パートナーシップ協定）",
+      "name_en": "Comprehensive and Progressive Agreement for Trans-Pacific Partnership",
+      "countries": ["JP", "AU", "CA", "CL", "MX", "NZ", "PE", "SG", "VN", "MY", "BN", "GB"],
+      "effective_date": "2018-12-30",
+      "document_url": "https://www.mofa.go.jp/mofaj/gaiko/tpp/",
+      "priority": 2,
+      "is_active": true
+    },
+    {
+      "id": "jaepa",
+      "name_ja": "日豪EPA（日豪経済連携協定）",
+      "name_en": "Japan-Australia Economic Partnership Agreement",
+      "countries": ["JP", "AU"],
+      "effective_date": "2015-01-15",
+      "document_url": "https://www.mofa.go.jp/mofaj/gaiko/fta/j-a/",
+      "priority": 3,
+      "is_active": true
+    },
+    {
+      "id": "jepa",
+      "name_ja": "日EU・EPA（日欧経済連携協定）",
+      "name_en": "Japan-EU Economic Partnership Agreement",
+      "countries": ["JP", "DE", "FR", "IT", "ES", "NL", "BE", "AT", "PL", "RO", "GR", "PT", "CZ", "HU", "SE", "BG", "DK", "FI", "SK", "HR", "IE", "LT", "SI", "LV", "EE", "CY", "LU", "MT"],
+      "effective_date": "2019-02-01",
+      "document_url": "https://www.mofa.go.jp/mofaj/gaiko/page6_000042.html",
+      "priority": 4,
+      "is_active": true
+    },
+    {
+      "id": "jusmca",
+      "name_ja": "日米貿易協定",
+      "name_en": "Japan-United States Trade Agreement",
+      "countries": ["JP", "US"],
+      "effective_date": "2020-01-01",
+      "document_url": "https://www.mofa.go.jp/mofaj/ila/et/page23_002886_00001.html",
+      "priority": 5,
+      "is_active": true
+    },
+    {
+      "id": "juk-epa",
+      "name_ja": "日英EPA（日英包括的経済連携協定）",
+      "name_en": "Japan-UK Comprehensive Economic Partnership Agreement",
+      "countries": ["JP", "GB"],
+      "effective_date": "2021-01-01",
+      "document_url": "https://www.mofa.go.jp/mofaj/gaiko/fta/j-uk/",
+      "priority": 6,
+      "is_active": true
+    },
+    {
+      "id": "jasean-epa",
+      "name_ja": "日ASEAN EPA（日ASEAN包括的経済連携協定）",
+      "name_en": "Japan-ASEAN Comprehensive Economic Partnership",
+      "countries": ["JP", "TH", "VN", "MY", "SG", "ID", "PH", "BN", "KH", "LA", "MM"],
+      "effective_date": "2008-12-01",
+      "document_url": "https://www.mofa.go.jp/mofaj/gaiko/fta/j-asean/",
+      "priority": 7,
+      "is_active": true
+    },
+    {
+      "id": "jch-epa",
+      "name_ja": "日スイスEPA（日スイス経済連携協定）",
+      "name_en": "Japan-Switzerland Economic Partnership Agreement",
+      "countries": ["JP", "CH"],
+      "effective_date": "2009-09-01",
+      "document_url": "https://www.mofa.go.jp/mofaj/gaiko/fta/j-swiss/",
+      "priority": 8,
+      "is_active": true
+    },
+    {
+      "id": "jcl-epa",
+      "name_ja": "日チリEPA（日チリ戦略的経済連携協定）",
+      "name_en": "Japan-Chile Strategic Economic Partnership Agreement",
+      "countries": ["JP", "CL"],
+      "effective_date": "2007-09-03",
+      "document_url": "https://www.mofa.go.jp/mofaj/gaiko/fta/j-chile/",
+      "priority": 9,
+      "is_active": true
+    },
+    {
+      "id": "jth-epa",
+      "name_ja": "日タイEPA（日タイ経済連携協定）",
+      "name_en": "Japan-Thailand Economic Partnership Agreement",
+      "countries": ["JP", "TH"],
+      "effective_date": "2007-11-01",
+      "document_url": "https://www.mofa.go.jp/mofaj/gaiko/fta/j-thai/",
+      "priority": 10,
+      "is_active": true
+    },
+    {
+      "id": "jid-epa",
+      "name_ja": "日インドネシアEPA（日インドネシア経済連携協定）",
+      "name_en": "Japan-Indonesia Economic Partnership Agreement",
+      "countries": ["JP", "ID"],
+      "effective_date": "2008-07-01",
+      "document_url": "https://www.mofa.go.jp/mofaj/gaiko/fta/j-indonesia/",
+      "priority": 11,
+      "is_active": true
+    },
+    {
+      "id": "jph-epa",
+      "name_ja": "日フィリピンEPA（日フィリピン経済連携協定）",
+      "name_en": "Japan-Philippines Economic Partnership Agreement",
+      "countries": ["JP", "PH"],
+      "effective_date": "2008-12-11",
+      "document_url": "https://www.mofa.go.jp/mofaj/gaiko/fta/j-philippines/",
+      "priority": 12,
+      "is_active": true
+    },
+    {
+      "id": "jsg-epa",
+      "name_ja": "日シンガポールEPA（日シンガポール経済連携協定）",
+      "name_en": "Japan-Singapore Economic Partnership Agreement",
+      "countries": ["JP", "SG"],
+      "effective_date": "2002-11-30",
+      "document_url": "https://www.mofa.go.jp/mofaj/gaiko/fta/j-singapore/",
+      "priority": 13,
+      "is_active": true
+    },
+    {
+      "id": "jmy-epa",
+      "name_ja": "日マレーシアEPA（日マレーシア経済連携協定）",
+      "name_en": "Japan-Malaysia Economic Partnership Agreement",
+      "countries": ["JP", "MY"],
+      "effective_date": "2006-07-13",
+      "document_url": "https://www.mofa.go.jp/mofaj/gaiko/fta/j-malaysia/",
+      "priority": 14,
+      "is_active": true
+    },
+    {
+      "id": "jvn-epa",
+      "name_ja": "日ベトナムEPA（日ベトナム経済連携協定）",
+      "name_en": "Japan-Viet Nam Economic Partnership Agreement",
+      "countries": ["JP", "VN"],
+      "effective_date": "2009-10-01",
+      "document_url": "https://www.mofa.go.jp/mofaj/gaiko/fta/j-vietnam/",
+      "priority": 15,
+      "is_active": true
+    },
+    {
+      "id": "jmn-epa",
+      "name_ja": "日モンゴルEPA（日モンゴル経済連携協定）",
+      "name_en": "Japan-Mongolia Economic Partnership Agreement",
+      "countries": ["JP", "MN"],
+      "effective_date": "2016-06-07",
+      "document_url": "https://www.mofa.go.jp/mofaj/gaiko/fta/j-mongolia/",
+      "priority": 16,
+      "is_active": true
+    },
+    {
+      "id": "jtr-epa",
+      "name_ja": "日トルコEPA（日トルコ経済連携協定）",
+      "name_en": "Japan-Turkey Economic Partnership Agreement",
+      "countries": ["JP", "TR"],
+      "effective_date": "2025-01-01",
+      "document_url": "https://www.mofa.go.jp/mofaj/gaiko/fta/j-turkey/",
+      "priority": 17,
+      "is_active": false
+    },
+    {
+      "id": "jco-epa",
+      "name_ja": "日コロンビアEPA（日コロンビア経済連携協定）",
+      "name_en": "Japan-Colombia Economic Partnership Agreement",
+      "countries": ["JP", "CO"],
+      "effective_date": "2025-01-01",
+      "document_url": "https://www.mofa.go.jp/mofaj/gaiko/fta/j-colombia/",
+      "priority": 18,
+      "is_active": false
+    },
+    {
+      "id": "jkr-epa",
+      "name_ja": "日韓EPA（日韓経済連携協定）",
+      "name_en": "Japan-Korea Economic Partnership Agreement",
+      "countries": ["JP", "KR"],
+      "effective_date": "2025-01-01",
+      "document_url": "https://www.mofa.go.jp/mofaj/gaiko/fta/j-korea/",
+      "priority": 19,
+      "is_active": false
+    },
+    {
+      "id": "jck-fta",
+      "name_ja": "日中韓FTA（日中韓自由貿易協定）",
+      "name_en": "Japan-China-Korea Free Trade Agreement",
+      "countries": ["JP", "CN", "KR"],
+      "effective_date": "2025-01-01",
+      "document_url": "https://www.mofa.go.jp/mofaj/gaiko/fta/jck/",
+      "priority": 20,
+      "is_active": false
+    }
+  ]
+}

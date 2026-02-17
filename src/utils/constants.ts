@@ -65,3 +65,19 @@ export const API_ENDPOINTS = {
   OPTIMIZE_FTA: 'optimize-fta',
   GET_AGREEMENTS: 'get-agreements'
 } as const;
+
+export const TRADE_RELATED_DOMAINS = [
+  'jetro.go.jp',
+  'customs.go.jp',
+  'meti.go.jp',
+  'mofa.go.jp',
+  'tradestats.go.jp',
+  'alibaba.com',
+  'made-in-china.com',
+  'globalsources.com'
+] as const;
+
+export const CONTENT_SCRIPT_CONFIG = {
+  DEBOUNCE_MS: 300,
+  MAX_NODE_COUNT: 10000
+} as const;

@@ -2,11 +2,12 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
-    webextensions: true
+    webextensions: true,
+    jest: true
   },
   extends: [
     'eslint:recommended',
-    '@typescript-eslint/recommended',
+    'plugin:@typescript-eslint/recommended',
     'plugin:react/recommended',
     'plugin:react-hooks/recommended'
   ],
