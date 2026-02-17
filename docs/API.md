@@ -20,7 +20,7 @@ JSONファイル (public/data/)
 
 | ファイル | 説明 |
 |---------|------|
-| `public/data/manifest.json` | データバージョン・メタ情報 |
+| `public/data/data-manifest.json` | データバージョン・メタ情報 |
 | `public/data/hs_codes.json` | HSコードマスター |
 | `public/data/agreements.json` | FTA/EPA協定マスター |
 | `public/data/tariff_rates.json` | 関税率データ |

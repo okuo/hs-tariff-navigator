@@ -120,7 +120,7 @@ async function loadLocalData(): Promise<CachedData> {
   const basePath = LOCAL_DATA_PATH;
 
   const [manifestData, hsCodesData, agreementsData, tariffRatesData] = await Promise.all([
-    fetchJson<DataManifest>(`${basePath}manifest.json`),
+    fetchJson<DataManifest>(`${basePath}data-manifest.json`),
     fetchJson<{ version: string; data: HSCode[] }>(`${basePath}hs_codes.json`),
     fetchJson<{ version: string; data: Agreement[] }>(`${basePath}agreements.json`),
     fetchJson<{ version: string; data: TariffRateData[] }>(`${basePath}tariff_rates.json`),
@@ -139,7 +139,7 @@ async function loadLocalData(): Promise<CachedData> {
  * 外部URLからデータを読み込む
  */
 async function loadRemoteData(baseUrl: string): Promise<CachedData> {
-  const manifestUrl = `${baseUrl}/manifest.json`;
+  const manifestUrl = `${baseUrl}/data-manifest.json`;
   const manifest = await fetchJson<DataManifest>(manifestUrl);
 
   const [hsCodesData, agreementsData, tariffRatesData] = await Promise.all([
@@ -203,7 +203,7 @@ export async function checkForUpdates(baseUrl: string = DATA_BASE_URL): Promise<
     const cached = await getCachedData();
     if (!cached) return true;
 
-    const remoteManifest = await fetchJson<DataManifest>(`${baseUrl}/manifest.json`);
+    const remoteManifest = await fetchJson<DataManifest>(`${baseUrl}/data-manifest.json`);
     return remoteManifest.version !== cached.manifest.version;
   } catch (error) {
     console.error('Failed to check for updates:', error);
