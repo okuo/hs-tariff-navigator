@@ -93,7 +93,7 @@ const App: React.FC = () => {
                   </svg>
                 </button>
               )}
-              <h1 className="text-lg font-bold text-gray-900 dark:text-gray-100">Trade Lens</h1>
+              <h1 className="text-lg font-bold text-gray-900 dark:text-gray-100">TariffScope</h1>
             </div>
             <div className="flex items-center space-x-2">
               <button

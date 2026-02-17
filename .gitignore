@@ -12,3 +12,4 @@ yarn-debug.log*
 .idea/
 .vscode/
 .claude/
+tariff-scope-*.zip

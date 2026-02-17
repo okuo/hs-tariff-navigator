@@ -70,7 +70,7 @@ const TariffComparison: React.FC<TariffComparisonProps> = ({ result, onBack, onT
     if (!result) return;
     try {
       const lines = [
-        `[Trade Lens] 関税最適化結果`,
+        `[TariffScope] 関税最適化結果`,
         `HSコード: ${result.hs_code}`,
         `輸出国: ${result.from_country} / 輸入国: ${result.to_country}`,
         `貿易額: ${result.trade_value.toLocaleString()}円`,

@@ -1,5 +1,5 @@
 /**
- * Trade Lens API層
+ * TariffScope API層
  * データサービス、検索、関税最適化の統合インターフェース
  */
 
@@ -9,7 +9,7 @@ import { searchHSCodes as searchHS } from './search';
 import { optimizeTariff as optimize } from './tariffOptimizer';
 
 // 検索履歴のストレージキー
-const SEARCH_HISTORY_KEY = 'trade-lens-search-history';
+const SEARCH_HISTORY_KEY = 'tariff-scope-search-history';
 const MAX_HISTORY_ITEMS = 50;
 
 /**
@@ -204,9 +204,9 @@ async function getLocalSearchHistory(): Promise<SearchHistoryEntry[]> {
 export async function initializeData(): Promise<void> {
   try {
     await dataService.getData();
-    console.log('Trade Lens: データ初期化完了');
+    console.log('TariffScope: データ初期化完了');
   } catch (error) {
-    console.error('Trade Lens: データ初期化エラー:', error);
+    console.error('TariffScope: データ初期化エラー:', error);
   }
 }
 
@@ -216,8 +216,8 @@ export async function initializeData(): Promise<void> {
 export async function refreshData(): Promise<void> {
   try {
     await dataService.refresh();
-    console.log('Trade Lens: データ更新完了');
+    console.log('TariffScope: データ更新完了');
   } catch (error) {
-    console.error('Trade Lens: データ更新エラー:', error);
+    console.error('TariffScope: データ更新エラー:', error);
   }
 }

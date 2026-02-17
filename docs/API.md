@@ -1,10 +1,10 @@
-# Trade Lens API ドキュメント
+# TariffScope API ドキュメント
 
-Trade Lensで使用されるデータ構造とAPI関数の詳細ドキュメントです。
+TariffScopeで使用されるデータ構造とAPI関数の詳細ドキュメントです。
 
 ## データアーキテクチャ
 
-Trade Lensはローカルデータ方式を採用しています。拡張機能に同梱されたJSONファイルからデータを読み込み、Chrome Storage APIにキャッシュします。
+TariffScopeはローカルデータ方式を採用しています。拡張機能に同梱されたJSONファイルからデータを読み込み、Chrome Storage APIにキャッシュします。
 
 ### データフロー
 
@@ -212,8 +212,8 @@ async function refreshData(): Promise<void>
 
 | キー | 内容 |
 |-----|------|
-| `trade-lens-search-history` | 検索履歴（最大50件） |
-| `trade-lens-data-cache` | HSコード・協定・関税率のキャッシュ |
+| `tariff-scope-search-history` | 検索履歴（最大50件） |
+| `tariff-scope-data-cache` | HSコード・協定・関税率のキャッシュ |
 | `search_history` | Background Scriptが管理する検索履歴 |
 | `user_settings` | ユーザー設定 |
 

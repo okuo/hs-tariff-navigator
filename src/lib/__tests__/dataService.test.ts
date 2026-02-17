@@ -6,7 +6,7 @@ beforeEach(() => {
   resetChromeStorage();
 });
 
-const CACHE_KEY = 'trade-lens-data-cache';
+const CACHE_KEY = 'tariff-scope-data-cache';
 
 const validCachedData = {
   hs_codes: [

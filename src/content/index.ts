@@ -1,7 +1,7 @@
-// Content Script for Trade Lens Chrome Extension
+// Content Script for TariffScope Chrome Extension
 import { TRADE_RELATED_DOMAINS, CONTENT_SCRIPT_CONFIG } from '@/utils/constants';
 
-console.log('Trade Lens Content Script loaded');
+console.log('TariffScope Content Script loaded');
 
 // Debounce utility
 function debounce(fn: () => void, ms: number): () => void {
@@ -76,7 +76,7 @@ function highlightHSCodes(): void {
       content = content.replace(pattern, (match) => {
         modified = true;
         return `<span class="hs-tariff-navigator-highlight" data-hs-code="${match.replace(/[^0-9]/g, '')}"
-                      title="Trade Lensで詳細を確認">${match}</span>`;
+                      title="TariffScopeで詳細を確認">${match}</span>`;
       });
     });
 
@@ -140,7 +140,7 @@ function handleHSCodeClick(event: Event): void {
   const hsCode = target.getAttribute('data-hs-code');
   if (!hsCode) return;
 
-  // Trade Lensポップアップを開く（将来的にはポップアップ内で直接表示）
+  // TariffScopeポップアップを開く（将来的にはポップアップ内で直接表示）
   chrome.runtime.sendMessage({
     type: 'HS_CODE_CLICKED',
     hsCode: hsCode,
@@ -149,7 +149,7 @@ function handleHSCodeClick(event: Event): void {
   });
 
   // ユーザーに通知
-  showNotification(`HSコード ${hsCode} をTrade Lensで確認できます`);
+  showNotification(`HSコード ${hsCode} をTariffScopeで確認できます`);
 }
 
 // 通知表示

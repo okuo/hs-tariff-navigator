@@ -36,8 +36,8 @@ export interface CachedData {
 }
 
 // 設定
-const DATA_BASE_URL = 'https://your-username.github.io/trade-lens-data';
-const CACHE_KEY = 'trade-lens-data-cache';
+const DATA_BASE_URL = 'https://your-username.github.io/tariff-scope-data';
+const CACHE_KEY = 'tariff-scope-data-cache';
 const CACHE_EXPIRY_HOURS = 24;
 
 // 開発環境用のローカルデータパス

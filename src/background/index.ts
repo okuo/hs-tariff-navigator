@@ -7,7 +7,7 @@ const DATA_UPDATE_INTERVAL_MINUTES = 60 * 24;
 
 // Extension install handler
 chrome.runtime.onInstalled.addListener((details) => {
-  console.log('Trade Lens extension installed:', details);
+  console.log('TariffScope extension installed:', details);
 
   // Initialize default storage values
   chrome.storage.local.set(
@@ -109,11 +109,11 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 // データ初期化
 async function initializeData() {
   try {
-    console.log('Trade Lens: Initializing data...');
+    console.log('TariffScope: Initializing data...');
     await loadData();
-    console.log('Trade Lens: Data initialized successfully');
+    console.log('TariffScope: Data initialized successfully');
   } catch (error) {
-    console.error('Trade Lens: Failed to initialize data:', error);
+    console.error('TariffScope: Failed to initialize data:', error);
   }
 }
 
@@ -121,10 +121,10 @@ async function initializeData() {
 async function checkDataUpdates(): Promise<boolean> {
   try {
     const hasUpdates = await checkForUpdates();
-    console.log('Trade Lens: Data update check result:', hasUpdates);
+    console.log('TariffScope: Data update check result:', hasUpdates);
     return hasUpdates;
   } catch (error) {
-    console.error('Trade Lens: Failed to check for updates:', error);
+    console.error('TariffScope: Failed to check for updates:', error);
     return false;
   }
 }
@@ -132,12 +132,12 @@ async function checkDataUpdates(): Promise<boolean> {
 // データ更新
 async function refreshData(): Promise<void> {
   try {
-    console.log('Trade Lens: Refreshing data...');
+    console.log('TariffScope: Refreshing data...');
     await clearCache();
     await loadData(true);
-    console.log('Trade Lens: Data refreshed successfully');
+    console.log('TariffScope: Data refreshed successfully');
   } catch (error) {
-    console.error('Trade Lens: Failed to refresh data:', error);
+    console.error('TariffScope: Failed to refresh data:', error);
     throw error;
   }
 }
@@ -203,15 +203,15 @@ function safeInitializeChromeAPIs() {
       // アラームリスナー
       chrome.alarms.onAlarm.addListener(async (alarm) => {
         if (alarm.name === 'dataUpdate') {
-          console.log('Trade Lens: Checking for data updates...');
+          console.log('TariffScope: Checking for data updates...');
           try {
             const hasUpdates = await checkDataUpdates();
             if (hasUpdates) {
-              console.log('Trade Lens: Updates available, refreshing data...');
+              console.log('TariffScope: Updates available, refreshing data...');
               await refreshData();
             }
           } catch (error) {
-            console.error('Trade Lens: Error during scheduled update check:', error);
+            console.error('TariffScope: Error during scheduled update check:', error);
           }
         }
       });
@@ -226,7 +226,7 @@ function safeInitializeChromeAPIs() {
 }
 
 // Service Worker 起動時に初期化
-console.log('Trade Lens background script loaded');
+console.log('TariffScope background script loaded');
 safeInitializeChromeAPIs();
 
 export {};
