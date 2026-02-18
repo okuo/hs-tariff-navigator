@@ -1,134 +1,110 @@
-﻿# HS Tariff Navigator - FTA/EPA譛驕ｩ蛹砲hrome諡｡蠑ｵ讖溯・
+# TariffScope - FTA/EPA関税最適化Chrome拡張機能
 
-譌･譛ｬ莨∵･ｭ縺ｮ雋ｿ譏薙さ繧ｹ繝亥炎貂帙ｒ謾ｯ謠ｴ縺吶ｋChrome諡｡蠑ｵ讖溯・縺ｧ縺吶・S繧ｳ繝ｼ繝画､懃ｴ｢縺ｨFTA/EPA蜊泌ｮ壹・譛驕ｩ縺ｪ髢｢遞守紫繧定・蜍募愛螳壹＠縲∝炎貂幃｡阪ｒ繧ｷ繝溘Η繝ｬ繝ｼ繧ｷ繝ｧ繝ｳ縺励∪縺吶・
-## 検 荳ｻ縺ｪ讖溯・
+日本企業の貿易コスト削減を支援するChrome拡張機能です。HSコード検索とFTA/EPA協定の最適な関税率を自動判定し、削減額をシミュレーションします。
 
-- **HS繧ｳ繝ｼ繝画､懃ｴ｢**: 蝠・刀蜷阪∪縺溘・逡ｪ蜿ｷ縺九ｉ隧ｲ蠖薙☆繧稀S繧ｳ繝ｼ繝峨ｒ讀懃ｴ｢
-- **髢｢遞取怙驕ｩ蛹・*: 蜷・嵜髢薙・FTA/EPA蜊泌ｮ壹ｒ豈碑ｼ・＠縺ｦ譛驕ｩ縺ｪ髢｢遞守紫繧呈署譯・- **蜑頑ｸ幃｡崎ｨ育ｮ・*: 雋ｿ譏馴≡鬘阪ｒ蜈・↓縺励◆髢｢遞主炎貂幃｡阪・繧ｷ繝溘Η繝ｬ繝ｼ繧ｷ繝ｧ繝ｳ
-- **蜊泌ｮ壽ュ蝣ｱ**: 蜴溽肇蝨ｰ險ｼ譏取嶌縺ｮ隕∽ｻｶ縺ｪ縺ｩ隧ｳ邏ｰ縺ｪ驕ｩ逕ｨ譚｡莉ｶ繧定｡ｨ遉ｺ
-- **讀懃ｴ｢螻･豁ｴ**: 驕主悉縺ｮ讀懃ｴ｢邨先棡繧剃ｿ晏ｭ倥・蜿ら・
+## 主な機能
 
-## 投 繝・・繧ｿ蜿朱鹸迥ｶ豕・ｼ・024蟷ｴ12譛育樟蝨ｨ・・
-| 繝・・繧ｿ遞ｮ蛻･ | 蜿朱鹸謨ｰ | 繧ｫ繝舌・遽・峇 |
-|-----------|--------|-----------|
-| HS繧ｳ繝ｼ繝・| 88蜩∫岼 | 荳ｻ隕∬ｲｿ譏灘刀逶ｮ・郁ｲｿ譏馴｡阪・繝ｼ繧ｹ邏・0-50%・・|
-| FTA/EPA蜊泌ｮ・| 20蜊泌ｮ・| 譌･譛ｬ縺檎ｷ邨先ｸ医∩縺ｮ荳ｻ隕∝鵠螳・|
-| 髢｢遞守紫繝・・繧ｿ | 130莉ｶ | 蜊泌ｮ壼挨繝ｻ蜩∫岼蛻･縺ｮ蜆ｪ驕・ｨ守紫 |
+- **HSコード検索**: 品目名またはコード番号から該当するHSコードを検索（88品目収録）
+- **関税最適化**: 各国間のFTA/EPA協定を比較して最適な関税率を算出（20協定対応）
+- **削減額シミュレーション**: 貿易額を入力するだけで協定別の削減額・削減率を即座に算出
+- **原産地規則ガイド**: 推奨協定の原産地証明に必要な手続きを案内
+- **HSコード自動検出**: 貿易関連サイト上でHSコードをハイライト表示
+- **検索履歴**: 過去の検索条件を保存・再利用（最大50件）
+- **エクスポート**: 結果をCSVダウンロード・クリップボードコピー
+- **ダークモード**: システム設定連動またはワンクリック切替
 
-### 蜿朱鹸貂医∩FTA/EPA蜊泌ｮ・
-- **RCEP**・亥慍蝓溽噪縺ｪ蛹・峡逧・ｵ梧ｸ磯｣謳ｺ・・- **CPTPP**・育腸螟ｪ蟷ｳ豢九ヱ繝ｼ繝医リ繝ｼ繧ｷ繝・・蜊泌ｮ夲ｼ・- **譌･EU EPA**縲・*譌･闍ｱEPA**縲・*譌･雎ｪEPA**
-- **譌･邀ｳ雋ｿ譏灘鵠螳・*
-- 蜷・ｨｮ莠悟嵜髢摘PA・・SEAN蜷・嵜縲√せ繧､繧ｹ縲√メ繝ｪ遲会ｼ・
-## 噫 繧ｻ繝・ヨ繧｢繝・・
+## 対応FTA/EPA協定
 
-### 1. 蜑肴署譚｡莉ｶ
+RCEP、CPTPP（TPP11）、日EU EPA、日英EPA、日豪EPA、日米貿易協定、日ASEAN包括的経済連携、日中韓投資協定 など20協定
 
-- Node.js 18莉･荳・- Chrome 繝悶Λ繧ｦ繧ｶ
-- Supabase繧｢繧ｫ繧ｦ繝ｳ繝茨ｼ育┌譁吶・繝ｩ繝ｳ蜿ｯ・・
-### 2. 繝励Ο繧ｸ繧ｧ繧ｯ繝医・繧ｯ繝ｭ繝ｼ繝ｳ縺ｨ繝薙Ν繝・
+## セットアップ
+
+### 前提条件
+
+- Node.js 18以上
+- Chrome ブラウザ
+
+### インストールと開発
+
 ```bash
-git clone <repository-url>
+git clone https://github.com/okuo/hs-tariff-navigator.git
 cd hs-tariff-navigator
 npm install
 npm run build
 ```
 
-### 3. Supabase繝励Ο繧ｸ繧ｧ繧ｯ繝医・險ｭ螳・
-1. [Supabase](https://supabase.com) 縺ｧ繝励Ο繧ｸ繧ｧ繧ｯ繝医ｒ菴懈・
-2. 繝励Ο繧ｸ繧ｧ繧ｯ繝郁ｨｭ螳壹°繧・`Project URL` 縺ｨ `API Key` 繧貞叙蠕・3. `.env.example` 繧・`.env` 縺ｫ繧ｳ繝斐・縺励※險ｭ螳壼､繧呈峩譁ｰ
+### Chrome拡張機能の読み込み
+
+1. Chromeで `chrome://extensions/` にアクセス
+2. 「デベロッパーモード」を有効化
+3. 「パッケージ化されていない拡張機能を読み込む」で `dist` フォルダを選択
+
+## 開発コマンド
 
 ```bash
-cp .env.example .env
-# .env 繧堤ｷｨ髮・＠縺ｦSupabase縺ｮ隱崎ｨｼ諠・ｱ繧定ｨｭ螳・```
-
-### 4. 繝・・繧ｿ繝吶・繧ｹ縺ｮ蛻晄悄蛹・
-Supabase SQL Editor縺ｧ莉･荳九ｒ鬆・ｬ｡螳溯｡鯉ｼ・
-```bash
-# 蝓ｺ譛ｬ繧ｹ繧ｭ繝ｼ繝槭→繧ｻ繧ｭ繝･繝ｪ繝・ぅ險ｭ螳・database/schema.sql
-database/security.sql
-database/functions.sql
-
-# 繧ｵ繝ｳ繝励Ν繝・・繧ｿ
-database/sample_data.sql
-
-# 諡｡蠑ｵ繝・・繧ｿ・医が繝励す繝ｧ繝ｳ・・database/hs_codes_extended.sql
-database/agreements_extended.sql  
-database/tariff_rates_extended.sql
+npm run dev          # 開発ビルド（ファイル監視）
+npm run build        # 本番ビルド
+npm run type-check   # TypeScript型チェック
+npm run lint         # ESLintチェック
+npm run test         # テスト実行
+npm run pack:zip     # CWS用zipパッケージ作成
 ```
 
-### 5. Chrome諡｡蠑ｵ讖溯・縺ｮ隱ｭ縺ｿ霎ｼ縺ｿ
+## リリース
 
-1. Chrome 縺ｧ `chrome://extensions/` 縺ｫ繧｢繧ｯ繧ｻ繧ｹ
-2. 縲後ョ繝吶Ο繝・ヱ繝ｼ繝｢繝ｼ繝峨阪ｒ譛牙柑蛹・3. 縲後ヱ繝・こ繝ｼ繧ｸ蛹悶＆繧後※縺・↑縺・僑蠑ｵ讖溯・繧定ｪｭ縺ｿ霎ｼ繧縲阪〒 `dist` 繝輔か繝ｫ繝繧帝∈謚・
-## 屏・・髢狗匱繧ｳ繝槭Φ繝・
 ```bash
-# 髢狗匱繝薙Ν繝会ｼ医ヵ繧｡繧､繝ｫ逶｣隕厄ｼ・npm run dev
-
-# 譛ｬ逡ｪ繝薙Ν繝・npm run build
-
-# 諡｡蠑ｵ讖溯・繝代ャ繧ｱ繝ｼ繧ｸ蛹・npm run pack
-
-# 蝙九メ繧ｧ繝・け
-npm run typecheck
+npm run release:patch  # パッチリリース (1.0.0 → 1.0.1)
+npm run release:minor  # マイナーリリース (1.0.0 → 1.1.0)
+npm run release:major  # メジャーリリース (1.0.0 → 2.0.0)
 ```
 
-## 女・・繝励Ο繧ｸ繧ｧ繧ｯ繝域ｧ矩
+リリースコマンドは以下を自動実行します:
+1. type-check + lint + test（品質ガード）
+2. package.json + manifest.json のバージョン更新
+3. git commit + tag + push
+4. GitHub Actions: ビルド → GitHub Release作成 → Chrome Web Storeアップロード
+
+## プロジェクト構成
 
 ```
 hs-tariff-navigator/
-笏懌楳笏 public/
-笏・  笏披楳笏 manifest.json          # 諡｡蠑ｵ讖溯・險ｭ螳・笏懌楳笏 src/
-笏・  笏懌楳笏 background/            # Service Worker
-笏・  笏懌楳笏 content/               # 繧ｳ繝ｳ繝・Φ繝・せ繧ｯ繝ｪ繝励ヨ
-笏・  笏懌楳笏 popup/                 # 繝昴ャ繝励い繝・・UI
-笏・  笏懌楳笏 lib/                   # Supabase險ｭ螳・笏・  笏懌楳笏 types/                 # TypeScript蝙句ｮ夂ｾｩ
-笏・  笏披楳笏 utils/                 # 繝ｦ繝ｼ繝・ぅ繝ｪ繝・ぅ
-笏懌楳笏 database/                  # 繝・・繧ｿ繝吶・繧ｹ繧ｹ繧ｭ繝ｼ繝槭・繝・・繧ｿ
-笏・  笏懌楳笏 schema.sql            # 繝・・繝悶Ν螳夂ｾｩ
-笏・  笏懌楳笏 security.sql          # RLS繝昴Μ繧ｷ繝ｼ
-笏・  笏懌楳笏 functions.sql         # 繧ｹ繝医い繝峨ヵ繧｡繝ｳ繧ｯ繧ｷ繝ｧ繝ｳ
-笏・  笏懌楳笏 sample_data.sql       # 蝓ｺ譛ｬ繝・・繧ｿ
-笏・  笏懌楳笏 hs_codes_extended.sql # 諡｡蠑ｵHS繧ｳ繝ｼ繝・笏・  笏懌楳笏 agreements_extended.sql # 諡｡蠑ｵ蜊泌ｮ壹ョ繝ｼ繧ｿ
-笏・  笏披楳笏 tariff_rates_extended.sql # 諡｡蠑ｵ髢｢遞守紫
-笏懌楳笏 dist/                     # 繝薙Ν繝牙・蜉・笏披楳笏 docs/                     # 繝峨く繝･繝｡繝ｳ繝・```
+├── public/
+│   ├── manifest.json          # 拡張機能設定
+│   ├── icons/                 # アイコン (16/48/128px)
+│   └── data/                  # HSコード・協定・関税率データ (JSON)
+├── src/
+│   ├── background/            # Service Worker
+│   ├── content/               # コンテンツスクリプト（HSコード検出）
+│   ├── popup/                 # ポップアップUI（React）
+│   ├── components/            # Reactコンポーネント
+│   ├── lib/                   # データサービス・検索・関税最適化ロジック
+│   ├── hooks/                 # カスタムフック
+│   ├── types/                 # TypeScript型定義
+│   └── utils/                 # 定数・ユーティリティ
+├── scripts/                   # ビルド・リリースツール
+├── database/                  # SQLスキーマ・サンプルデータ
+├── docs/                      # ドキュメント
+├── store-assets/              # CWSストア掲載用画像
+└── .github/workflows/         # CI/CDパイプライン
+```
 
-## 導 菴ｿ逕ｨ譁ｹ豕・
-1. Chrome繝・・繝ｫ繝舌・縺ｮ諡｡蠑ｵ讖溯・繧｢繧､繧ｳ繝ｳ繧偵け繝ｪ繝・け
-2. HS繧ｳ繝ｼ繝峨∪縺溘・蝠・刀蜷阪ｒ蜈･蜉帙＠縺ｦ讀懃ｴ｢
-3. 隧ｲ蠖薙☆繧稀S繧ｳ繝ｼ繝峨ｒ驕ｸ謚・4. 霈ｸ蜃ｺ蝗ｽ繝ｻ霈ｸ蜈･蝗ｽ繝ｻ雋ｿ譏馴≡鬘阪ｒ險ｭ螳・5. 縲碁未遞取怙驕ｩ蛹悶ｒ螳溯｡後阪ｒ繧ｯ繝ｪ繝・け
-6. 蜊泌ｮ壼挨縺ｮ髢｢遞守紫縺ｨ蜑頑ｸ幃｡阪ｒ遒ｺ隱・
-## 嶋 莉雁ｾ後・髢狗匱繝ｭ繝ｼ繝峨・繝・・
+## 技術スタック
 
-### Phase 1: 繝・・繧ｿ諡｡蜈・- [ ] 荳ｻ隕・,000蜩∫岼縺ｮHS繧ｳ繝ｼ繝芽ｿｽ蜉
-- [ ] 蜈ｨFTA/EPA蜊泌ｮ壹・邯ｲ鄒・- [ ] 螳滄圀縺ｮ髢｢遞守紫繝・・繧ｿ縺ｮ蜈・ｮ・
-### Phase 2: 讖溯・諡｡蠑ｵ
-- [ ] 霈ｸ蜃ｺ蜈･隕丞宛繝√ぉ繝・け讖溯・
-- [ ] 蜴溽肇蝨ｰ險ｼ譏取嶌隕∽ｻｶ縺ｮ隧ｳ邏ｰ陦ｨ遉ｺ
-- [ ] 讀懃ｴ｢螻･豁ｴ繝ｻ縺頑ｰ励↓蜈･繧頑ｩ溯・
-- [ ] 繝・・繧ｿ繧ｨ繧ｯ繧ｹ繝昴・繝域ｩ溯・
+- **Frontend**: React 18 + TypeScript + Tailwind CSS
+- **Build**: Webpack 5
+- **Test**: Jest + Testing Library
+- **CI/CD**: GitHub Actions → Chrome Web Store自動デプロイ
+- **Extension**: Chrome Manifest V3
 
-### Phase 3: 鬮伜ｺｦ縺ｪ蛻・梵
-- [ ] 髢｢遞守紫繝医Ξ繝ｳ繝牙・譫・- [ ] 譛驕ｩ霈ｸ騾√Ν繝ｼ繝域署譯・- [ ] 繧ｳ繝ｳ繝励Λ繧､繧｢繝ｳ繧ｹ繝√ぉ繝・け
-- [ ] 螟夊ｨ隱槫ｯｾ蠢・
-## ､・繧ｳ繝ｳ繝医Μ繝薙Η繝ｼ繧ｷ繝ｧ繝ｳ
+## ドキュメント
 
-1. 縺薙・繝ｪ繝昴ず繝医Μ繧偵ヵ繧ｩ繝ｼ繧ｯ
-2. 繝輔ぅ繝ｼ繝√Ε繝ｼ繝悶Λ繝ｳ繝√ｒ菴懈・ (`git checkout -b feature/AmazingFeature`)
-3. 螟画峩繧偵さ繝溘ャ繝・(`git commit -m 'Add some AmazingFeature'`)
-4. 繝悶Λ繝ｳ繝√↓繝励ャ繧ｷ繝･ (`git push origin feature/AmazingFeature`)
-5. 繝励Ν繝ｪ繧ｯ繧ｨ繧ｹ繝医ｒ菴懈・
+- [API リファレンス](docs/API.md)
+- [プライバシーポリシー](docs/privacy-policy.md)
 
-## 笞・・蜈崎ｲｬ莠矩・
-縺薙・諡｡蠑ｵ讖溯・縺ｧ謠蝉ｾ帙＆繧後ｋ髢｢遞守紫諠・ｱ縺ｯ蜿り・､縺ｧ縺吶ょｮ滄圀縺ｮ雋ｿ譏灘叙蠑輔〒縺ｯ縲∝ｿ・★遞朱未繧・夐未讌ｭ閠・↓譛譁ｰ縺ｮ諠・ｱ繧偵＃遒ｺ隱阪￥縺縺輔＞縲・
-## 塘 繝ｩ繧､繧ｻ繝ｳ繧ｹ
+## 免責事項
 
-縺薙・繝励Ο繧ｸ繧ｧ繧ｯ繝医・MIT繝ｩ繧､繧ｻ繝ｳ繧ｹ縺ｮ荳九〒蜈ｬ髢九＆繧後※縺・∪縺吶りｩｳ邏ｰ縺ｯ [LICENSE](LICENSE) 繝輔ぃ繧､繝ｫ繧貞盾辣ｧ縺励※縺上□縺輔＞縲・
-## 到 縺雁撫縺・粋繧上○
+この拡張機能で提供される関税率情報は参考値です。実際の貿易取引では、必ず税関等に最新の情報をご確認ください。
 
-- 蝠城｡悟ｱ蜻・ [GitHub Issues](../../issues)
-- 讖溯・隕∵悍: [GitHub Discussions](../../discussions)
+## ライセンス
 
----
-
-**HS Tariff Navigator** - Made with 笶､・・for international trade professionals
-
+MIT License
