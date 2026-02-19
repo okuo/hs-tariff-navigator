@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "TariffScope - FTA/EPA最適化ツール",
+  "name": "TariffScope - 関税計算・HSコード検索・FTA/EPA比較",
   "version": "1.0.1",
-  "description": "日本企業の貿易コスト削減を支援。FTA/EPA協定の最適な関税率を自動判定し、削減額をシミュレーション。",
+  "description": "HSコード検索・FTA/EPA関税率比較・削減額シミュレーション。RCEP・CPTPP等20協定対応。原産地規則ガイド付きの無料貿易支援ツール。",
   "permissions": [
     "storage",
     "activeTab",
