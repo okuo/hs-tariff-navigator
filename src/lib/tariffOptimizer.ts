@@ -158,7 +158,7 @@ export function optimizeTariff(
     base_rate: baseRate,
     agreements: agreementRates,
     best_agreement: bestAgreement,
-    trade_value: tradeValue ?? 0,
+    trade_value: effectiveTradeValue,
   };
 }
 

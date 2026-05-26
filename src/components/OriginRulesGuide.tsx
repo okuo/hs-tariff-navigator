@@ -10,10 +10,15 @@ const OriginRulesGuide: React.FC<OriginRulesGuideProps> = ({ agreementId, agreem
   const [rulesData, setRulesData] = useState<OriginRulesData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [expandedSection, setExpandedSection] = useState<string | null>('certification');
+  const [checkedDocuments, setCheckedDocuments] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     loadOriginRules();
   }, []);
+
+  useEffect(() => {
+    setCheckedDocuments({});
+  }, [agreementId]);
 
   const loadOriginRules = async () => {
     try {
@@ -47,8 +52,24 @@ const OriginRulesGuide: React.FC<OriginRulesGuideProps> = ({ agreementId, agreem
     ? rulesData.data[agreementId]
     : rulesData.data['default'];
 
+  const checkedDocumentCount = rules.required_documents.filter((doc) => checkedDocuments[doc]).length;
+  const checklistProgress = rules.required_documents.length > 0
+    ? Math.round((checkedDocumentCount / rules.required_documents.length) * 100)
+    : 0;
+
   const toggleSection = (section: string) => {
     setExpandedSection(expandedSection === section ? null : section);
+  };
+
+  const toggleDocument = (documentName: string) => {
+    setCheckedDocuments((prev) => ({
+      ...prev,
+      [documentName]: !prev[documentName],
+    }));
+  };
+
+  const clearChecklist = () => {
+    setCheckedDocuments({});
   };
 
   return (
@@ -99,15 +120,20 @@ const OriginRulesGuide: React.FC<OriginRulesGuideProps> = ({ agreementId, agreem
         )}
       </div>
 
-      {/* 必要書類 */}
+      {/* 必要書類チェックリスト */}
       <div className="border border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden">
         <button
           onClick={() => toggleSection('documents')}
           className="w-full flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
           aria-expanded={expandedSection === 'documents'}
-          aria-label="必要書類を展開"
+          aria-label="必要書類チェックリストを展開"
         >
-          <span className="font-medium text-gray-900 dark:text-gray-100">必要書類</span>
+          <div className="flex items-center space-x-2">
+            <span className="font-medium text-gray-900 dark:text-gray-100">必要書類チェック</span>
+            <span className="text-xs bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded-full border border-gray-200 dark:border-gray-600">
+              {checkedDocumentCount}/{rules.required_documents.length}
+            </span>
+          </div>
           <svg
             className={`w-5 h-5 text-gray-500 dark:text-gray-400 transition-transform ${expandedSection === 'documents' ? 'rotate-180' : ''}`}
             fill="none"
@@ -118,17 +144,46 @@ const OriginRulesGuide: React.FC<OriginRulesGuideProps> = ({ agreementId, agreem
           </svg>
         </button>
         {expandedSection === 'documents' && (
-          <div className="p-3 dark:bg-gray-800">
-            <ul className="space-y-1">
-              {rules.required_documents.map((doc, index) => (
-                <li key={index} className="flex items-center text-sm text-gray-700 dark:text-gray-300">
-                  <svg className="w-4 h-4 mr-2 text-success-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  {doc}
+          <div className="p-3 dark:bg-gray-800 space-y-3">
+            <div>
+              <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
+                <span>準備状況</span>
+                <span>{checklistProgress}%</span>
+              </div>
+              <div className="h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-success-500 transition-all"
+                  style={{ width: `${checklistProgress}%` }}
+                />
+              </div>
+            </div>
+
+            <ul className="space-y-2">
+              {rules.required_documents.map((doc) => (
+                <li key={doc}>
+                  <label className="flex items-start space-x-2 text-sm text-gray-700 dark:text-gray-300 p-2 rounded hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={Boolean(checkedDocuments[doc])}
+                      onChange={() => toggleDocument(doc)}
+                      className="mt-0.5 h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                    />
+                    <span className={checkedDocuments[doc] ? 'line-through text-gray-400 dark:text-gray-500' : ''}>
+                      {doc}
+                    </span>
+                  </label>
                 </li>
               ))}
             </ul>
+
+            <button
+              onClick={clearChecklist}
+              disabled={checkedDocumentCount === 0}
+              className="w-full px-3 py-2 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded hover:bg-gray-200 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors focus:ring-2 focus:ring-primary-500"
+              aria-label="必要書類チェックをクリア"
+            >
+              チェックをクリア
+            </button>
           </div>
         )}
       </div>
