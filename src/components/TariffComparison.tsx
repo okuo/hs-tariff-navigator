@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { OptimizationResult } from '@/types';
 import { ToastType } from '@/hooks/useToast';
+import { COUNTRIES } from '@/utils/constants';
 import OriginRulesGuide from './OriginRulesGuide';
 
 interface TariffComparisonProps {
@@ -25,11 +26,15 @@ const TariffComparison: React.FC<TariffComparisonProps> = ({ result, onBack, onT
   }, []);
 
   const buildCsvContent = (data: OptimizationResult): string => {
-    const headers = ['協定名', '協定名(英)', '関税率(%)', '削減額(円)', '削減率(%)'];
+    const calculateDutyAmountForCsv = (rate: number) => Math.round((data.trade_value * rate) / 100);
+    const baseDutyAmountForCsv = calculateDutyAmountForCsv(data.base_rate);
+    const headers = ['協定名', '協定名(英)', '関税率(%)', '基本税額(円)', '協定適用後税額(円)', '削減額(円)', '削減率(%)'];
     const rows = data.agreements.map((item) => [
       item.agreement.name_ja,
       item.agreement.name_en,
       item.rate.toFixed(1),
+      baseDutyAmountForCsv.toString(),
+      calculateDutyAmountForCsv(item.rate).toString(),
       item.savings_amount.toString(),
       item.savings_percentage.toFixed(1),
     ]);
@@ -69,17 +74,20 @@ const TariffComparison: React.FC<TariffComparisonProps> = ({ result, onBack, onT
   const handleCopyClipboard = async () => {
     if (!result) return;
     try {
+      const calculateDutyAmountForCopy = (rate: number) => Math.round((result.trade_value * rate) / 100);
+      const baseDutyAmountForCopy = calculateDutyAmountForCopy(result.base_rate);
       const lines = [
         `[TariffScope] 関税最適化結果`,
         `HSコード: ${result.hs_code}`,
         `輸出国: ${result.from_country} / 輸入国: ${result.to_country}`,
         `貿易額: ${result.trade_value.toLocaleString()}円`,
         `基本関税率(MFN): ${result.base_rate.toFixed(1)}%`,
+        `基本税額: ${baseDutyAmountForCopy.toLocaleString()}円`,
         '',
         '--- 協定別比較 ---',
         ...result.agreements.map(
           (item) =>
-            `${item.agreement.name_ja}: ${item.rate.toFixed(1)}% (削減額: ${item.savings_amount.toLocaleString()}円, 削減率: ${item.savings_percentage.toFixed(1)}%)`
+            `${item.agreement.name_ja}: ${item.rate.toFixed(1)}% (協定適用後税額: ${calculateDutyAmountForCopy(item.rate).toLocaleString()}円, 削減額: ${item.savings_amount.toLocaleString()}円, 削減率: ${item.savings_percentage.toFixed(1)}%)`
         ),
       ];
       if (result.best_agreement) {
@@ -114,6 +122,19 @@ const TariffComparison: React.FC<TariffComparisonProps> = ({ result, onBack, onT
   const formatPercentage = (rate: number) => {
     return `${rate.toFixed(1)}%`;
   };
+
+  const calculateDutyAmount = (rate: number) => {
+    return Math.round((result.trade_value * rate) / 100);
+  };
+
+  const getCountryName = (code: string) => {
+    return COUNTRIES.find((country) => country.code === code)?.name_ja ?? code;
+  };
+
+  const baseDutyAmount = calculateDutyAmount(result.base_rate);
+  const bestDutyAmount = result.best_agreement
+    ? calculateDutyAmount(result.best_agreement.rate)
+    : 0;
 
   return (
     <div className="space-y-6">
@@ -151,6 +172,22 @@ const TariffComparison: React.FC<TariffComparisonProps> = ({ result, onBack, onT
           </div>
         )}
 
+        {/* 計算条件 */}
+        <div className="grid grid-cols-2 gap-2 mb-3">
+          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3">
+            <div className="text-xs text-gray-500 dark:text-gray-400">貿易条件</div>
+            <div className="text-sm font-medium text-gray-900 dark:text-gray-100 mt-1">
+              {getCountryName(result.from_country)} → {getCountryName(result.to_country)}
+            </div>
+          </div>
+          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3">
+            <div className="text-xs text-gray-500 dark:text-gray-400">計算対象額</div>
+            <div className="text-sm font-medium text-gray-900 dark:text-gray-100 mt-1">
+              {formatCurrency(result.trade_value)}
+            </div>
+          </div>
+        </div>
+
         {/* 基本関税率 */}
         <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 mb-4">
           <div className="flex justify-between items-center">
@@ -159,7 +196,22 @@ const TariffComparison: React.FC<TariffComparisonProps> = ({ result, onBack, onT
               {formatPercentage(result.base_rate)}
             </span>
           </div>
+          <div className="flex justify-between items-center mt-1 text-xs text-gray-500 dark:text-gray-400">
+            <span>基本税額</span>
+            <span>{formatCurrency(baseDutyAmount)}</span>
+          </div>
         </div>
+
+        {result.best_agreement && (
+          <div className="border border-primary-100 dark:border-primary-900/50 bg-primary-50 dark:bg-primary-900/20 rounded-lg p-3">
+            <h3 className="text-sm font-semibold text-primary-800 dark:text-primary-300">推奨理由</h3>
+            <p className="text-xs text-primary-700 dark:text-primary-300 mt-1 leading-relaxed">
+              {result.best_agreement.agreement.name_ja}を適用すると、関税率が
+              {formatPercentage(result.base_rate)}から{formatPercentage(result.best_agreement.rate)}になり、
+              税額は{formatCurrency(baseDutyAmount)}から{formatCurrency(bestDutyAmount)}に下がります。
+            </p>
+          </div>
+        )}
       </div>
 
       {/* 協定別比較 */}
@@ -167,7 +219,10 @@ const TariffComparison: React.FC<TariffComparisonProps> = ({ result, onBack, onT
         <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">協定別関税率比較</h3>
 
         <div className="space-y-3">
-          {result.agreements.map((item) => (
+          {result.agreements.map((item) => {
+            const agreementDutyAmount = calculateDutyAmount(item.rate);
+
+            return (
             <div
               key={item.agreement.id}
               className={`border rounded-lg p-4 ${
@@ -217,6 +272,27 @@ const TariffComparison: React.FC<TariffComparisonProps> = ({ result, onBack, onT
                 </div>
               </div>
 
+              <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
+                <p className="text-xs font-medium text-gray-600 dark:text-gray-300 mb-2">計算根拠</p>
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div className="bg-white dark:bg-gray-800 rounded p-2 border border-gray-100 dark:border-gray-700">
+                    <div className="text-gray-500 dark:text-gray-400">基本税額</div>
+                    <div className="font-semibold text-gray-900 dark:text-gray-100 mt-0.5">
+                      {formatCurrency(baseDutyAmount)}
+                    </div>
+                  </div>
+                  <div className="bg-white dark:bg-gray-800 rounded p-2 border border-gray-100 dark:border-gray-700">
+                    <div className="text-gray-500 dark:text-gray-400">協定適用後</div>
+                    <div className="font-semibold text-gray-900 dark:text-gray-100 mt-0.5">
+                      {formatCurrency(agreementDutyAmount)}
+                    </div>
+                  </div>
+                </div>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                  {formatCurrency(result.trade_value)} × ({formatPercentage(result.base_rate)} - {formatPercentage(item.rate)}) = {formatCurrency(item.savings_amount)}
+                </p>
+              </div>
+
               {/* 条件情報 */}
               {item.conditions && Object.keys(item.conditions).length > 0 && (
                 <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
@@ -229,7 +305,8 @@ const TariffComparison: React.FC<TariffComparisonProps> = ({ result, onBack, onT
                 </div>
               )}
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 

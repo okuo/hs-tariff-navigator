@@ -157,7 +157,7 @@ describe('optimizeTariff', () => {
     });
 
     // Should use default value of 1000000
-    expect(result.trade_value).toBe(0);
+    expect(result.trade_value).toBe(1000000);
     expect(result.best_agreement).toBeDefined();
     expect(result.best_agreement!.savings_amount).toBeGreaterThan(0);
   });
