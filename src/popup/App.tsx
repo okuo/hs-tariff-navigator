@@ -5,6 +5,8 @@ import SearchHistory from '@/components/SearchHistory';
 import ToastContainer from '@/components/Toast';
 import { useToast } from '@/hooks/useToast';
 import { OptimizationResult } from '@/types';
+import { consumePendingHSCodeSelection } from '@/lib/api';
+import DataStatusPanel from '@/components/DataStatusPanel';
 
 type TabType = 'search' | 'history';
 type ViewType = 'main' | 'results';
@@ -49,6 +51,33 @@ const App: React.FC = () => {
     toCountry: string;
     tradeValue: number;
   } | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const consumePendingSelection = async () => {
+      const pending = await consumePendingHSCodeSelection();
+      if (cancelled || !pending) {
+        return;
+      }
+
+      setPrefilledData({
+        hsCode: pending.hsCode,
+        fromCountry: 'JP',
+        toCountry: 'CN',
+        tradeValue: 0,
+      });
+      setCurrentView('main');
+      setActiveTab('search');
+      addToast('success', `ページ上のHSコード ${pending.hsCode} を入力しました`);
+    };
+
+    consumePendingSelection();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [addToast]);
 
   const handleHSCodeSelect = useCallback((_hsCode: string) => {
     // HSコード選択時のコールバック（将来の拡張用）
@@ -167,12 +196,15 @@ const App: React.FC = () => {
         ) : (
           <>
             {activeTab === 'search' ? (
-              <HSCodeSearch
-                onHSCodeSelect={handleHSCodeSelect}
-                onOptimizationResult={handleOptimizationResult}
-                prefilledData={prefilledData}
-                onPrefilledDataUsed={clearPrefilledData}
-              />
+              <div className="space-y-6">
+                <HSCodeSearch
+                  onHSCodeSelect={handleHSCodeSelect}
+                  onOptimizationResult={handleOptimizationResult}
+                  prefilledData={prefilledData}
+                  onPrefilledDataUsed={clearPrefilledData}
+                />
+                <DataStatusPanel />
+              </div>
             ) : (
               <SearchHistory onSelectHistory={handleHistorySelect} />
             )}

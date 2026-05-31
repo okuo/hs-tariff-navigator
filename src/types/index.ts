@@ -95,6 +95,24 @@ export interface SearchHistoryForDisplay {
   timestamp: string;
 }
 
+export interface PendingHSCodeSelection {
+  hsCode: string;
+  url?: string;
+  context?: string | null;
+  detected_at: string;
+}
+
+export interface DataStatus {
+  version: string;
+  data_updated_at: string;
+  cached_at: string;
+  counts: {
+    hs_codes: number;
+    agreements: number;
+    tariff_rates: number;
+  };
+}
+
 export interface CertificationType {
   type: string;
   name_ja: string;

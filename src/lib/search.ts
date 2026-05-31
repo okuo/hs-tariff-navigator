@@ -60,6 +60,13 @@ function containsMatch(haystack: string, needle: string): boolean {
 }
 
 /**
+ * HSコード比較用に数字だけへ正規化
+ */
+function normalizeHSCodeDigits(value: string): string {
+  return value.replace(/[^0-9]/g, '');
+}
+
+/**
  * HSコードを検索
  * @param searchTerm 検索語
  * @param hsCodeData HSコードデータ配列
@@ -76,12 +83,21 @@ export function searchHSCodes(
   }
 
   const normalizedSearch = searchTerm.trim().toLowerCase();
+  const normalizedSearchDigits = normalizeHSCodeDigits(normalizedSearch);
 
   const results = hsCodeData
     .map((item) => {
+      const itemCodeDigits = normalizeHSCodeDigits(item.code);
+      const hasCodeDigits = normalizedSearchDigits.length >= 4;
+      const digitExactMatch = hasCodeDigits && itemCodeDigits === normalizedSearchDigits;
+      const digitPartialMatch = hasCodeDigits && (
+        itemCodeDigits.includes(normalizedSearchDigits) ||
+        normalizedSearchDigits.includes(itemCodeDigits)
+      );
+
       // 完全一致・部分一致チェック
-      const codeExactMatch = item.code === normalizedSearch;
-      const codeMatch = containsMatch(item.code, normalizedSearch);
+      const codeExactMatch = item.code.toLowerCase() === normalizedSearch || digitExactMatch;
+      const codeMatch = containsMatch(item.code, normalizedSearch) || digitPartialMatch;
       const jaMatch = containsMatch(item.description_ja, normalizedSearch);
       const enMatch = containsMatch(item.description_en, normalizedSearch);
 
@@ -97,7 +113,7 @@ export function searchHSCodes(
       if (codeExactMatch) {
         rank = 100;
       } else if (codeMatch) {
-        rank = Math.max(rank, 10.0);
+        rank = Math.max(rank, digitPartialMatch ? 20.0 : 10.0);
       }
 
       // 部分一致

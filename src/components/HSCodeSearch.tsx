@@ -17,6 +17,14 @@ interface HSCodeSearchProps {
   onPrefilledDataUsed?: () => void;
 }
 
+const normalizeHSCodeDigits = (value: string) => value.replace(/[^0-9]/g, '');
+
+const isSameHSCode = (left: string, right: string) => {
+  const leftDigits = normalizeHSCodeDigits(left);
+  const rightDigits = normalizeHSCodeDigits(right);
+  return left === right || (!!leftDigits && leftDigits === rightDigits);
+};
+
 const HSCodeSearch: React.FC<HSCodeSearchProps> = ({
   onHSCodeSelect,
   onOptimizationResult,
@@ -38,28 +46,55 @@ const HSCodeSearch: React.FC<HSCodeSearchProps> = ({
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const listboxRef = useRef<HTMLDivElement>(null);
 
-  // 履歴から選択された場合、データを復元
+  // 履歴やページ上で選択されたHSコードを復元
   useEffect(() => {
     if (prefilledData) {
-      setSearchTerm(prefilledData.hsCode);
-      setSelectedHSCode({
+      let cancelled = false;
+      const fallbackHSCode: HSCode = {
         code: prefilledData.hsCode,
         description_ja: '',
         description_en: '',
         unit: '',
         created_at: '',
         updated_at: ''
-      });
+      };
+
+      setSearchTerm(prefilledData.hsCode);
+      setSelectedHSCode(fallbackHSCode);
       setFilters({
         from_country: prefilledData.fromCountry,
         to_country: prefilledData.toCountry,
         trade_value: prefilledData.tradeValue || 0
       });
+      setSuggestions([]);
+      setSelectedIndex(-1);
+      setErrors({});
       onHSCodeSelect(prefilledData.hsCode);
-      if (onPrefilledDataUsed) {
-        onPrefilledDataUsed();
-      }
+
+      const hydrateHSCode = async () => {
+        try {
+          const results = await searchHSCodes(prefilledData.hsCode, 10);
+          const exactMatch = results.find((item) => isSameHSCode(item.code, prefilledData.hsCode));
+          const matchedHSCode = exactMatch ?? results[0];
+          if (!cancelled && matchedHSCode) {
+            setSelectedHSCode(matchedHSCode);
+            setSearchTerm(matchedHSCode.code);
+            onHSCodeSelect(matchedHSCode.code);
+          }
+        } finally {
+          if (!cancelled) {
+            onPrefilledDataUsed?.();
+          }
+        }
+      };
+
+      hydrateHSCode();
+
+      return () => {
+        cancelled = true;
+      };
     }
+    return undefined;
   }, [prefilledData, onHSCodeSelect, onPrefilledDataUsed]);
 
   // 検索処理（デバウンス付き）

@@ -57,7 +57,8 @@ export const MAJOR_AGREEMENTS = [
 export const STORAGE_KEYS = {
   SEARCH_HISTORY: 'search_history',
   USER_SETTINGS: 'user_settings',
-  CACHE_EXPIRY: 'cache_expiry'
+  CACHE_EXPIRY: 'cache_expiry',
+  PENDING_HS_CODE: 'tariff-scope-pending-hs-code'
 } as const;
 
 export const API_ENDPOINTS = {

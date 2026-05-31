@@ -5,6 +5,12 @@ import { checkForUpdates, loadData, clearCache } from '@/lib/dataService';
 // データ更新チェック間隔（24時間）
 const DATA_UPDATE_INTERVAL_MINUTES = 60 * 24;
 
+interface HSCodeClickedMessage {
+  hsCode: string;
+  url?: string;
+  context?: string | null;
+}
+
 // Extension install handler
 chrome.runtime.onInstalled.addListener((details) => {
   console.log('TariffScope extension installed:', details);
@@ -52,6 +58,17 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           sendResponse({ error: 'No tab information available' });
         }
         break;
+
+      case 'HS_CODE_CLICKED':
+        savePendingHSCodeSelection(message)
+          .then(() => {
+            sendResponse({ success: true });
+          })
+          .catch((error) => {
+            console.error('Save pending HS code error:', error);
+            sendResponse({ success: false, error: error.message });
+          });
+        return true;
 
       case 'SAVE_SEARCH_HISTORY':
         saveSearchHistory(message.data)
@@ -105,6 +122,48 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     sendResponse({ error: 'Internal error in message handler' });
   }
 });
+
+function normalizeHSCode(rawValue: unknown): string | null {
+  if (typeof rawValue !== 'string') {
+    return null;
+  }
+
+  const normalized = rawValue.replace(/[^0-9]/g, '');
+  if (normalized.length < 6 || normalized.length > 10) {
+    return null;
+  }
+  return normalized;
+}
+
+async function tryOpenPopup(): Promise<void> {
+  const actionWithPopup = chrome.action as typeof chrome.action & {
+    openPopup?: () => Promise<void>;
+  };
+
+  try {
+    await actionWithPopup.openPopup?.();
+  } catch (error) {
+    console.debug('TariffScope: Popup could not be opened automatically:', error);
+  }
+}
+
+async function savePendingHSCodeSelection(message: HSCodeClickedMessage): Promise<void> {
+  const hsCode = normalizeHSCode(message.hsCode);
+  if (!hsCode) {
+    throw new Error('Invalid HS code');
+  }
+
+  await chrome.storage.local.set({
+    [STORAGE_KEYS.PENDING_HS_CODE]: {
+      hsCode,
+      url: message.url,
+      context: message.context ?? null,
+      detected_at: new Date().toISOString(),
+    },
+  });
+
+  await tryOpenPopup();
+}
 
 // データ初期化
 async function initializeData() {

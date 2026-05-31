@@ -3,7 +3,15 @@
  * データサービス、検索、関税最適化の統合インターフェース
  */
 
-import { HSCode, OptimizationResult, SearchHistoryEntry, SearchHistoryForDisplay } from '@/types';
+import {
+  DataStatus,
+  HSCode,
+  OptimizationResult,
+  PendingHSCodeSelection,
+  SearchHistoryEntry,
+  SearchHistoryForDisplay
+} from '@/types';
+import { STORAGE_KEYS } from '@/utils/constants';
 import { dataService } from './dataService';
 import { searchHSCodes as searchHS } from './search';
 import { optimizeTariff as optimize } from './tariffOptimizer';
@@ -83,6 +91,23 @@ export async function searchHSCodes(searchTerm: string, limit = 10): Promise<HSC
   } catch (error) {
     console.error('HSコード検索エラー:', error);
     return [];
+  }
+}
+
+/**
+ * コンテンツスクリプトでクリックされたHSコードを取得してクリア
+ */
+export async function consumePendingHSCodeSelection(): Promise<PendingHSCodeSelection | null> {
+  try {
+    const pending = await storageGet(STORAGE_KEYS.PENDING_HS_CODE) as PendingHSCodeSelection | null;
+    if (!pending?.hsCode) {
+      return null;
+    }
+    await storageRemove(STORAGE_KEYS.PENDING_HS_CODE);
+    return pending;
+  } catch (error) {
+    console.error('クリック済みHSコードの取得に失敗:', error);
+    return null;
   }
 }
 
@@ -172,6 +197,24 @@ export async function getSearchHistory(): Promise<SearchHistoryForDisplay[]> {
  */
 export async function getSearchHistoryRaw(): Promise<SearchHistoryEntry[]> {
   return getLocalSearchHistory();
+}
+
+/**
+ * データ鮮度・件数情報を取得
+ */
+export async function getDataStatus(): Promise<DataStatus> {
+  const data = await dataService.getData();
+
+  return {
+    version: data.manifest.version,
+    data_updated_at: data.manifest.updated_at,
+    cached_at: data.cached_at,
+    counts: {
+      hs_codes: data.manifest.files.hs_codes.count ?? data.hs_codes.length,
+      agreements: data.manifest.files.agreements.count ?? data.agreements.length,
+      tariff_rates: data.manifest.files.tariff_rates.count ?? data.tariff_rates.length,
+    },
+  };
 }
 
 /**

@@ -140,16 +140,19 @@ function handleHSCodeClick(event: Event): void {
   const hsCode = target.getAttribute('data-hs-code');
   if (!hsCode) return;
 
-  // TariffScopeポップアップを開く（将来的にはポップアップ内で直接表示）
+  // TariffScopeポップアップで使用できるように一時保存
   chrome.runtime.sendMessage({
     type: 'HS_CODE_CLICKED',
     hsCode: hsCode,
     url: window.location.href,
     context: target.textContent
+  }, (response) => {
+    if (chrome.runtime.lastError || !response?.success) {
+      showNotification(`HSコード ${hsCode} を検出しました。TariffScopeを開いて確認してください`);
+      return;
+    }
+    showNotification(`HSコード ${hsCode} をTariffScopeにセットしました`);
   });
-
-  // ユーザーに通知
-  showNotification(`HSコード ${hsCode} をTariffScopeで確認できます`);
 }
 
 // 通知表示

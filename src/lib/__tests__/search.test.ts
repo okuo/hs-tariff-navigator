@@ -74,6 +74,19 @@ describe('searchHSCodes', () => {
     expect(result[0].rank).toBe(100); // exact match
   });
 
+  it('should search by HS code digits without punctuation', () => {
+    const result = searchHSCodes('847130', sampleHSCodes);
+    expect(result.length).toBeGreaterThan(0);
+    expect(result[0].code).toBe('8471.30');
+    expect(result[0].rank).toBe(100);
+  });
+
+  it('should search by longer national tariff code prefix', () => {
+    const result = searchHSCodes('8471300000', sampleHSCodes);
+    expect(result.length).toBeGreaterThan(0);
+    expect(result[0].code).toBe('8471.30');
+  });
+
   it('should search by partial HS code', () => {
     const result = searchHSCodes('8517', sampleHSCodes);
     expect(result.length).toBeGreaterThan(0);
