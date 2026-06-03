@@ -209,6 +209,8 @@ export async function getDataStatus(): Promise<DataStatus> {
     version: data.manifest.version,
     data_updated_at: data.manifest.updated_at,
     cached_at: data.cached_at,
+    source: 'bundled',
+    remote_updates_enabled: false,
     counts: {
       hs_codes: data.manifest.files.hs_codes.count ?? data.hs_codes.length,
       agreements: data.manifest.files.agreements.count ?? data.agreements.length,

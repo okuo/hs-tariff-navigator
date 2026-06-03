@@ -102,10 +102,14 @@ export interface PendingHSCodeSelection {
   detected_at: string;
 }
 
+export type DataSourceType = 'bundled';
+
 export interface DataStatus {
   version: string;
   data_updated_at: string;
   cached_at: string;
+  source: DataSourceType;
+  remote_updates_enabled: boolean;
   counts: {
     hs_codes: number;
     agreements: number;

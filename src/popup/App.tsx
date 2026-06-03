@@ -50,6 +50,9 @@ const App: React.FC = () => {
     fromCountry: string;
     toCountry: string;
     tradeValue: number;
+    sourceUrl?: string;
+    sourceContext?: string | null;
+    detectedAt?: string;
   } | null>(null);
 
   useEffect(() => {
@@ -66,6 +69,9 @@ const App: React.FC = () => {
         fromCountry: 'JP',
         toCountry: 'CN',
         tradeValue: 0,
+        sourceUrl: pending.url,
+        sourceContext: pending.context,
+        detectedAt: pending.detected_at,
       });
       setCurrentView('main');
       setActiveTab('search');

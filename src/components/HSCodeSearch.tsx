@@ -8,6 +8,9 @@ interface PrefilledData {
   fromCountry: string;
   toCountry: string;
   tradeValue: number;
+  sourceUrl?: string;
+  sourceContext?: string | null;
+  detectedAt?: string;
 }
 
 interface HSCodeSearchProps {
@@ -23,6 +26,19 @@ const isSameHSCode = (left: string, right: string) => {
   const leftDigits = normalizeHSCodeDigits(left);
   const rightDigits = normalizeHSCodeDigits(right);
   return left === right || (!!leftDigits && leftDigits === rightDigits);
+};
+
+const formatSourceUrl = (url?: string) => {
+  if (!url) {
+    return null;
+  }
+
+  try {
+    const parsed = new URL(url);
+    return `${parsed.hostname}${parsed.pathname}`;
+  } catch {
+    return url;
+  }
 };
 
 const HSCodeSearch: React.FC<HSCodeSearchProps> = ({
@@ -44,6 +60,7 @@ const HSCodeSearch: React.FC<HSCodeSearchProps> = ({
   const [searchTimer, setSearchTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
   const [errors, setErrors] = useState<{ tradeValue?: string; hsCode?: string }>({});
   const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [sourceInfo, setSourceInfo] = useState<{ url?: string; context?: string | null } | null>(null);
   const listboxRef = useRef<HTMLDivElement>(null);
 
   // 履歴やページ上で選択されたHSコードを復元
@@ -69,6 +86,11 @@ const HSCodeSearch: React.FC<HSCodeSearchProps> = ({
       setSuggestions([]);
       setSelectedIndex(-1);
       setErrors({});
+      setSourceInfo(
+        prefilledData.sourceUrl || prefilledData.sourceContext
+          ? { url: prefilledData.sourceUrl, context: prefilledData.sourceContext }
+          : null
+      );
       onHSCodeSelect(prefilledData.hsCode);
 
       const hydrateHSCode = async () => {
@@ -139,6 +161,7 @@ const HSCodeSearch: React.FC<HSCodeSearchProps> = ({
   const handleHSCodeSelect = (hsCode: HSCode) => {
     setSelectedHSCode(hsCode);
     setSearchTerm(hsCode.code);
+    setSourceInfo(null);
     setSuggestions([]);
     setSelectedIndex(-1);
     onHSCodeSelect(hsCode.code);
@@ -260,7 +283,10 @@ const HSCodeSearch: React.FC<HSCodeSearchProps> = ({
           <input
             type="text"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setSourceInfo(null);
+            }}
             onKeyDown={handleKeyDown}
             placeholder="HSコードまたは商品名を入力..."
             className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 dark:placeholder-gray-400 focus:ring-2 focus:ring-primary-500"
@@ -314,6 +340,29 @@ const HSCodeSearch: React.FC<HSCodeSearchProps> = ({
           <div className="mt-4 p-3 bg-primary-50 dark:bg-primary-900/30 rounded-lg">
             <div className="font-mono text-sm text-primary-700 dark:text-primary-400 font-semibold">{selectedHSCode.code}</div>
             <div className="text-sm text-gray-900 dark:text-gray-100 mt-1">{selectedHSCode.description_ja}</div>
+            {(sourceInfo?.url || sourceInfo?.context) && (
+              <div className="mt-3 pt-3 border-t border-primary-100 dark:border-primary-800">
+                <div className="text-xs font-medium text-primary-800 dark:text-primary-300">
+                  ページから取得
+                </div>
+                {sourceInfo.context && (
+                  <p className="text-xs text-primary-700 dark:text-primary-300 mt-1 break-words">
+                    {sourceInfo.context}
+                  </p>
+                )}
+                {sourceInfo.url && (
+                  <a
+                    href={sourceInfo.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="block text-xs text-primary-700 dark:text-primary-300 mt-1 truncate underline"
+                    title={sourceInfo.url}
+                  >
+                    {formatSourceUrl(sourceInfo.url)}
+                  </a>
+                )}
+              </div>
+            )}
           </div>
         )}
       </div>
