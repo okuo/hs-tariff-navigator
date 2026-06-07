@@ -47,6 +47,8 @@ export interface AgreementRate {
   savings_amount: number;
   savings_percentage: number;
   conditions?: Record<string, any> | null;
+  rate_source: 'actual' | 'estimated';
+  data_note?: string;
 }
 
 export interface OptimizationResult {
@@ -55,8 +57,10 @@ export interface OptimizationResult {
   to_country: string;
   trade_value: number;
   base_rate: number;
+  base_rate_source: 'actual' | 'fallback_hs' | 'default';
   agreements: AgreementRate[];
   best_agreement?: AgreementRate;
+  data_warnings?: string[];
 }
 
 export interface SearchFilters {

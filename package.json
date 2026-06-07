@@ -1,7 +1,7 @@
 {
   "name": "hs-tariff-navigator",
-  "version": "1.2.1",
-  "description": "FTA/EPA譛驕ｩ蛹砲hrome諡｡蠑ｵ讖溯・ - 雋ｿ譏薙さ繧ｹ繝亥炎貂帶髪謠ｴ繝・・繝ｫ",
+  "version": "1.2.2",
+  "description": "HSコード検索とFTA/EPA比較で貿易コスト調査を支援するChrome拡張機能",
   "private": true,
   "scripts": {
     "dev": "webpack --mode development --watch",

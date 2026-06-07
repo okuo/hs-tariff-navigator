@@ -4,7 +4,7 @@
   "files": {
     "hs_codes": {
       "url": "hs_codes.json",
-      "count": 90
+      "count": 88
     },
     "agreements": {
       "url": "agreements.json",
@@ -12,7 +12,7 @@
     },
     "tariff_rates": {
       "url": "tariff_rates.json",
-      "count": 78
+      "count": 75
     }
   }
 }

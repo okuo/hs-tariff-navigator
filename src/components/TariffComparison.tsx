@@ -28,10 +28,11 @@ const TariffComparison: React.FC<TariffComparisonProps> = ({ result, onBack, onT
   const buildCsvContent = (data: OptimizationResult): string => {
     const calculateDutyAmountForCsv = (rate: number) => Math.round((data.trade_value * rate) / 100);
     const baseDutyAmountForCsv = calculateDutyAmountForCsv(data.base_rate);
-    const headers = ['協定名', '協定名(英)', '関税率(%)', '基本税額(円)', '協定適用後税額(円)', '削減額(円)', '削減率(%)'];
+    const headers = ['協定名', '協定名(英)', '税率区分', '関税率(%)', '基本税額(円)', '協定適用後税額(円)', '削減額(円)', '削減率(%)'];
     const rows = data.agreements.map((item) => [
       item.agreement.name_ja,
       item.agreement.name_en,
+      getRateSourceLabel(item.rate_source),
       item.rate.toFixed(1),
       baseDutyAmountForCsv.toString(),
       calculateDutyAmountForCsv(item.rate).toString(),
@@ -46,9 +47,12 @@ const TariffComparison: React.FC<TariffComparisonProps> = ({ result, onBack, onT
       `輸入国,${data.to_country}`,
       `貿易額,${data.trade_value}`,
       `基本関税率(MFN),${data.base_rate.toFixed(1)}%`,
+      `基本関税率区分,${getBaseRateSourceLabel(data.base_rate_source)}`,
       '',
       headers.join(','),
       ...rows.map((r) => r.join(',')),
+      '',
+      ...(data.data_warnings?.map((warning) => `注意,${warning}`) ?? []),
     ];
     return bom + csvLines.join('\n');
   };
@@ -87,11 +91,14 @@ const TariffComparison: React.FC<TariffComparisonProps> = ({ result, onBack, onT
         '--- 協定別比較 ---',
         ...result.agreements.map(
           (item) =>
-            `${item.agreement.name_ja}: ${item.rate.toFixed(1)}% (協定適用後税額: ${calculateDutyAmountForCopy(item.rate).toLocaleString()}円, 削減額: ${item.savings_amount.toLocaleString()}円, 削減率: ${item.savings_percentage.toFixed(1)}%)`
+            `${item.agreement.name_ja}: ${item.rate.toFixed(1)}% [${getRateSourceLabel(item.rate_source)}] (協定適用後税額: ${calculateDutyAmountForCopy(item.rate).toLocaleString()}円, 削減額: ${item.savings_amount.toLocaleString()}円, 削減率: ${item.savings_percentage.toFixed(1)}%)`
         ),
       ];
       if (result.best_agreement) {
-        lines.push('', `推奨: ${result.best_agreement.agreement.name_ja}`);
+        lines.push('', `${result.best_agreement.rate_source === 'estimated' ? '参考候補' : '推奨'}: ${result.best_agreement.agreement.name_ja}`);
+      }
+      if (result.data_warnings?.length) {
+        lines.push('', '--- 注意 ---', ...result.data_warnings);
       }
       await navigator.clipboard.writeText(lines.join('\n'));
       setShowExportMenu(false);
@@ -123,6 +130,21 @@ const TariffComparison: React.FC<TariffComparisonProps> = ({ result, onBack, onT
     return `${rate.toFixed(1)}%`;
   };
 
+  const getRateSourceLabel = (source?: string) => {
+    return source === 'estimated' ? '参考推定' : '収録データ';
+  };
+
+  const getBaseRateSourceLabel = (source?: string) => {
+    switch (source) {
+      case 'fallback_hs':
+        return '同一HSコード参考値';
+      case 'default':
+        return '標準参考値';
+      default:
+        return '収録データ';
+    }
+  };
+
   const calculateDutyAmount = (rate: number) => {
     return Math.round((result.trade_value * rate) / 100);
   };
@@ -135,6 +157,7 @@ const TariffComparison: React.FC<TariffComparisonProps> = ({ result, onBack, onT
   const bestDutyAmount = result.best_agreement
     ? calculateDutyAmount(result.best_agreement.rate)
     : 0;
+  const isBestEstimated = result.best_agreement?.rate_source === 'estimated';
 
   return (
     <div className="space-y-6">
@@ -148,21 +171,25 @@ const TariffComparison: React.FC<TariffComparisonProps> = ({ result, onBack, onT
         </div>
 
         {result.best_agreement && (
-          <div className="bg-success-50 dark:bg-green-900/30 border border-success-200 dark:border-green-800 rounded-lg p-4 mb-4">
+          <div className={`${isBestEstimated ? 'bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800' : 'bg-success-50 dark:bg-green-900/30 border-success-200 dark:border-green-800'} border rounded-lg p-4 mb-4`}>
             <div className="flex items-start">
               <div className="flex-shrink-0">
-                <svg className="h-5 w-5 text-success-500 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                <svg className={`h-5 w-5 mt-0.5 ${isBestEstimated ? 'text-amber-500' : 'text-success-500'}`} fill="currentColor" viewBox="0 0 20 20">
+                  {isBestEstimated ? (
+                    <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.72-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                  ) : (
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  )}
                 </svg>
               </div>
               <div className="ml-3 flex-1">
-                <h3 className="text-sm font-semibold text-success-800 dark:text-green-300">
-                  最適協定が見つかりました！
+                <h3 className={`text-sm font-semibold ${isBestEstimated ? 'text-amber-800 dark:text-amber-300' : 'text-success-800 dark:text-green-300'}`}>
+                  {isBestEstimated ? '参考候補を表示しています' : '最適協定が見つかりました'}
                 </h3>
-                <p className="text-sm text-success-700 dark:text-green-400 mt-1">
+                <p className={`text-sm mt-1 ${isBestEstimated ? 'text-amber-700 dark:text-amber-300' : 'text-success-700 dark:text-green-400'}`}>
                   {result.best_agreement.agreement.name_ja}
                 </p>
-                <div className="mt-2 text-sm text-success-800 dark:text-green-300">
+                <div className={`mt-2 text-sm ${isBestEstimated ? 'text-amber-800 dark:text-amber-300' : 'text-success-800 dark:text-green-300'}`}>
                   <span className="font-semibold">削減額: </span>
                   {formatCurrency(result.best_agreement.savings_amount)}
                   <span className="ml-2">({formatPercentage(result.best_agreement.savings_percentage)}削減)</span>
@@ -192,9 +219,14 @@ const TariffComparison: React.FC<TariffComparisonProps> = ({ result, onBack, onT
         <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 mb-4">
           <div className="flex justify-between items-center">
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">基本関税率（MFN）</span>
-            <span className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-              {formatPercentage(result.base_rate)}
-            </span>
+            <div className="text-right">
+              <span className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                {formatPercentage(result.base_rate)}
+              </span>
+              <div className="text-xs text-gray-500 dark:text-gray-400">
+                {getBaseRateSourceLabel(result.base_rate_source)}
+              </div>
+            </div>
           </div>
           <div className="flex justify-between items-center mt-1 text-xs text-gray-500 dark:text-gray-400">
             <span>基本税額</span>
@@ -204,12 +236,28 @@ const TariffComparison: React.FC<TariffComparisonProps> = ({ result, onBack, onT
 
         {result.best_agreement && (
           <div className="border border-primary-100 dark:border-primary-900/50 bg-primary-50 dark:bg-primary-900/20 rounded-lg p-3">
-            <h3 className="text-sm font-semibold text-primary-800 dark:text-primary-300">推奨理由</h3>
+            <h3 className="text-sm font-semibold text-primary-800 dark:text-primary-300">
+              {isBestEstimated ? '参考候補の理由' : '推奨理由'}
+            </h3>
             <p className="text-xs text-primary-700 dark:text-primary-300 mt-1 leading-relaxed">
               {result.best_agreement.agreement.name_ja}を適用すると、関税率が
               {formatPercentage(result.base_rate)}から{formatPercentage(result.best_agreement.rate)}になり、
               税額は{formatCurrency(baseDutyAmount)}から{formatCurrency(bestDutyAmount)}に下がります。
+              {isBestEstimated && ' この税率は未収録データに基づく参考推定です。'}
             </p>
+          </div>
+        )}
+
+        {result.data_warnings && result.data_warnings.length > 0 && (
+          <div className="mt-3 border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20 rounded-lg p-3">
+            <p className="text-xs font-semibold text-amber-800 dark:text-amber-300">データに関する注意</p>
+            <ul className="mt-1 space-y-1">
+              {result.data_warnings.map((warning) => (
+                <li key={warning} className="text-xs text-amber-700 dark:text-amber-300">
+                  {warning}
+                </li>
+              ))}
+            </ul>
           </div>
         )}
       </div>
@@ -223,23 +271,30 @@ const TariffComparison: React.FC<TariffComparisonProps> = ({ result, onBack, onT
             const agreementDutyAmount = calculateDutyAmount(item.rate);
 
             return (
-            <div
-              key={item.agreement.id}
-              className={`border rounded-lg p-4 ${
-                result.best_agreement?.agreement.id === item.agreement.id
-                  ? 'border-success-300 dark:border-green-700 bg-success-50 dark:bg-green-900/20'
-                  : 'border-gray-200 dark:border-gray-600'
-              }`}
-            >
+              <div
+                key={item.agreement.id}
+                className={`border rounded-lg p-4 ${
+                  result.best_agreement?.agreement.id === item.agreement.id
+                    ? 'border-success-300 dark:border-green-700 bg-success-50 dark:bg-green-900/20'
+                    : 'border-gray-200 dark:border-gray-600'
+                }`}
+              >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center">
                     <h4 className="font-medium text-gray-900 dark:text-gray-100">
                       {item.agreement.name_ja}
                     </h4>
+                    <span className={`ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
+                      item.rate_source === 'estimated'
+                        ? 'bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300'
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
+                    }`}>
+                      {getRateSourceLabel(item.rate_source)}
+                    </span>
                     {result.best_agreement?.agreement.id === item.agreement.id && (
                       <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-success-100 dark:bg-green-900/50 text-success-800 dark:text-green-300">
-                        推奨
+                        {item.rate_source === 'estimated' ? '参考候補' : '推奨'}
                       </span>
                     )}
                   </div>
@@ -303,6 +358,11 @@ const TariffComparison: React.FC<TariffComparisonProps> = ({ result, onBack, onT
                     ))}
                   </ul>
                 </div>
+              )}
+              {item.data_note && (
+                <p className="mt-3 text-xs text-amber-700 dark:text-amber-300">
+                  {item.data_note}
+                </p>
               )}
             </div>
             );

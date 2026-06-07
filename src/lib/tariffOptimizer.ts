@@ -5,6 +5,7 @@
 
 import type { Agreement, AgreementRate, OptimizationResult } from '../types';
 import type { TariffRateData } from './dataService';
+import { EU_MEMBER_CODES } from '@/utils/constants';
 
 // デフォルトの基本関税率
 const DEFAULT_BASE_RATE = 10.0;
@@ -13,7 +14,14 @@ const DEFAULT_BASE_RATE = 10.0;
  * 指定された国が協定に参加しているか確認
  */
 function isCountryInAgreement(agreement: Agreement, country: string): boolean {
-  return agreement.countries.includes(country);
+  return expandCountryCode(country).some((countryCode) => agreement.countries.includes(countryCode));
+}
+
+function expandCountryCode(country: string): string[] {
+  if (country === 'EU') {
+    return [...EU_MEMBER_CODES];
+  }
+  return [country];
 }
 
 /**
@@ -44,14 +52,22 @@ function findTariffRate(
   toCountry: string,
   agreementId: string | null
 ): TariffRateData | undefined {
+  const fromCountryCodes = expandCountryCode(fromCountry);
+  const toCountryCodes = expandCountryCode(toCountry);
+
   return tariffRates.find(
     (tr) =>
       tr.hs_code === hsCode &&
-      tr.country_from === fromCountry &&
-      tr.country_to === toCountry &&
+      fromCountryCodes.includes(tr.country_from) &&
+      toCountryCodes.includes(tr.country_to) &&
       tr.agreement_id === agreementId
   );
 }
+
+type BaseRateResult = {
+  rate: number;
+  source: 'actual' | 'fallback_hs' | 'default';
+};
 
 /**
  * 基本関税率を取得
@@ -61,23 +77,39 @@ function getBaseRate(
   hsCode: string,
   fromCountry: string,
   toCountry: string
-): number {
+): BaseRateResult {
+  const fromCountryCodes = expandCountryCode(fromCountry);
+  const toCountryCodes = expandCountryCode(toCountry);
+
   // MFN（最恵国待遇）レートを探す
   const mfnRate = tariffRates.find(
     (tr) =>
       tr.hs_code === hsCode &&
-      tr.country_from === fromCountry &&
-      tr.country_to === toCountry &&
+      fromCountryCodes.includes(tr.country_from) &&
+      toCountryCodes.includes(tr.country_to) &&
       tr.agreement_id === null
   );
 
   if (mfnRate) {
-    return mfnRate.base_rate;
+    return {
+      rate: mfnRate.base_rate,
+      source: 'actual',
+    };
   }
 
   // 該当HSコードの任意のレートから基本関税率を取得
   const anyRate = tariffRates.find((tr) => tr.hs_code === hsCode);
-  return anyRate?.base_rate ?? DEFAULT_BASE_RATE;
+  if (anyRate) {
+    return {
+      rate: anyRate.base_rate,
+      source: 'fallback_hs',
+    };
+  }
+
+  return {
+    rate: DEFAULT_BASE_RATE,
+    source: 'default',
+  };
 }
 
 /**
@@ -105,7 +137,8 @@ export function optimizeTariff(
   const { agreements, tariffRates } = data;
 
   // 基本関税率を取得
-  const baseRate = getBaseRate(tariffRates, hsCode, fromCountry, toCountry);
+  const baseRateResult = getBaseRate(tariffRates, hsCode, fromCountry, toCountry);
+  const baseRate = baseRateResult.rate;
 
   // 適用可能な協定を取得
   const applicableAgreements = getApplicableAgreements(agreements, fromCountry, toCountry);
@@ -114,17 +147,31 @@ export function optimizeTariff(
   const effectiveTradeValue = tradeValue && tradeValue > 0 ? tradeValue : 1000000;
 
   // 各協定のレート計算
+  const dataWarnings: string[] = [];
+  if (fromCountry === 'EU' || toCountry === 'EU') {
+    dataWarnings.push('EUは収録済み加盟国コードを代表値として照合しています。加盟国別の実データがある場合は個別国での確認も推奨します。');
+  }
+  if (baseRateResult.source === 'fallback_hs') {
+    dataWarnings.push('この貿易ルートのMFN税率が未収録のため、同一HSコードの収録税率を参考値として使用しています。');
+  } else if (baseRateResult.source === 'default') {
+    dataWarnings.push('このHSコードのMFN税率が未収録のため、標準の参考税率を使用しています。');
+  }
+
   const agreementRates: AgreementRate[] = applicableAgreements.map((agreement) => {
     // 該当する関税率を検索
     const tariffRate = findTariffRate(tariffRates, hsCode, fromCountry, toCountry, agreement.id);
 
     // 優遇関税率を決定
     let preferentialRate: number;
+    let rateSource: AgreementRate['rate_source'] = 'actual';
+    let dataNote: string | undefined;
     if (tariffRate) {
       preferentialRate = tariffRate.preferential_rate;
     } else {
       // データがない場合は推定
       preferentialRate = calculatePreferentialRate(baseRate, agreement.priority);
+      rateSource = 'estimated';
+      dataNote = 'この協定の税率データは未収録のため、協定優先度に基づく参考推定です。';
     }
 
     // 削減額・削減率を計算
@@ -137,11 +184,21 @@ export function optimizeTariff(
       savings_amount: Math.round(savingsAmount * 100) / 100,
       savings_percentage: Math.round(savingsPercentage * 100) / 100,
       conditions: tariffRate?.conditions ?? null,
+      rate_source: rateSource,
+      data_note: dataNote,
     };
   });
 
-  // 最適協定を選択（削減額が最大のもの）
-  const bestAgreement = agreementRates.reduce<AgreementRate | undefined>(
+  const estimatedCount = agreementRates.filter((rate) => rate.rate_source === 'estimated').length;
+  if (estimatedCount > 0) {
+    dataWarnings.push(`${estimatedCount}件の協定税率は未収録のため、参考推定として表示しています。`);
+  }
+
+  // 最適協定を選択（実データがある場合は実データを優先）
+  const comparableRates = agreementRates.some((rate) => rate.rate_source === 'actual')
+    ? agreementRates.filter((rate) => rate.rate_source === 'actual')
+    : agreementRates;
+  const bestAgreement = comparableRates.reduce<AgreementRate | undefined>(
     (best, current) => {
       if (!best || current.savings_amount > best.savings_amount) {
         return current;
@@ -156,9 +213,11 @@ export function optimizeTariff(
     from_country: fromCountry,
     to_country: toCountry,
     base_rate: baseRate,
+    base_rate_source: baseRateResult.source,
     agreements: agreementRates,
     best_agreement: bestAgreement,
     trade_value: effectiveTradeValue,
+    data_warnings: dataWarnings,
   };
 }
 

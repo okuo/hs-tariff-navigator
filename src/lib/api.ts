@@ -139,9 +139,11 @@ export async function optimizeTariff(
       from_country: fromCountry,
       to_country: toCountry,
       base_rate: 10.0,
+      base_rate_source: 'default',
       agreements: [],
       best_agreement: undefined,
       trade_value: tradeValue,
+      data_warnings: ['データ読み込みエラーのため、参考用の空結果を返しています。'],
     };
   }
 }

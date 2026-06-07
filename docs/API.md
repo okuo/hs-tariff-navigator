@@ -80,8 +80,10 @@ interface OptimizationResult {
   to_country: string;           // 輸入国コード
   trade_value: number;          // 貿易金額
   base_rate: number;            // MFN基本関税率 (%)
+  base_rate_source: 'actual' | 'fallback_hs' | 'default'; // MFN税率の根拠
   agreements: AgreementRate[];  // 利用可能協定一覧
   best_agreement?: AgreementRate; // 最適協定
+  data_warnings?: string[];     // データ未収録・推定に関する注意
 }
 
 interface AgreementRate {
@@ -90,8 +92,12 @@ interface AgreementRate {
   savings_amount: number;         // 削減金額 (円)
   savings_percentage: number;     // 削減率 (%)
   conditions?: Record<string, any> | null; // 適用条件
+  rate_source: 'actual' | 'estimated'; // 収録税率または参考推定
+  data_note?: string;             // 推定時の補足
 }
 ```
+
+`rate_source` が `estimated` の場合、その税率は収録データではなく参考推定です。UI、CSV、クリップボード出力では「参考推定」として明示し、実データがある協定を推奨候補として優先します。
 
 ## API関数
 
@@ -148,6 +154,7 @@ const result = await optimizeTariff('8507100000', 'JP', 'CN', 1000000);
 //   from_country: 'JP',
 //   to_country: 'CN',
 //   base_rate: 10.0,
+//   base_rate_source: 'actual',
 //   trade_value: 1000000,
 //   agreements: [...],
 //   best_agreement: {
@@ -157,6 +164,7 @@ const result = await optimizeTariff('8507100000', 'JP', 'CN', 1000000);
 //       ...
 //     },
 //     rate: 0.0,
+//     rate_source: 'actual',
 //     savings_amount: 100000,
 //     savings_percentage: 100.0,
 //     conditions: { origin_requirement: '原産地証明書が必要' }
