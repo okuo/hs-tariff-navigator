@@ -3,7 +3,7 @@
  * 外部JSONファイルからデータを取得し、ローカルにキャッシュする
  */
 
-import type { HSCode, Agreement } from '../types';
+import type { HSCode, Agreement, DataReference, DataSourceType } from '../types';
 
 // 型定義
 export interface TariffRateData {
@@ -15,11 +15,38 @@ export interface TariffRateData {
   preferential_rate: number;
   conditions: Record<string, any>;
   effective_date: string;
+  effective_from?: string;
+  effective_to?: string;
+  source_name?: string;
+  source_url?: string;
+  source_note?: string;
+  last_verified_at?: string;
+}
+
+export interface DataManifestSource {
+  type?: DataSourceType;
+  name?: string;
+  url?: string;
+  note?: string;
+  last_verified_at?: string;
+}
+
+export interface DataManifestCoverage {
+  effective_from?: string;
+  effective_to?: string;
+}
+
+export interface DataManifestRemote {
+  enabled?: boolean;
+  base_url?: string;
 }
 
 export interface DataManifest {
   version: string;
   updated_at: string;
+  source?: DataManifestSource;
+  coverage?: DataManifestCoverage;
+  remote?: DataManifestRemote;
   files: {
     hs_codes: { url: string; count: number };
     agreements: { url: string; count: number };
@@ -36,12 +63,56 @@ export interface CachedData {
 }
 
 // 設定
-const DATA_BASE_URL = 'https://your-username.github.io/tariff-scope-data';
+const DATA_BASE_URL = '';
 const CACHE_KEY = 'tariff-scope-data-cache';
 const CACHE_EXPIRY_HOURS = 24;
+const FALLBACK_SOURCE_NAME = 'TariffScope同梱参考データ';
 
 // 開発環境用のローカルデータパス
-const LOCAL_DATA_PATH = chrome?.runtime?.getURL?.('data/') || '/data/';
+const LOCAL_DATA_PATH =
+  typeof chrome !== 'undefined' && chrome.runtime?.getURL
+    ? chrome.runtime.getURL('data/')
+    : '/data/';
+
+function normalizeBaseUrl(baseUrl?: string): string | null {
+  const trimmed = baseUrl?.trim();
+  return trimmed ? trimmed.replace(/\/$/, '') : null;
+}
+
+function getConfiguredRemoteBaseUrl(manifest?: DataManifest): string | null {
+  if (manifest?.remote?.enabled) {
+    return normalizeBaseUrl(manifest.remote.base_url);
+  }
+  return normalizeBaseUrl(DATA_BASE_URL);
+}
+
+export function getManifestDataReference(manifest?: DataManifest): DataReference {
+  return {
+    source_name: manifest?.source?.name ?? FALLBACK_SOURCE_NAME,
+    source_url: manifest?.source?.url,
+    source_note: manifest?.source?.note,
+    last_verified_at: manifest?.source?.last_verified_at ?? manifest?.updated_at,
+    effective_from: manifest?.coverage?.effective_from,
+    effective_to: manifest?.coverage?.effective_to,
+  };
+}
+
+export function getTariffRateReference(
+  tariffRate: TariffRateData | undefined,
+  manifest?: DataManifest
+): DataReference {
+  const manifestReference = getManifestDataReference(manifest);
+
+  return {
+    ...manifestReference,
+    source_name: tariffRate?.source_name ?? manifestReference.source_name,
+    source_url: tariffRate?.source_url ?? manifestReference.source_url,
+    source_note: tariffRate?.source_note ?? manifestReference.source_note,
+    last_verified_at: tariffRate?.last_verified_at ?? manifestReference.last_verified_at,
+    effective_from: tariffRate?.effective_from ?? tariffRate?.effective_date ?? manifestReference.effective_from,
+    effective_to: tariffRate?.effective_to ?? manifestReference.effective_to,
+  };
+}
 
 /**
  * キャッシュが有効かどうかを確認
@@ -139,13 +210,18 @@ async function loadLocalData(): Promise<CachedData> {
  * 外部URLからデータを読み込む
  */
 async function loadRemoteData(baseUrl: string): Promise<CachedData> {
-  const manifestUrl = `${baseUrl}/data-manifest.json`;
+  const normalizedBaseUrl = normalizeBaseUrl(baseUrl);
+  if (!normalizedBaseUrl) {
+    throw new Error('Remote data URL is not configured');
+  }
+
+  const manifestUrl = `${normalizedBaseUrl}/data-manifest.json`;
   const manifest = await fetchJson<DataManifest>(manifestUrl);
 
   const [hsCodesData, agreementsData, tariffRatesData] = await Promise.all([
-    fetchJson<{ version: string; data: HSCode[] }>(`${baseUrl}/${manifest.files.hs_codes.url}`),
-    fetchJson<{ version: string; data: Agreement[] }>(`${baseUrl}/${manifest.files.agreements.url}`),
-    fetchJson<{ version: string; data: TariffRateData[] }>(`${baseUrl}/${manifest.files.tariff_rates.url}`),
+    fetchJson<{ version: string; data: HSCode[] }>(`${normalizedBaseUrl}/${manifest.files.hs_codes.url}`),
+    fetchJson<{ version: string; data: Agreement[] }>(`${normalizedBaseUrl}/${manifest.files.agreements.url}`),
+    fetchJson<{ version: string; data: TariffRateData[] }>(`${normalizedBaseUrl}/${manifest.files.tariff_rates.url}`),
   ]);
 
   return {
@@ -181,7 +257,11 @@ export async function loadData(forceRefresh = false): Promise<CachedData> {
     console.log('Local data not available, trying remote...');
     try {
       // 外部URLからデータを取得
-      data = await loadRemoteData(DATA_BASE_URL);
+      const remoteBaseUrl = getConfiguredRemoteBaseUrl();
+      if (!remoteBaseUrl) {
+        throw new Error('Remote data URL is not configured');
+      }
+      data = await loadRemoteData(remoteBaseUrl);
       console.log('Loaded remote data');
     } catch (remoteError) {
       console.error('Failed to load data:', remoteError);
@@ -198,12 +278,15 @@ export async function loadData(forceRefresh = false): Promise<CachedData> {
 /**
  * マニフェストをチェックして更新が必要か確認
  */
-export async function checkForUpdates(baseUrl: string = DATA_BASE_URL): Promise<boolean> {
+export async function checkForUpdates(baseUrl?: string): Promise<boolean> {
   try {
     const cached = await getCachedData();
     if (!cached) return true;
 
-    const remoteManifest = await fetchJson<DataManifest>(`${baseUrl}/data-manifest.json`);
+    const remoteBaseUrl = normalizeBaseUrl(baseUrl) ?? getConfiguredRemoteBaseUrl(cached.manifest);
+    if (!remoteBaseUrl) return false;
+
+    const remoteManifest = await fetchJson<DataManifest>(`${remoteBaseUrl}/data-manifest.json`);
     return remoteManifest.version !== cached.manifest.version;
   } catch (error) {
     console.error('Failed to check for updates:', error);

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { OptimizationResult } from '@/types';
+import type { DataReference, OptimizationResult } from '@/types';
 import { ToastType } from '@/hooks/useToast';
 import { COUNTRIES } from '@/utils/constants';
 import OriginRulesGuide from './OriginRulesGuide';
@@ -25,10 +25,29 @@ const TariffComparison: React.FC<TariffComparisonProps> = ({ result, onBack, onT
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  const escapeCsvField = (value: string | number | undefined): string => {
+    const text = value == null ? '' : String(value);
+    return /[",\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
+  };
+
   const buildCsvContent = (data: OptimizationResult): string => {
     const calculateDutyAmountForCsv = (rate: number) => Math.round((data.trade_value * rate) / 100);
     const baseDutyAmountForCsv = calculateDutyAmountForCsv(data.base_rate);
-    const headers = ['協定名', '協定名(英)', '税率区分', '関税率(%)', '基本税額(円)', '協定適用後税額(円)', '削減額(円)', '削減率(%)'];
+    const headers = [
+      '協定名',
+      '協定名(英)',
+      '税率区分',
+      '関税率(%)',
+      '基本税額(円)',
+      '協定適用後税額(円)',
+      '削減額(円)',
+      '削減率(%)',
+      '出典',
+      '検証日',
+      '適用開始',
+      '適用終了',
+      '備考',
+    ];
     const rows = data.agreements.map((item) => [
       item.agreement.name_ja,
       item.agreement.name_en,
@@ -38,22 +57,31 @@ const TariffComparison: React.FC<TariffComparisonProps> = ({ result, onBack, onT
       calculateDutyAmountForCsv(item.rate).toString(),
       item.savings_amount.toString(),
       item.savings_percentage.toFixed(1),
+      getReferenceSourceLabel(item.reference),
+      item.reference?.last_verified_at ?? '',
+      item.reference?.effective_from ?? '',
+      item.reference?.effective_to ?? '',
+      item.reference?.source_note ?? item.data_note ?? '',
     ]);
 
     const bom = '\uFEFF';
     const csvLines = [
-      `HSコード,${data.hs_code}`,
-      `輸出国,${data.from_country}`,
-      `輸入国,${data.to_country}`,
-      `貿易額,${data.trade_value}`,
-      `基本関税率(MFN),${data.base_rate.toFixed(1)}%`,
-      `基本関税率区分,${getBaseRateSourceLabel(data.base_rate_source)}`,
+      ['HSコード', data.hs_code],
+      ['輸出国', data.from_country],
+      ['輸入国', data.to_country],
+      ['貿易額', data.trade_value],
+      ['基本関税率(MFN)', `${data.base_rate.toFixed(1)}%`],
+      ['基本関税率区分', getBaseRateSourceLabel(data.base_rate_source)],
+      ['基本関税率出典', getReferenceSourceLabel(data.base_rate_reference)],
+      ['基本関税率検証日', data.base_rate_reference?.last_verified_at ?? ''],
+      ['データ出典', getReferenceSourceLabel(data.data_reference)],
+      ['データ適用範囲', formatReferenceRange(data.data_reference)],
       '',
-      headers.join(','),
-      ...rows.map((r) => r.join(',')),
+      headers,
+      ...rows,
       '',
-      ...(data.data_warnings?.map((warning) => `注意,${warning}`) ?? []),
-    ];
+      ...(data.data_warnings?.map((warning) => ['注意', warning]) ?? []),
+    ].map((line) => Array.isArray(line) ? line.map(escapeCsvField).join(',') : line);
     return bom + csvLines.join('\n');
   };
 
@@ -86,12 +114,14 @@ const TariffComparison: React.FC<TariffComparisonProps> = ({ result, onBack, onT
         `輸出国: ${result.from_country} / 輸入国: ${result.to_country}`,
         `貿易額: ${result.trade_value.toLocaleString()}円`,
         `基本関税率(MFN): ${result.base_rate.toFixed(1)}%`,
+        `基本関税率出典: ${getReferenceSourceLabel(result.base_rate_reference)}`,
+        `データ適用範囲: ${formatReferenceRange(result.data_reference)}`,
         `基本税額: ${baseDutyAmountForCopy.toLocaleString()}円`,
         '',
         '--- 協定別比較 ---',
         ...result.agreements.map(
           (item) =>
-            `${item.agreement.name_ja}: ${item.rate.toFixed(1)}% [${getRateSourceLabel(item.rate_source)}] (協定適用後税額: ${calculateDutyAmountForCopy(item.rate).toLocaleString()}円, 削減額: ${item.savings_amount.toLocaleString()}円, 削減率: ${item.savings_percentage.toFixed(1)}%)`
+            `${item.agreement.name_ja}: ${item.rate.toFixed(1)}% [${getRateSourceLabel(item.rate_source)} / ${getReferenceSourceLabel(item.reference)} / ${formatReferenceRange(item.reference)}] (協定適用後税額: ${calculateDutyAmountForCopy(item.rate).toLocaleString()}円, 削減額: ${item.savings_amount.toLocaleString()}円, 削減率: ${item.savings_percentage.toFixed(1)}%)`
         ),
       ];
       if (result.best_agreement) {
@@ -128,6 +158,37 @@ const TariffComparison: React.FC<TariffComparisonProps> = ({ result, onBack, onT
 
   const formatPercentage = (rate: number) => {
     return `${rate.toFixed(1)}%`;
+  };
+
+  const formatDate = (value?: string) => {
+    if (!value) {
+      return '不明';
+    }
+
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) {
+      return '不明';
+    }
+
+    return new Intl.DateTimeFormat('ja-JP', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).format(date);
+  };
+
+  const formatReferenceRange = (reference?: DataReference) => {
+    if (!reference?.effective_from && !reference?.effective_to) {
+      return '不明';
+    }
+
+    return `${formatDate(reference.effective_from)} - ${
+      reference.effective_to ? formatDate(reference.effective_to) : '継続中'
+    }`;
+  };
+
+  const getReferenceSourceLabel = (reference?: DataReference) => {
+    return reference?.source_name ?? '出典未設定';
   };
 
   const getRateSourceLabel = (source?: string) => {
@@ -226,6 +287,9 @@ const TariffComparison: React.FC<TariffComparisonProps> = ({ result, onBack, onT
               <div className="text-xs text-gray-500 dark:text-gray-400">
                 {getBaseRateSourceLabel(result.base_rate_source)}
               </div>
+              <div className="text-xs text-gray-500 dark:text-gray-400">
+                {getReferenceSourceLabel(result.base_rate_reference)}
+              </div>
             </div>
           </div>
           <div className="flex justify-between items-center mt-1 text-xs text-gray-500 dark:text-gray-400">
@@ -233,6 +297,34 @@ const TariffComparison: React.FC<TariffComparisonProps> = ({ result, onBack, onT
             <span>{formatCurrency(baseDutyAmount)}</span>
           </div>
         </div>
+
+        {result.data_reference && (
+          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 mb-4">
+            <div className="flex justify-between items-start gap-3">
+              <div>
+                <div className="text-xs text-gray-500 dark:text-gray-400">データ出典</div>
+                <div className="text-sm font-medium text-gray-900 dark:text-gray-100 mt-1">
+                  {result.data_reference.source_url ? (
+                    <a
+                      href={result.data_reference.source_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-primary-600 dark:text-primary-400 hover:underline"
+                    >
+                      {getReferenceSourceLabel(result.data_reference)}
+                    </a>
+                  ) : (
+                    getReferenceSourceLabel(result.data_reference)
+                  )}
+                </div>
+              </div>
+              <div className="text-right text-xs text-gray-500 dark:text-gray-400">
+                <div>検証日: {formatDate(result.data_reference.last_verified_at)}</div>
+                <div>適用範囲: {formatReferenceRange(result.data_reference)}</div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {result.best_agreement && (
           <div className="border border-primary-100 dark:border-primary-900/50 bg-primary-50 dark:bg-primary-900/20 rounded-lg p-3">
@@ -346,6 +438,31 @@ const TariffComparison: React.FC<TariffComparisonProps> = ({ result, onBack, onT
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
                   {formatCurrency(result.trade_value)} × ({formatPercentage(result.base_rate)} - {formatPercentage(item.rate)}) = {formatCurrency(item.savings_amount)}
                 </p>
+                <div className="grid grid-cols-2 gap-2 text-xs mt-2">
+                  <div className="bg-white dark:bg-gray-800 rounded p-2 border border-gray-100 dark:border-gray-700">
+                    <div className="text-gray-500 dark:text-gray-400">出典</div>
+                    <div className="font-medium text-gray-900 dark:text-gray-100 mt-0.5">
+                      {item.reference?.source_url ? (
+                        <a
+                          href={item.reference.source_url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-primary-600 dark:text-primary-400 hover:underline"
+                        >
+                          {getReferenceSourceLabel(item.reference)}
+                        </a>
+                      ) : (
+                        getReferenceSourceLabel(item.reference)
+                      )}
+                    </div>
+                  </div>
+                  <div className="bg-white dark:bg-gray-800 rounded p-2 border border-gray-100 dark:border-gray-700">
+                    <div className="text-gray-500 dark:text-gray-400">適用期間</div>
+                    <div className="font-medium text-gray-900 dark:text-gray-100 mt-0.5">
+                      {formatReferenceRange(item.reference)}
+                    </div>
+                  </div>
+                </div>
               </div>
 
               {/* 条件情報 */}

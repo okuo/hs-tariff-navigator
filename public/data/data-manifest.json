@@ -1,6 +1,19 @@
 {
   "version": "1.0.0",
   "updated_at": "2025-01-15T00:00:00Z",
+  "source": {
+    "type": "bundled",
+    "name": "TariffScope同梱参考データ",
+    "url": "https://github.com/okuo/hs-tariff-navigator/tree/main/public/data",
+    "last_verified_at": "2025-01-15",
+    "note": "公式確認前の事前調査用に整備した参考データです。申告、契約、価格決定、原産地証明では税関、通関士、JETRO、各協定文書などの公式情報を確認してください。"
+  },
+  "coverage": {
+    "effective_from": "2002-11-30"
+  },
+  "remote": {
+    "enabled": false
+  },
   "files": {
     "hs_codes": {
       "url": "hs_codes.json",

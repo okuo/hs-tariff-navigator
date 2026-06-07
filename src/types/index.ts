@@ -30,6 +30,15 @@ export interface TariffRate {
   effective_to?: string;
 }
 
+export interface DataReference {
+  source_name: string;
+  source_url?: string;
+  source_note?: string;
+  last_verified_at?: string;
+  effective_from?: string;
+  effective_to?: string;
+}
+
 export interface SearchHistory {
   id: string;
   session_id: string;
@@ -49,6 +58,7 @@ export interface AgreementRate {
   conditions?: Record<string, any> | null;
   rate_source: 'actual' | 'estimated';
   data_note?: string;
+  reference?: DataReference;
 }
 
 export interface OptimizationResult {
@@ -58,8 +68,10 @@ export interface OptimizationResult {
   trade_value: number;
   base_rate: number;
   base_rate_source: 'actual' | 'fallback_hs' | 'default';
+  base_rate_reference?: DataReference;
   agreements: AgreementRate[];
   best_agreement?: AgreementRate;
+  data_reference?: DataReference;
   data_warnings?: string[];
 }
 
@@ -106,13 +118,19 @@ export interface PendingHSCodeSelection {
   detected_at: string;
 }
 
-export type DataSourceType = 'bundled';
+export type DataSourceType = 'bundled' | 'remote';
 
 export interface DataStatus {
   version: string;
   data_updated_at: string;
   cached_at: string;
   source: DataSourceType;
+  source_name: string;
+  source_url?: string;
+  source_note?: string;
+  last_verified_at?: string;
+  effective_from?: string;
+  effective_to?: string;
   remote_updates_enabled: boolean;
   counts: {
     hs_codes: number;

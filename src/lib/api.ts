@@ -12,7 +12,7 @@ import {
   SearchHistoryForDisplay
 } from '@/types';
 import { STORAGE_KEYS } from '@/utils/constants';
-import { dataService } from './dataService';
+import { dataService, getManifestDataReference } from './dataService';
 import { searchHSCodes as searchHS } from './search';
 import { optimizeTariff as optimize } from './tariffOptimizer';
 
@@ -121,14 +121,12 @@ export async function optimizeTariff(
   tradeValue: number = 0
 ): Promise<OptimizationResult> {
   try {
-    const [agreements, tariffRates] = await Promise.all([
-      dataService.getAgreements(),
-      dataService.getTariffRates(),
-    ]);
+    const data = await dataService.getData();
 
     return optimize(hsCode, fromCountry, toCountry, tradeValue || null, {
-      agreements,
-      tariffRates,
+      agreements: data.agreements,
+      tariffRates: data.tariff_rates,
+      manifest: data.manifest,
     });
   } catch (error) {
     console.error('関税最適化エラー:', error);
@@ -206,13 +204,21 @@ export async function getSearchHistoryRaw(): Promise<SearchHistoryEntry[]> {
  */
 export async function getDataStatus(): Promise<DataStatus> {
   const data = await dataService.getData();
+  const dataReference = getManifestDataReference(data.manifest);
+  const source = data.manifest.source?.type ?? 'bundled';
 
   return {
     version: data.manifest.version,
     data_updated_at: data.manifest.updated_at,
     cached_at: data.cached_at,
-    source: 'bundled',
-    remote_updates_enabled: false,
+    source,
+    source_name: dataReference.source_name,
+    source_url: dataReference.source_url,
+    source_note: dataReference.source_note,
+    last_verified_at: dataReference.last_verified_at,
+    effective_from: dataReference.effective_from,
+    effective_to: dataReference.effective_to,
+    remote_updates_enabled: Boolean(data.manifest.remote?.enabled && data.manifest.remote.base_url),
     counts: {
       hs_codes: data.manifest.files.hs_codes.count ?? data.hs_codes.length,
       agreements: data.manifest.files.agreements.count ?? data.agreements.length,

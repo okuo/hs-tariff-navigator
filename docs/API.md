@@ -26,7 +26,51 @@ JSONファイル (public/data/)
 | `public/data/tariff_rates.json` | 関税率データ |
 | `public/data/origin_rules.json` | 原産地規則データ |
 
+`data-manifest.json` は、データセット全体の出典、最終検証日、適用範囲、オンライン更新設定も保持します。オンライン更新元が未設定の場合、アプリは同梱データを利用し、その状態をUIに表示します。
+
 ## データ構造
+
+### `DataReference` - データ出典情報
+
+```typescript
+interface DataReference {
+  source_name: string;      // 出典名
+  source_url?: string;      // 出典URL
+  source_note?: string;     // 利用上の注意
+  last_verified_at?: string; // 最終検証日
+  effective_from?: string;  // 適用開始日
+  effective_to?: string;    // 適用終了日
+}
+```
+
+### `DataManifest` - データマニフェスト
+
+```typescript
+interface DataManifest {
+  version: string;
+  updated_at: string;
+  source?: {
+    type?: 'bundled' | 'remote';
+    name?: string;
+    url?: string;
+    note?: string;
+    last_verified_at?: string;
+  };
+  coverage?: {
+    effective_from?: string;
+    effective_to?: string;
+  };
+  remote?: {
+    enabled?: boolean;
+    base_url?: string;
+  };
+  files: {
+    hs_codes: { url: string; count: number };
+    agreements: { url: string; count: number };
+    tariff_rates: { url: string; count: number };
+  };
+}
+```
 
 ### `HSCode` - HSコードマスター
 
@@ -68,6 +112,12 @@ interface TariffRateData {
   preferential_rate: number;          // 協定関税率 (%)
   conditions: Record<string, any>;    // 適用条件
   effective_date: string;             // 発効日
+  effective_from?: string;            // 適用開始日
+  effective_to?: string;              // 適用終了日
+  source_name?: string;               // 個別税率の出典名
+  source_url?: string;                // 個別税率の出典URL
+  source_note?: string;               // 個別税率の注意
+  last_verified_at?: string;          // 個別税率の最終検証日
 }
 ```
 
@@ -81,8 +131,10 @@ interface OptimizationResult {
   trade_value: number;          // 貿易金額
   base_rate: number;            // MFN基本関税率 (%)
   base_rate_source: 'actual' | 'fallback_hs' | 'default'; // MFN税率の根拠
+  base_rate_reference?: DataReference; // MFN税率の出典情報
   agreements: AgreementRate[];  // 利用可能協定一覧
   best_agreement?: AgreementRate; // 最適協定
+  data_reference?: DataReference; // データセット全体の出典情報
   data_warnings?: string[];     // データ未収録・推定に関する注意
 }
 
@@ -94,10 +146,11 @@ interface AgreementRate {
   conditions?: Record<string, any> | null; // 適用条件
   rate_source: 'actual' | 'estimated'; // 収録税率または参考推定
   data_note?: string;             // 推定時の補足
+  reference?: DataReference;       // 税率の出典情報
 }
 ```
 
-`rate_source` が `estimated` の場合、その税率は収録データではなく参考推定です。UI、CSV、クリップボード出力では「参考推定」として明示し、実データがある協定を推奨候補として優先します。
+`rate_source` が `estimated` の場合、その税率は収録データではなく参考推定です。UI、CSV、クリップボード出力では「参考推定」として明示し、実データがある協定を推奨候補として優先します。`reference` には出典名、検証日、適用期間を含め、検索結果を外部に共有しても根拠を確認できるようにします。
 
 ## API関数
 
@@ -155,6 +208,11 @@ const result = await optimizeTariff('8507100000', 'JP', 'CN', 1000000);
 //   to_country: 'CN',
 //   base_rate: 10.0,
 //   base_rate_source: 'actual',
+//   base_rate_reference: {
+//     source_name: 'TariffScope同梱参考データ',
+//     last_verified_at: '2025-01-15',
+//     effective_from: '2024-01-01'
+//   },
 //   trade_value: 1000000,
 //   agreements: [...],
 //   best_agreement: {
@@ -165,6 +223,10 @@ const result = await optimizeTariff('8507100000', 'JP', 'CN', 1000000);
 //     },
 //     rate: 0.0,
 //     rate_source: 'actual',
+//     reference: {
+//       source_name: 'TariffScope同梱参考データ',
+//       effective_from: '2024-01-01'
+//     },
 //     savings_amount: 100000,
 //     savings_percentage: 100.0,
 //     conditions: { origin_requirement: '原産地証明書が必要' }

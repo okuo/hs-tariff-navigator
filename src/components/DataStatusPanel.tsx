@@ -2,7 +2,11 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { DataStatus } from '@/types';
 import { getDataStatus, refreshData } from '@/lib/api';
 
-const formatDateTime = (value: string): string => {
+const formatDateTime = (value?: string): string => {
+  if (!value) {
+    return '不明';
+  }
+
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) {
     return '不明';
@@ -15,6 +19,31 @@ const formatDateTime = (value: string): string => {
     hour: '2-digit',
     minute: '2-digit',
   }).format(date);
+};
+
+const formatDate = (value?: string): string => {
+  if (!value) {
+    return '不明';
+  }
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return '不明';
+  }
+
+  return new Intl.DateTimeFormat('ja-JP', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(date);
+};
+
+const formatEffectiveRange = (from?: string, to?: string): string => {
+  if (!from && !to) {
+    return '不明';
+  }
+
+  return `${formatDate(from)} - ${to ? formatDate(to) : '継続中'}`;
 };
 
 const DataStatusPanel: React.FC = () => {
@@ -60,7 +89,7 @@ const DataStatusPanel: React.FC = () => {
         <div>
           <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">収録データ</h2>
           <div className="mt-1 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-            同梱データ
+            {status?.source === 'remote' ? 'オンライン更新データ' : '同梱データ'}
           </div>
         </div>
         <button
@@ -113,6 +142,43 @@ const DataStatusPanel: React.FC = () => {
             <div className="text-sm font-medium text-gray-900 dark:text-gray-100 mt-1">
               {formatDateTime(status.data_updated_at)}
             </div>
+          </div>
+
+          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3">
+            <div className="text-xs text-gray-500 dark:text-gray-400">データ出典</div>
+            <div className="text-sm font-medium text-gray-900 dark:text-gray-100 mt-1">
+              {status.source_url ? (
+                <a
+                  href={status.source_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-primary-600 dark:text-primary-400 hover:underline"
+                >
+                  {status.source_name}
+                </a>
+              ) : (
+                status.source_name
+              )}
+            </div>
+            <div className="grid grid-cols-2 gap-2 mt-2 text-xs">
+              <div>
+                <span className="text-gray-500 dark:text-gray-400">検証日</span>
+                <div className="font-medium text-gray-800 dark:text-gray-200">
+                  {formatDate(status.last_verified_at)}
+                </div>
+              </div>
+              <div>
+                <span className="text-gray-500 dark:text-gray-400">適用範囲</span>
+                <div className="font-medium text-gray-800 dark:text-gray-200">
+                  {formatEffectiveRange(status.effective_from, status.effective_to)}
+                </div>
+              </div>
+            </div>
+            {status.source_note && (
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 leading-relaxed">
+                {status.source_note}
+              </p>
+            )}
           </div>
 
           {!status.remote_updates_enabled && (

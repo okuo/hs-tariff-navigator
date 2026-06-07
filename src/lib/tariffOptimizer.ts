@@ -3,8 +3,13 @@
  * PostgreSQLのoptimize_tariff関数をJavaScriptで再実装
  */
 
-import type { Agreement, AgreementRate, OptimizationResult } from '../types';
-import type { TariffRateData } from './dataService';
+import type { Agreement, AgreementRate, DataReference, OptimizationResult } from '../types';
+import {
+  getManifestDataReference,
+  getTariffRateReference,
+  type DataManifest,
+  type TariffRateData
+} from './dataService';
 import { EU_MEMBER_CODES } from '@/utils/constants';
 
 // デフォルトの基本関税率
@@ -67,6 +72,7 @@ function findTariffRate(
 type BaseRateResult = {
   rate: number;
   source: 'actual' | 'fallback_hs' | 'default';
+  tariffRate?: TariffRateData;
 };
 
 /**
@@ -94,6 +100,7 @@ function getBaseRate(
     return {
       rate: mfnRate.base_rate,
       source: 'actual',
+      tariffRate: mfnRate,
     };
   }
 
@@ -103,6 +110,7 @@ function getBaseRate(
     return {
       rate: anyRate.base_rate,
       source: 'fallback_hs',
+      tariffRate: anyRate,
     };
   }
 
@@ -121,6 +129,14 @@ function calculatePreferentialRate(baseRate: number, priority: number): number {
   return Math.max(0, baseRate * reductionFactor);
 }
 
+function buildEstimatedRateReference(datasetReference: DataReference): DataReference {
+  return {
+    ...datasetReference,
+    source_name: 'TariffScope参考推定',
+    source_note: '収録税率ではなく、協定優先度と基本税率に基づく参考推定です。',
+  };
+}
+
 /**
  * 関税最適化を実行
  */
@@ -132,13 +148,18 @@ export function optimizeTariff(
   data: {
     agreements: Agreement[];
     tariffRates: TariffRateData[];
+    manifest?: DataManifest;
   }
 ): OptimizationResult {
-  const { agreements, tariffRates } = data;
+  const { agreements, tariffRates, manifest } = data;
+  const datasetReference = getManifestDataReference(manifest);
 
   // 基本関税率を取得
   const baseRateResult = getBaseRate(tariffRates, hsCode, fromCountry, toCountry);
   const baseRate = baseRateResult.rate;
+  const baseRateReference = baseRateResult.tariffRate
+    ? getTariffRateReference(baseRateResult.tariffRate, manifest)
+    : buildEstimatedRateReference(datasetReference);
 
   // 適用可能な協定を取得
   const applicableAgreements = getApplicableAgreements(agreements, fromCountry, toCountry);
@@ -165,13 +186,16 @@ export function optimizeTariff(
     let preferentialRate: number;
     let rateSource: AgreementRate['rate_source'] = 'actual';
     let dataNote: string | undefined;
+    let reference: DataReference;
     if (tariffRate) {
       preferentialRate = tariffRate.preferential_rate;
+      reference = getTariffRateReference(tariffRate, manifest);
     } else {
       // データがない場合は推定
       preferentialRate = calculatePreferentialRate(baseRate, agreement.priority);
       rateSource = 'estimated';
       dataNote = 'この協定の税率データは未収録のため、協定優先度に基づく参考推定です。';
+      reference = buildEstimatedRateReference(datasetReference);
     }
 
     // 削減額・削減率を計算
@@ -186,6 +210,7 @@ export function optimizeTariff(
       conditions: tariffRate?.conditions ?? null,
       rate_source: rateSource,
       data_note: dataNote,
+      reference,
     };
   });
 
@@ -214,9 +239,11 @@ export function optimizeTariff(
     to_country: toCountry,
     base_rate: baseRate,
     base_rate_source: baseRateResult.source,
+    base_rate_reference: baseRateReference,
     agreements: agreementRates,
     best_agreement: bestAgreement,
     trade_value: effectiveTradeValue,
+    data_reference: datasetReference,
     data_warnings: dataWarnings,
   };
 }
