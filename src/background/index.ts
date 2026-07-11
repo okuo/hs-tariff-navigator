@@ -1,30 +1,30 @@
 // Service Worker for Chrome Extension
 import { STORAGE_KEYS } from '@/utils/constants';
 import { checkForUpdates, loadData, clearCache } from '@/lib/dataService';
+import { searchHistoryRepository } from '@/lib/searchHistoryRepository';
+import { isExtensionMessage, type ExtensionMessage } from '@/types/messages';
+import { getInitialStorageValues } from './installation';
 
 // データ更新チェック間隔（24時間）
 const DATA_UPDATE_INTERVAL_MINUTES = 60 * 24;
 
-interface HSCodeClickedMessage {
-  hsCode: string;
-  url?: string;
-  context?: string | null;
+type HSCodeClickedMessage = Extract<ExtensionMessage, { type: 'HS_CODE_CLICKED' }>;
+
+function getErrorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
 }
 
 // Extension install handler
 chrome.runtime.onInstalled.addListener((details) => {
   console.log('TariffScope extension installed:', details);
 
-  // Initialize default storage values
+  const initialStorageValues = getInitialStorageValues(details.reason);
+  if (!initialStorageValues) {
+    return;
+  }
+
   chrome.storage.local.set(
-    {
-      [STORAGE_KEYS.USER_SETTINGS]: {
-        defaultFromCountry: 'JP',
-        defaultToCountry: 'CN',
-        language: 'ja',
-      },
-      [STORAGE_KEYS.SEARCH_HISTORY]: [],
-    },
+    initialStorageValues,
     () => {
       if (chrome.runtime.lastError) {
         console.error('Error setting initial data:', chrome.runtime.lastError);
@@ -34,10 +34,7 @@ chrome.runtime.onInstalled.addListener((details) => {
     }
   );
 
-  // 初回インストール時にデータを読み込み
-  if (details.reason === 'install') {
-    initializeData();
-  }
+  initializeData();
 });
 
 // Handle extension icon clicks
@@ -46,8 +43,13 @@ chrome.action.onClicked.addListener((tab) => {
 });
 
 // Handle messages from content scripts and popup
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message: unknown, sender, sendResponse) => {
   console.log('Message received:', message);
+
+  if (!isExtensionMessage(message)) {
+    sendResponse({ error: 'Unknown message type' });
+    return false;
+  }
 
   try {
     switch (message.type) {
@@ -66,29 +68,29 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           })
           .catch((error) => {
             console.error('Save pending HS code error:', error);
-            sendResponse({ success: false, error: error.message });
+            sendResponse({ success: false, error: getErrorMessage(error) });
           });
         return true;
 
       case 'SAVE_SEARCH_HISTORY':
-        saveSearchHistory(message.data)
+        searchHistoryRepository.add(message.data)
           .then(() => {
             sendResponse({ success: true });
           })
           .catch((error) => {
             console.error('Save search history error:', error);
-            sendResponse({ success: false, error: error.message });
+            sendResponse({ success: false, error: getErrorMessage(error) });
           });
         return true;
 
       case 'GET_SEARCH_HISTORY':
-        getSearchHistory()
+        searchHistoryRepository.getAll()
           .then((history) => {
             sendResponse({ history });
           })
           .catch((error) => {
             console.error('Get search history error:', error);
-            sendResponse({ error: error.message });
+            sendResponse({ error: getErrorMessage(error) });
           });
         return true;
 
@@ -99,7 +101,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           })
           .catch((error) => {
             console.error('Check data updates error:', error);
-            sendResponse({ hasUpdates: false, error: error.message });
+            sendResponse({ hasUpdates: false, error: getErrorMessage(error) });
           });
         return true;
 
@@ -110,7 +112,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           })
           .catch((error) => {
             console.error('Refresh data error:', error);
-            sendResponse({ success: false, error: error.message });
+            sendResponse({ success: false, error: getErrorMessage(error) });
           });
         return true;
 
@@ -197,43 +199,6 @@ async function refreshData(): Promise<void> {
     console.log('TariffScope: Data refreshed successfully');
   } catch (error) {
     console.error('TariffScope: Failed to refresh data:', error);
-    throw error;
-  }
-}
-
-// 検索履歴の保存
-async function saveSearchHistory(searchData: any) {
-  try {
-    const result = await chrome.storage.local.get([STORAGE_KEYS.SEARCH_HISTORY]);
-    const history = result[STORAGE_KEYS.SEARCH_HISTORY] || [];
-
-    const newSearch = {
-      id: Date.now().toString(),
-      ...searchData,
-      timestamp: new Date().toISOString(),
-    };
-
-    // 最大50件まで保持
-    const updatedHistory = [newSearch, ...history].slice(0, 50);
-
-    await chrome.storage.local.set({
-      [STORAGE_KEYS.SEARCH_HISTORY]: updatedHistory,
-    });
-
-    console.log('Search history saved:', newSearch);
-  } catch (error) {
-    console.error('Error saving search history:', error);
-    throw error;
-  }
-}
-
-// 検索履歴の取得
-async function getSearchHistory() {
-  try {
-    const result = await chrome.storage.local.get([STORAGE_KEYS.SEARCH_HISTORY]);
-    return result[STORAGE_KEYS.SEARCH_HISTORY] || [];
-  } catch (error) {
-    console.error('Error getting search history:', error);
     throw error;
   }
 }

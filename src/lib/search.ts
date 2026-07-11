@@ -152,8 +152,8 @@ export function filterByCategory(hsCodeData: HSCode[], category: string): HSCode
   if (!category) return hsCodeData;
   return hsCodeData.filter(
     (item) =>
-      (item as any).category?.toLowerCase() === category.toLowerCase() ||
-      (item as any).subcategory?.toLowerCase() === category.toLowerCase()
+      item.category?.toLowerCase() === category.toLowerCase() ||
+      item.subcategory?.toLowerCase() === category.toLowerCase()
   );
 }
 
@@ -175,8 +175,8 @@ export function getHSCodeByCode(code: string, hsCodeData: HSCode[]): HSCode | un
 export function getAllCategories(hsCodeData: HSCode[]): string[] {
   const categories = new Set<string>();
   hsCodeData.forEach((item) => {
-    if ((item as any).category) {
-      categories.add((item as any).category);
+    if (item.category) {
+      categories.add(item.category);
     }
   });
   return Array.from(categories).sort();

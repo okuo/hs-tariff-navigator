@@ -5,7 +5,17 @@ export interface HSCode {
   unit: string;
   created_at: string;
   updated_at: string;
+  category?: string;
+  subcategory?: string;
 }
+
+export type JsonValue =
+  | string
+  | number
+  | boolean
+  | null
+  | JsonValue[]
+  | { [key: string]: JsonValue };
 
 export interface Agreement {
   id: string;
@@ -25,7 +35,7 @@ export interface TariffRate {
   from_country: string;
   to_country: string;
   rate: number;
-  conditions: Record<string, any>;
+  conditions: Record<string, JsonValue>;
   effective_from: string;
   effective_to?: string;
 }
@@ -55,7 +65,7 @@ export interface AgreementRate {
   rate: number;
   savings_amount: number;
   savings_percentage: number;
-  conditions?: Record<string, any> | null;
+  conditions?: Record<string, JsonValue> | null;
   rate_source: 'actual' | 'estimated';
   data_note?: string;
   reference?: DataReference;

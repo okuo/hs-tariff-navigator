@@ -1,5 +1,5 @@
 import { resetChromeStorage, setChromeStorageData } from '../../test/mocks/chrome';
-import { getCachedData, clearCache } from '../dataService';
+import { getCachedData, clearCache, checkForUpdates } from '../dataService';
 
 // Set up Chrome mocks before importing modules that use chrome APIs
 beforeEach(() => {
@@ -82,5 +82,37 @@ describe('clearCache', () => {
 
     const result = await getCachedData();
     expect(result).toBeNull();
+  });
+});
+
+describe('checkForUpdates', () => {
+  it('空白の明示URLは無視してmanifestのリモートURLを使用する', async () => {
+    setChromeStorageData({
+      [CACHE_KEY]: {
+        ...validCachedData,
+        manifest: {
+          ...validCachedData.manifest,
+          remote: {
+            enabled: true,
+            base_url: 'https://data.example.com/',
+          },
+        },
+      },
+    });
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = jest.fn(async (
+      _input: RequestInfo | URL,
+      _init?: RequestInit
+    ): Promise<Response> => ({
+      ok: true,
+      json: async () => ({ ...validCachedData.manifest, version: '2.0.0' }),
+    } as Response));
+
+    try {
+      await expect(checkForUpdates('   ')).resolves.toBe(true);
+      expect(globalThis.fetch).toHaveBeenCalledWith('https://data.example.com/data-manifest.json');
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
   });
 });

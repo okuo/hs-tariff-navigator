@@ -13,63 +13,10 @@ import {
 } from '@/types';
 import { STORAGE_KEYS } from '@/utils/constants';
 import { dataService, getManifestDataReference } from './dataService';
+import { searchHistoryRepository } from './searchHistoryRepository';
 import { searchHSCodes as searchHS } from './search';
+import { extensionStorage } from './storage';
 import { optimizeTariff as optimize } from './tariffOptimizer';
-
-// 検索履歴のストレージキー
-const SEARCH_HISTORY_KEY = 'tariff-scope-search-history';
-const MAX_HISTORY_ITEMS = 50;
-
-/**
- * Chrome Storage APIのラッパー
- * 拡張機能環境ではchrome.storage.localを使用し、
- * 非拡張環境（開発時等）ではlocalStorageにフォールバック
- */
-async function storageGet(key: string): Promise<any> {
-  if (typeof chrome !== 'undefined' && chrome.storage?.local) {
-    return new Promise((resolve) => {
-      chrome.storage.local.get([key], (result) => {
-        resolve(result[key] ?? null);
-      });
-    });
-  }
-  try {
-    const stored = localStorage.getItem(key);
-    return stored ? JSON.parse(stored) : null;
-  } catch {
-    return null;
-  }
-}
-
-async function storageSet(key: string, value: any): Promise<void> {
-  if (typeof chrome !== 'undefined' && chrome.storage?.local) {
-    return new Promise((resolve) => {
-      chrome.storage.local.set({ [key]: value }, () => {
-        resolve();
-      });
-    });
-  }
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-  } catch {
-    // ignore storage errors in non-extension environments
-  }
-}
-
-async function storageRemove(key: string): Promise<void> {
-  if (typeof chrome !== 'undefined' && chrome.storage?.local) {
-    return new Promise((resolve) => {
-      chrome.storage.local.remove([key], () => {
-        resolve();
-      });
-    });
-  }
-  try {
-    localStorage.removeItem(key);
-  } catch {
-    // ignore storage errors in non-extension environments
-  }
-}
 
 /**
  * HSコード検索
@@ -99,11 +46,11 @@ export async function searchHSCodes(searchTerm: string, limit = 10): Promise<HSC
  */
 export async function consumePendingHSCodeSelection(): Promise<PendingHSCodeSelection | null> {
   try {
-    const pending = await storageGet(STORAGE_KEYS.PENDING_HS_CODE) as PendingHSCodeSelection | null;
+    const pending = await extensionStorage.get<PendingHSCodeSelection>(STORAGE_KEYS.PENDING_HS_CODE);
     if (!pending?.hsCode) {
       return null;
     }
-    await storageRemove(STORAGE_KEYS.PENDING_HS_CODE);
+    await extensionStorage.remove(STORAGE_KEYS.PENDING_HS_CODE);
     return pending;
   } catch (error) {
     console.error('クリック済みHSコードの取得に失敗:', error);
@@ -157,7 +104,6 @@ export async function saveSearchHistory(
   searchResults: OptimizationResult
 ): Promise<void> {
   try {
-    const history = await getLocalSearchHistory();
     const newEntry: SearchHistoryEntry = {
       id: Date.now().toString(),
       hs_code: hsCode,
@@ -168,8 +114,7 @@ export async function saveSearchHistory(
       created_at: new Date().toISOString(),
     };
 
-    history.unshift(newEntry);
-    await storageSet(SEARCH_HISTORY_KEY, history.slice(0, MAX_HISTORY_ITEMS));
+    await searchHistoryRepository.add(newEntry);
   } catch (error) {
     console.error('検索履歴保存エラー:', error);
   }
@@ -232,7 +177,7 @@ export async function getDataStatus(): Promise<DataStatus> {
  */
 export async function clearSearchHistory(): Promise<void> {
   try {
-    await storageRemove(SEARCH_HISTORY_KEY);
+    await searchHistoryRepository.clear();
   } catch (error) {
     console.error('検索履歴クリアエラー:', error);
   }
@@ -243,8 +188,7 @@ export async function clearSearchHistory(): Promise<void> {
  */
 async function getLocalSearchHistory(): Promise<SearchHistoryEntry[]> {
   try {
-    const stored = await storageGet(SEARCH_HISTORY_KEY);
-    return stored ?? [];
+    return await searchHistoryRepository.getAll();
   } catch (error) {
     console.error('ローカル履歴読み込みエラー:', error);
     return [];

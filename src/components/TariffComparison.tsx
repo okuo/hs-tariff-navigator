@@ -470,7 +470,7 @@ const TariffComparison: React.FC<TariffComparisonProps> = ({ result, onBack, onT
                 <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
                   <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">適用条件:</p>
                   <ul className="text-xs text-gray-500 dark:text-gray-400 space-y-1">
-                    {Object.entries(item.conditions).map(([key, value]: [string, any]) => (
+                    {Object.entries(item.conditions).map(([key, value]) => (
                       <li key={key}>• {key}: {String(value)}</li>
                     ))}
                   </ul>
