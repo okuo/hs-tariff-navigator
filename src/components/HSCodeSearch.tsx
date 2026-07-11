@@ -2,6 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import { HSCode, SearchFilters, OptimizationResult } from '@/types';
 import { COUNTRIES } from '@/utils/constants';
 import { searchHSCodes, optimizeTariff, saveSearchHistory } from '@/lib/api';
+import {
+  ChromeAiAvailability,
+  ChromeAiKeywordSuggestion,
+  generateHsSearchKeywordsWithChromeAi,
+  getChromeAiAvailability,
+} from '@/lib/chromeBuiltInAi';
 
 interface PrefilledData {
   hsCode: string;
@@ -57,11 +63,31 @@ const HSCodeSearch: React.FC<HSCodeSearchProps> = ({
   });
   const [isLoading, setIsLoading] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
-  const [searchTimer, setSearchTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
   const [errors, setErrors] = useState<{ tradeValue?: string; hsCode?: string }>({});
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [sourceInfo, setSourceInfo] = useState<{ url?: string; context?: string | null } | null>(null);
+  const [localLlmDescription, setLocalLlmDescription] = useState('');
+  const [isGeneratingKeywords, setIsGeneratingKeywords] = useState(false);
+  const [localLlmSuggestion, setLocalLlmSuggestion] = useState<ChromeAiKeywordSuggestion | null>(null);
+  const [localLlmStatus, setLocalLlmStatus] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [chromeAiAvailability, setChromeAiAvailability] = useState<ChromeAiAvailability | null>(null);
+  const [chromeAiDownloadProgress, setChromeAiDownloadProgress] = useState<number | null>(null);
   const listboxRef = useRef<HTMLDivElement>(null);
+  const searchTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    getChromeAiAvailability().then((availability) => {
+      if (!cancelled) {
+        setChromeAiAvailability(availability);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   // 履歴やページ上で選択されたHSコードを復元
   useEffect(() => {
@@ -122,8 +148,8 @@ const HSCodeSearch: React.FC<HSCodeSearchProps> = ({
   // 検索処理（デバウンス付き）
   useEffect(() => {
     // 既存のタイマーをクリア
-    if (searchTimer) {
-      clearTimeout(searchTimer);
+    if (searchTimerRef.current) {
+      clearTimeout(searchTimerRef.current);
     }
 
     if (searchTerm.length >= 2) {
@@ -143,7 +169,7 @@ const HSCodeSearch: React.FC<HSCodeSearchProps> = ({
         }
       }, 300);
       
-      setSearchTimer(timer);
+      searchTimerRef.current = timer;
     } else {
       setSuggestions([]);
       setSelectedIndex(-1);
@@ -152,8 +178,9 @@ const HSCodeSearch: React.FC<HSCodeSearchProps> = ({
     
     // クリーンアップ
     return () => {
-      if (searchTimer) {
-        clearTimeout(searchTimer);
+      if (searchTimerRef.current) {
+        clearTimeout(searchTimerRef.current);
+        searchTimerRef.current = null;
       }
     };
   }, [searchTerm]);
@@ -162,9 +189,100 @@ const HSCodeSearch: React.FC<HSCodeSearchProps> = ({
     setSelectedHSCode(hsCode);
     setSearchTerm(hsCode.code);
     setSourceInfo(null);
+    setLocalLlmStatus(null);
     setSuggestions([]);
     setSelectedIndex(-1);
     onHSCodeSelect(hsCode.code);
+  };
+
+  const handleGenerateSearchKeywords = async () => {
+    if (isGeneratingKeywords || chromeAiAvailability === 'unavailable') return;
+
+    setIsGeneratingKeywords(true);
+    setLocalLlmStatus(null);
+    setChromeAiDownloadProgress(null);
+
+    try {
+      const suggestion = await generateHsSearchKeywordsWithChromeAi(
+        localLlmDescription,
+        setChromeAiDownloadProgress
+      );
+
+      setLocalLlmSuggestion(suggestion);
+      setSearchTerm(suggestion.search_query);
+      setSelectedHSCode(null);
+      setSourceInfo(null);
+      setSuggestions([]);
+      setSelectedIndex(-1);
+      setErrors((prev) => ({ ...prev, hsCode: undefined }));
+      setLocalLlmStatus({
+        type: 'success',
+        message: '検索語を作成しました。候補から該当するHSコードを選択してください。',
+      });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'ローカルLLMで検索語を作成できませんでした。';
+      setLocalLlmStatus({ type: 'error', message });
+    } finally {
+      setIsGeneratingKeywords(false);
+    }
+  };
+
+  const refreshChromeAiAvailability = async () => {
+    setChromeAiAvailability(null);
+    setChromeAiDownloadProgress(null);
+    const availability = await getChromeAiAvailability();
+    setChromeAiAvailability(availability);
+  };
+
+  const getChromeAiStatusLabel = () => {
+    switch (chromeAiAvailability) {
+      case 'available':
+        return '利用可能';
+      case 'downloadable':
+        return '初回準備あり';
+      case 'downloading':
+        return '準備中';
+      case 'unavailable':
+        return '未対応';
+      default:
+        return '確認中';
+    }
+  };
+
+  const getChromeAiStatusClassName = () => {
+    switch (chromeAiAvailability) {
+      case 'available':
+        return 'bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300';
+      case 'downloadable':
+      case 'downloading':
+        return 'bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300';
+      case 'unavailable':
+        return 'bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300';
+      default:
+        return 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300';
+    }
+  };
+
+  const renderKeywordChips = (label: string, terms: string[]) => {
+    if (terms.length === 0) {
+      return null;
+    }
+
+    return (
+      <div>
+        <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{label}</div>
+        <div className="flex flex-wrap gap-1.5">
+          {terms.map((term) => (
+            <span
+              key={`${label}-${term}`}
+              className="px-2 py-1 rounded-md bg-gray-100 dark:bg-gray-700 text-xs text-gray-700 dark:text-gray-200"
+            >
+              {term}
+            </span>
+          ))}
+        </div>
+      </div>
+    );
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -365,6 +483,105 @@ const HSCodeSearch: React.FC<HSCodeSearchProps> = ({
             )}
           </div>
         )}
+
+        <div className="mt-5 pt-4 border-t border-gray-100 dark:border-gray-700">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">商品説明から検索語を作成</h3>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                Chrome内蔵AIで商品説明をHSコード検索用の短い語句へ整理します。
+              </p>
+            </div>
+            <span className={`shrink-0 px-2 py-1 rounded-md text-[11px] font-medium ${getChromeAiStatusClassName()}`}>
+              {getChromeAiStatusLabel()}
+            </span>
+          </div>
+
+          <div className="mt-3 flex items-center justify-between gap-3 rounded-lg border border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/40 p-3">
+            <div>
+              <div className="text-xs font-medium text-gray-700 dark:text-gray-200">Chrome内蔵AI</div>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                Gemini Nanoを端末上で使います。初回はモデルの準備に時間がかかる場合があります。
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={refreshChromeAiAvailability}
+              className="shrink-0 px-2.5 py-1.5 rounded-md bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-xs font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 focus:ring-2 focus:ring-primary-500"
+              aria-label="Chrome内蔵AIの状態を再確認"
+            >
+              再確認
+            </button>
+          </div>
+
+          {chromeAiDownloadProgress !== null && (
+            <div className="mt-3" aria-label="Chrome内蔵AIモデルの準備状況">
+              <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
+                <span>モデル準備中</span>
+                <span>{chromeAiDownloadProgress}%</span>
+              </div>
+              <div className="h-2 rounded-full bg-gray-100 dark:bg-gray-700 overflow-hidden">
+                <div
+                  className="h-full bg-primary-500 transition-all"
+                  style={{ width: `${Math.min(Math.max(chromeAiDownloadProgress, 0), 100)}%` }}
+                />
+              </div>
+            </div>
+          )}
+
+          <textarea
+            value={localLlmDescription}
+            onChange={(e) => setLocalLlmDescription(e.target.value)}
+            placeholder="例: アルミ製の自転車用ブレーキレバー。交換部品として販売。"
+            className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 dark:placeholder-gray-400 focus:ring-2 focus:ring-primary-500 mt-3 min-h-[88px] resize-y"
+            aria-label="商品説明"
+          />
+
+          <button
+            type="button"
+            onClick={handleGenerateSearchKeywords}
+            disabled={isGeneratingKeywords || localLlmDescription.trim().length < 2 || chromeAiAvailability === 'unavailable'}
+            className="btn-secondary w-full mt-3 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
+            aria-label="Chrome内蔵AIで検索語を作成"
+          >
+            {isGeneratingKeywords ? (
+              <div className="flex items-center justify-center">
+                <div className="loading-spinner mr-2"></div>
+                検索語を作成中...
+              </div>
+            ) : (
+              'Chrome内蔵AIで検索語を作成'
+            )}
+          </button>
+
+          {localLlmStatus && (
+            <p
+              className={`text-xs mt-2 ${
+                localLlmStatus.type === 'success'
+                  ? 'text-green-700 dark:text-green-300'
+                  : 'text-red-600 dark:text-red-400'
+              }`}
+            >
+              {localLlmStatus.message}
+            </p>
+          )}
+
+          {localLlmSuggestion && (
+            <div className="mt-3 space-y-3">
+              <div className="p-3 rounded-lg bg-gray-50 dark:bg-gray-700/50 border border-gray-100 dark:border-gray-700">
+                <div className="text-xs font-medium text-gray-500 dark:text-gray-400">検索語</div>
+                <div className="text-sm text-gray-900 dark:text-gray-100 mt-1 break-words">
+                  {localLlmSuggestion.search_query}
+                </div>
+              </div>
+              {renderKeywordChips('日本語', localLlmSuggestion.keywords_ja)}
+              {renderKeywordChips('英語', localLlmSuggestion.keywords_en)}
+              {renderKeywordChips('素材', localLlmSuggestion.materials)}
+              {renderKeywordChips('用途', localLlmSuggestion.use_terms)}
+              {renderKeywordChips('確認観点', localLlmSuggestion.notes)}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* 貿易条件設定 */}
@@ -460,9 +677,10 @@ const HSCodeSearch: React.FC<HSCodeSearchProps> = ({
         <h3 className="text-sm font-semibold text-blue-800 dark:text-blue-300 mb-2">使用方法</h3>
         <div className="text-sm text-blue-700 dark:text-blue-400 space-y-1">
           <p>1. 商品のHSコードを検索・選択</p>
-          <p>2. 輸出国・輸入国を設定</p>
-          <p>3. 貿易金額を入力（削減額計算用）</p>
-          <p>4. 「関税最適化を実行」ボタンをクリック</p>
+          <p>2. 必要に応じて商品説明からChrome内蔵AIで検索語を作成</p>
+          <p>3. 輸出国・輸入国を設定</p>
+          <p>4. 貿易金額を入力（削減額計算用）</p>
+          <p>5. 「関税最適化を実行」ボタンをクリック</p>
         </div>
       </div>
     </div>
