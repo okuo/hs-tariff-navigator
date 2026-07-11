@@ -1,6 +1,6 @@
 {
   "name": "hs-tariff-navigator",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "HSコード検索とFTA/EPA比較で貿易コスト調査を支援するChrome拡張機能",
   "private": true,
   "scripts": {
