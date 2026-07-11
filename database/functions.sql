@@ -17,7 +17,7 @@ RETURNS TABLE (
 )
 LANGUAGE SQL
 AS $$
-  SELECT 
+  SELECT
     h.code,
     h.description_ja,
     h.description_en,
@@ -28,7 +28,7 @@ AS $$
       similarity(h.description_en, search_term) * 1.5
     ) as rank
   FROM hs_codes h
-  WHERE 
+  WHERE
     h.code ILIKE '%' || search_term || '%'
     OR h.description_ja ILIKE '%' || search_term || '%'
     OR h.description_en ILIKE '%' || search_term || '%'
@@ -61,9 +61,9 @@ BEGIN
   -- 驕ｩ逕ｨ蜿ｯ閭ｽ縺ｪ蜊泌ｮ壹ｒ蜿門ｾ・  FOR current_agreement IN
     SELECT a.*, tr.preferential_rate, tr.base_rate, tr.conditions
     FROM agreements a
-    LEFT JOIN tariff_rates tr ON tr.agreement_id = a.id 
+    LEFT JOIN tariff_rates tr ON tr.agreement_id = a.id
       AND tr.hs_code = p_hs_code
-      AND tr.country_from = p_from_country 
+      AND tr.country_from = p_from_country
       AND tr.country_to = p_to_country
     WHERE a.is_active = true
       AND p_from_country = ANY(a.countries)
@@ -78,15 +78,15 @@ BEGIN
       current_agreement.preferential_rate := GREATEST(0, base_tariff * (1 - current_agreement.priority * 0.3));
       current_agreement.base_rate := base_tariff;
     END IF;
-    
+
     -- 蜑頑ｸ幃｡崎ｨ育ｮ・    IF p_trade_value IS NOT NULL AND p_trade_value > 0 THEN
       savings_amount := (p_trade_value * (current_agreement.base_rate - current_agreement.preferential_rate) / 100)::BIGINT;
     ELSE
       savings_amount := (1000000 * (current_agreement.base_rate - current_agreement.preferential_rate) / 100)::BIGINT;
     END IF;
-    
+
     savings_percentage := (current_agreement.base_rate - current_agreement.preferential_rate) / current_agreement.base_rate * 100;
-    
+
     -- 蜊泌ｮ壹ョ繝ｼ繧ｿ繧帝・蛻励↓霑ｽ蜉
     agreement_data := agreement_data || jsonb_build_object(
       'agreement', jsonb_build_object(
@@ -102,12 +102,12 @@ BEGIN
       'savings_percentage', savings_percentage,
       'conditions', current_agreement.conditions
     );
-    
+
     -- 譛濶ｯ縺ｮ蜊泌ｮ壹ｒ驕ｸ謚橸ｼ亥炎貂幃｡阪′譛螟ｧ・・    IF best_agreement IS NULL OR savings_amount > (best_agreement->>'savings_amount')::BIGINT THEN
       best_agreement := agreement_data[array_length(agreement_data, 1)];
     END IF;
   END LOOP;
-  
+
   -- 邨先棡繧呈ｧ狗ｯ・  result := jsonb_build_object(
     'hs_code', p_hs_code,
     'from_country', p_from_country,
@@ -117,7 +117,7 @@ BEGIN
     'best_agreement', best_agreement,
     'trade_value', p_trade_value
   );
-  
+
   RETURN result;
 END;
 $$;

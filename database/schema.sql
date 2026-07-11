@@ -15,7 +15,7 @@ CREATE TABLE hs_codes (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- FTA/EPA蜊泌ｮ壹・繧ｹ繧ｿ繝ｼ繝・・繝悶Ν  
+-- FTA/EPA蜊泌ｮ壹・繧ｹ繧ｿ繝ｼ繝・・繝悶Ν
 CREATE TABLE agreements (
   id VARCHAR(20) PRIMARY KEY,
   name_ja VARCHAR(200) NOT NULL,

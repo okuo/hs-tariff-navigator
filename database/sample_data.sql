@@ -21,8 +21,8 @@ INSERT INTO hs_codes (code, description_ja, description_en, unit, category, subc
 
 -- FTA/EPA蜊泌ｮ壹し繝ｳ繝励Ν繝・・繧ｿ
 INSERT INTO agreements (id, name_ja, name_en, countries, effective_date, document_url, priority, is_active) VALUES
-('rcep', 'RCEP・亥慍蝓溽噪縺ｪ蛹・峡逧・ｵ梧ｸ磯｣謳ｺ・・, 'Regional Comprehensive Economic Partnership', 
- ARRAY['JP','CN','KR','TH','VN','MY','SG','ID','PH','AU','NZ','BN','KH','LA','MM'], 
+('rcep', 'RCEP・亥慍蝓溽噪縺ｪ蛹・峡逧・ｵ梧ｸ磯｣謳ｺ・・, 'Regional Comprehensive Economic Partnership',
+ ARRAY['JP','CN','KR','TH','VN','MY','SG','ID','PH','AU','NZ','BN','KH','LA','MM'],
  '2022-01-01', 'https://www.mofa.go.jp/mofaj/gaiko/fta/j-eacepa/', 1, true),
 
 ('cptpp', 'CPTPP・育腸螟ｪ蟷ｳ豢九ヱ繝ｼ繝医リ繝ｼ繧ｷ繝・・蜊泌ｮ夲ｼ・, 'Comprehensive and Progressive Agreement for Trans-Pacific Partnership',
@@ -30,14 +30,14 @@ INSERT INTO agreements (id, name_ja, name_en, countries, effective_date, documen
  '2018-12-30', 'https://www.mofa.go.jp/mofaj/gaiko/fta/tpp/', 2, true),
 
 ('jaepa', '譌･雎ｪEPA・域律雎ｪ邨梧ｸ磯｣謳ｺ蜊泌ｮ夲ｼ・, 'Japan-Australia Economic Partnership Agreement',
- ARRAY['JP','AU'], 
+ ARRAY['JP','AU'],
  '2015-01-15', 'https://www.mofa.go.jp/mofaj/gaiko/fta/j-a/', 3, true),
 
 ('jepa', '譌･EU繝ｻEPA・域律谺ｧ邨梧ｸ磯｣謳ｺ蜊泌ｮ夲ｼ・, 'Japan-EU Economic Partnership Agreement',
  ARRAY['JP','DE','FR','IT','ES','NL','BE','AT','PL','RO','GR','PT','CZ','HU','SE','BG','DK','FI','SK','HR','IE','LT','SI','LV','EE','CY','LU','MT'],
  '2019-02-01', 'https://www.mofa.go.jp/mofaj/gaiko/fta/j-eu/', 4, true),
 
-('jusmca', '譌･邀ｳ雋ｿ譏灘鵠螳・, 'Japan-United States Trade Agreement', 
+('jusmca', '譌･邀ｳ雋ｿ譏灘鵠螳・, 'Japan-United States Trade Agreement',
  ARRAY['JP','US'],
  '2020-01-01', 'https://www.mofa.go.jp/mofaj/na/na1/us/page25_001767.html', 5, true);
 
